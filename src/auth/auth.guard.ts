@@ -73,7 +73,7 @@ export class AuthGuard implements CanActivate {
 
     try {
       return await this.authService.validateToken(token, processorType);
-    } catch (err) {
+    } catch {
       return this.authService.validateToken(token, JwtProcessorType.BEARER);
     }
   }
