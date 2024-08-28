@@ -1,3 +1,8 @@
-/.github
 /node_modules
-/dist
+/build
+/public/config.js
+/public/assets
+/public/css
+/public/js
+/public/vendor
+

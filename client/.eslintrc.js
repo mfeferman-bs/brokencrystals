@@ -5,7 +5,7 @@ module.exports = {
     project: 'tsconfig.json',
     createDefaultProgram: true
   },
-  ignorePatterns: ['cypress', 'node_modules', 'dist', 'public'],
+  ignorePatterns: ['cypress', 'node_modules', 'build', 'public', 'assets'],
   plugins: ['@typescript-eslint/eslint-plugin'],
   extends: [
     'plugin:@typescript-eslint/recommended',
