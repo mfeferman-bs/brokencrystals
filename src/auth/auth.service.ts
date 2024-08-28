@@ -121,7 +121,7 @@ export class AuthService {
     );
   }
 
-  validateToken(token: string, processor: JwtProcessorType): Promise<any> {
+  validateToken(token: string, processor: JwtProcessorType): Promise<unknown> {
     return this.processors.get(processor).validateToken(token);
   }
 

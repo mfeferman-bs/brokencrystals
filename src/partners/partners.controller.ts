@@ -97,12 +97,13 @@ export class PartnersController {
 
       return xmlStr;
     } catch (err) {
-      const strErr = err.toString();
-      if (strErr.includes('Unterminated string literal')) {
-        err = 'Error in XPath expression';
-      }
+      const errStr = err.toString();
+      const errorMessage = errStr.includes('Unterminated string literal')
+        ? 'Error in XPath expression'
+        : errStr;
+
       throw new HttpException(
-        `Access denied to partner's account. ${err}`,
+        `Access denied to partner's account. ${errorMessage}`,
         HttpStatus.FORBIDDEN,
       );
     }
@@ -130,15 +131,15 @@ export class PartnersController {
       const xpath = `//partners/partner/name[contains(., '${keyword}')]`;
       return this.partnersService.getPartnersProperties(xpath);
     } catch (err) {
-      const strErr = err.toString();
-      if (
-        strErr.includes('XPath parse error') ||
-        strErr.includes('Unterminated string literal')
-      ) {
-        err = 'Error in XPath expression';
-      }
+      const errStr = err.toString();
+      const errorMessage =
+        errStr.includes('XPath parse error') ||
+        errStr.includes('Unterminated string literal')
+          ? 'Error in XPath expression'
+          : errStr;
+
       throw new HttpException(
-        `Couldn't find partners. ${err}`,
+        `Couldn't find partners. ${errorMessage}`,
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }

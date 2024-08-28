@@ -7,7 +7,7 @@ export class JwtTokenWithRSASignatureKeysProcessor extends JwtTokenProcessor {
     super(new Logger(JwtTokenWithRSASignatureKeysProcessor.name));
   }
 
-  async validateToken(token: string): Promise<any> {
+  async validateToken(token: string): Promise<unknown> {
     this.log.debug('Call validateToken');
 
     return decode(token, this.publicKey, true, 'RS256');

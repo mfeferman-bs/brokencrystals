@@ -12,8 +12,8 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 export class AnyFilesInterceptor implements NestInterceptor {
   public async intercept(
     context: ExecutionContext,
-    next: CallHandler<any>,
-  ): Promise<Observable<any>> {
+    next: CallHandler<unknown>,
+  ): Promise<Observable<unknown>> {
     const req = context.switchToHttp().getRequest() as FastifyRequest;
     const res = context.switchToHttp().getResponse() as FastifyReply;
 

@@ -7,7 +7,7 @@ export class JwtTokenWithWeakKeyProcessor extends JwtTokenProcessor {
     super(new Logger(JwtTokenWithWeakKeyProcessor.name));
   }
 
-  async validateToken(token: string): Promise<any> {
+  async validateToken(token: string): Promise<unknown> {
     this.log.debug('Call validateToken');
     return decode(token, this.key, false);
   }

@@ -13,7 +13,7 @@ export class JwtTokenWithSqlKIDProcessor extends JwtTokenProcessor {
     super(new Logger(JwtTokenWithSqlKIDProcessor.name));
   }
 
-  async validateToken(token: string): Promise<any> {
+  async validateToken(token: string): Promise<unknown> {
     this.log.debug('Call validateToken');
 
     const [header] = this.parse(token);

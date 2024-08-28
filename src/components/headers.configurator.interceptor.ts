@@ -25,7 +25,7 @@ export class HeadersConfiguratorInterceptor implements NestInterceptor {
   public static readonly COUNTER_COOKIE_NAME = 'bc-calls-counter';
   private readonly logger = new Logger(HeadersConfiguratorInterceptor.name);
 
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
     const req = this.getRequest(context);
 
     const cookies: string[] = req.headers.cookie

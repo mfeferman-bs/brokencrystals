@@ -7,7 +7,7 @@ export class JwtTokenWithRSAKeysProcessor extends JwtTokenProcessor {
     super(new Logger(JwtTokenWithRSAKeysProcessor.name));
   }
 
-  async validateToken(token: string): Promise<any> {
+  async validateToken(token: string): Promise<unknown> {
     this.log.debug('Call validateToken');
 
     const [header, payload] = this.parse(token);

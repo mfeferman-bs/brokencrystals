@@ -12,7 +12,7 @@ export class JwtBearerTokenProcessor extends JwtTokenProcessor {
     super(new Logger(JwtBearerTokenProcessor.name));
   }
 
-  async validateToken(token: string): Promise<any> {
+  async validateToken(token: string): Promise<unknown> {
     const [header, payload] = this.parse(token);
     if (!header || !payload) {
       this.log.debug(`Invalid JWT token. parse() failure.`);
@@ -56,7 +56,10 @@ export class JwtBearerTokenProcessor extends JwtTokenProcessor {
     }
   }
 
-  private async decodeAndVerifyToken(token: string, kid: string): Promise<any> {
+  private async decodeAndVerifyToken(
+    token: string,
+    kid: string,
+  ): Promise<unknown> {
     try {
       return await this.keyCloakService.verifyToken(token, kid);
     } catch (e) {
