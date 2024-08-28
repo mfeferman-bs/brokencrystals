@@ -6,8 +6,6 @@ FROM node:18-alpine AS build
 
 WORKDIR /usr/src/app
 
-RUN apk add --no-cache --virtual .gyp python3 py3-pip make g++
-
 # Copy and build NestJS server project
 COPY --chown=node:node package*.json ./
 COPY --chown=node:node tsconfig.build.json ./
@@ -34,8 +32,6 @@ ENV NODE_OPTIONS=--openssl-legacy-provider
 ENV CYPRESS_INSTALL_BINARY=0
 RUN npm ci --prefix=client
 RUN npm run build --prefix=client
-
-RUN apk del .gyp
 
 USER node
 
