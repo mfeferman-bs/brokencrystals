@@ -56,7 +56,10 @@ export class JwtBearerTokenProcessor extends JwtTokenProcessor {
     }
   }
 
-  private async decodeAndVerifyToken(token: string, kid: string): Promise<unknown> {
+  private async decodeAndVerifyToken(
+    token: string,
+    kid: string,
+  ): Promise<unknown> {
     try {
       return await this.keyCloakService.verifyToken(token, kid);
     } catch (e) {
