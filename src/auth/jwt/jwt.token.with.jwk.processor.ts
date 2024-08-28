@@ -3,7 +3,10 @@ import * as jose from 'jose';
 import { JwtTokenProcessor as JwtTokenProcessor } from './jwt.token.processor';
 
 export class JwtTokenWithJWKProcessor extends JwtTokenProcessor {
-  constructor(private key: string, private jwk: jose.JWK) {
+  constructor(
+    private key: string,
+    private jwk: jose.JWK,
+  ) {
     super(new Logger(JwtTokenWithJWKProcessor.name));
   }
 

@@ -9,7 +9,10 @@ export class JwtTokenWithSqlKIDProcessor extends JwtTokenProcessor {
   private static readonly KID_FETCH_QUERY = (key: string, param: string) =>
     `select key from (select '${key}' as key, ${JwtTokenWithSqlKIDProcessor.KID} as id) as keys where keys.id = '${param}'`;
 
-  constructor(private readonly em: EntityManager, private key: string) {
+  constructor(
+    private readonly em: EntityManager,
+    private key: string,
+  ) {
     super(new Logger(JwtTokenWithSqlKIDProcessor.name));
   }
 
