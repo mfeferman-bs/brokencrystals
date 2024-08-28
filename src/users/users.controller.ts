@@ -538,11 +538,8 @@ export class UsersController {
       if (file_name.endsWith('.svg')) {
         const xml = file_buffer.toString();
         const xmlDoc = parseXml(xml, {
-          dtdload: true,
           noent: true,
-          doctype: true,
           dtdvalid: true,
-          errors: true,
           recover: true,
         });
         await this.usersService.updatePhoto(
