@@ -255,7 +255,7 @@ export function postRender(data: string): Promise<any> {
 
 function mapToUrlParams<T>(data: T): URLSearchParams {
   return Object.entries(data).reduce((acc, [k, v]) => {
-    acc.append(k, v);
+    acc.append(k, String(v));
     return acc;
   }, new URLSearchParams());
 }
