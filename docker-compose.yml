@@ -101,7 +101,7 @@ services:
       retries: 3
     depends_on:
       - keycloak-db
-  
+
   mailcatcher:
     image: sj26/mailcatcher
     container_name: mailcatcher

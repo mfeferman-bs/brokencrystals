@@ -3,7 +3,10 @@ import { decode, encode } from 'jwt-simple';
 import { JwtTokenProcessor as JwtTokenProcessor } from './jwt.token.processor';
 
 export class JwtTokenWithRSASignatureKeysProcessor extends JwtTokenProcessor {
-  constructor(private publicKey: string, private privateKey: string) {
+  constructor(
+    private publicKey: string,
+    private privateKey: string,
+  ) {
     super(new Logger(JwtTokenWithRSASignatureKeysProcessor.name));
   }
 

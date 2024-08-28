@@ -44,10 +44,10 @@ const splitUriIntoParamsPPVulnerable = (
             val && !isNaN(val) && +val + '' === val
               ? +val // number
               : val === 'undefined'
-              ? undefined // undefined
-              : coerce_types[val] !== undefined
-              ? coerce_types[val] // true, false, null
-              : val; // string
+                ? undefined // undefined
+                : coerce_types[val] !== undefined
+                  ? coerce_types[val] // true, false, null
+                  : val; // string
         }
 
         if (keys_last) {

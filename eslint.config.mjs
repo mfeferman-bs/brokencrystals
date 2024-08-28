@@ -5,13 +5,16 @@ export default tseslint.config(
   eslint.configs.recommended,
   ...tseslint.configs.strict,
   {
-    ignores: ["**/charts", "**/dist", "**/client"],
+    ignores: ['**/charts', '**/dist', '**/client'],
   },
   {
     rules: {
-        "@typescript-eslint/no-extraneous-class": ["error", {
-            allowWithDecorator: true
-        }]
-    }
-  }
+      '@typescript-eslint/no-extraneous-class': [
+        'error',
+        {
+          allowWithDecorator: true,
+        },
+      ],
+    },
+  },
 );
