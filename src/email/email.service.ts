@@ -60,11 +60,11 @@ export class EmailService {
     to = to.replace('\n', '%0A');
     this.logger.debug(`Creating vulnerable mailOptions. "to" param is: ${to}`);
 
-    let parsedSubject: any = subject;
-    let parsedFrom: any = from;
-    let parsedTo: any = to;
-    let parsedCc: any = [];
-    let parsedBcc: any = [];
+    let parsedSubject: string | RegExpExecArray | null = subject;
+    let parsedFrom: string | RegExpExecArray | null = from;
+    let parsedTo: string | RegExpExecArray | null = to;
+    let parsedCc: string | RegExpExecArray | null = null;
+    let parsedBcc: string | RegExpExecArray | null = null;
 
     // This is intentional to support email injection
     if (
@@ -124,7 +124,7 @@ export class EmailService {
     return mailOptions;
   }
 
-  async getEmails(withSource): Promise<any> {
+  async getEmails(withSource): Promise<unknown> {
     this.logger.debug(`Fetching all emails from MailCatcher`);
 
     const emails = await axios

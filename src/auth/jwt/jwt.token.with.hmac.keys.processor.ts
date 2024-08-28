@@ -7,7 +7,7 @@ export class JwtTokenWithHMACKeysProcessor extends JwtTokenProcessor {
     super(new Logger(JwtTokenWithHMACKeysProcessor.name));
   }
 
-  async validateToken(token: string): Promise<any> {
+  async validateToken(token: string): Promise<unknown> {
     this.log.debug('Call validateToken');
 
     return decode(token, this.publicKey, false, 'HS256');

@@ -11,7 +11,7 @@ export class JwtTokenWithX5UKeyProcessor extends JwtTokenProcessor {
     super(new Logger(JwtTokenWithX5UKeyProcessor.name));
   }
 
-  async validateToken(token: string): Promise<any> {
+  async validateToken(token: string): Promise<unknown> {
     this.log.debug('Call validateToken');
     const [header] = this.parse(token);
 

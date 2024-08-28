@@ -30,6 +30,7 @@ describe('AuthService', () => {
         AuthService,
         {
           provide: EntityManager,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           useFactory: () => new (EntityManager as any)(),
         },
         {

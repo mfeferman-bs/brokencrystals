@@ -22,7 +22,7 @@ export class HttpClientService {
 
   async post<T = unknown>(
     url: string,
-    data: any,
+    data: unknown,
     config?: AxiosRequestConfig,
   ): Promise<T> {
     const resp = await axios.post<T>(url, data, config);

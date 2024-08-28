@@ -84,9 +84,9 @@ export class EmailController {
     this.logger.debug(`Raw query ${rawQuery}`);
 
     // "Use" the status code
-    const uriParams: any = splitUriIntoParamsPPVulnerable(rawQuery);
+    const uriParams = splitUriIntoParamsPPVulnerable(rawQuery);
     if (uriParams?.status) {
-      responseJson.status = uriParams.status;
+      responseJson.status = uriParams.status as HttpStatus;
     }
 
     const mailSubject = `Support email regarding "${subject}"`;
@@ -118,8 +118,8 @@ export class EmailController {
     example: 'true',
     required: true,
   })
-  async getEmails(@Query('withSource') withSource: any) {
-    withSource = withSource === 'true';
+  async getEmails(@Query('withSource') withSourceStr: string) {
+    const withSource = withSourceStr === 'true';
 
     this.logger.log(`Getting Emails (withSource=${withSource})`);
     return await this.emailService.getEmails(withSource);

@@ -1,11 +1,11 @@
 // Taken from PortSwigger's prototype pollution labs
 // VULNERABLE TO PROTOTYPE POLLUTION!
-const splitUriIntoParamsPPVulnerable = (params, coerce = undefined) => {
+const splitUriIntoParamsPPVulnerable = (params, coerce = undefined): Record<string, unknown> => {
   if (params.charAt(0) === '?') {
     params = params.substring(1);
   }
 
-  const obj = {};
+  const obj: Record<string, unknown> = {};
   const coerce_types = { true: !0, false: !1, null: null };
 
   if (!params) {
@@ -21,6 +21,7 @@ const splitUriIntoParamsPPVulnerable = (params, coerce = undefined) => {
       let keys = key.split('][');
       let keys_last = keys.length - 1;
       let val;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let cur: any = obj;
       let i = 0;
 
@@ -52,12 +53,13 @@ const splitUriIntoParamsPPVulnerable = (params, coerce = undefined) => {
             cur = cur[key] =
               i < keys_last
                 ? cur[key] ||
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   (keys[i + 1] && isNaN(keys[i + 1] as any) ? {} : [])
                 : val;
           }
         } else {
           if (Object.prototype.toString.call(obj[key]) === '[object Array]') {
-            obj[key].push(val);
+            (obj[key] as unknown[]).push(val);
           } else if ({}.hasOwnProperty.call(obj, key)) {
             obj[key] = [obj[key], val];
           } else {
