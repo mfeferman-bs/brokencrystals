@@ -29,7 +29,6 @@ COPY --chown=node:node client/typings ./client/typings
 COPY --chown=node:node client/vcs ./client/vcs
 COPY --chown=node:node client/tsconfig.json ./client/tsconfig.json
 
-ENV NODE_OPTIONS=--openssl-legacy-provider
 ENV CYPRESS_INSTALL_BINARY=0
 RUN npm ci --prefix=client --no-audit
 RUN npm run build --prefix=client

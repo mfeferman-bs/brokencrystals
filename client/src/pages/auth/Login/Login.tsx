@@ -34,12 +34,8 @@ enum RequestHeaders {
   APPLICATION_JSON = 'application/json'
 }
 
-interface stateType {
-  from: string;
-}
-
 export const Login: FC = () => {
-  const { state } = useLocation<stateType>();
+  const { state } = useLocation();
 
   const [form, setForm] = useState<LoginUser>(defaultLoginUser);
   const { user, password } = form;
@@ -152,7 +148,6 @@ export const Login: FC = () => {
               className="form-control"
               name="op"
               id="authType"
-              placeholder="Authentication Type"
               aria-label="Authentication Type"
               value={mode}
               onChange={onSelectMode}

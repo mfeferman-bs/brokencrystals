@@ -171,7 +171,9 @@ export function getSpawnData(): Promise<any> {
   });
 }
 
-export function getUserPhoto(email: string): Promise<any> {
+export function getUserPhoto(
+  email: string
+): Promise<ArrayBuffer | { errorText: string }> {
   return makeApiRequest({
     url: `${ApiUrl.Users}/one/${email}/photo`,
     method: 'get',
@@ -254,7 +256,7 @@ export function postRender(data: string): Promise<any> {
 }
 
 function mapToUrlParams<T>(data: T): URLSearchParams {
-  return Object.entries(data).reduce((acc, [k, v]) => {
+  return Object.entries(data as any).reduce((acc, [k, v]) => {
     acc.append(k, String(v));
     return acc;
   }, new URLSearchParams());

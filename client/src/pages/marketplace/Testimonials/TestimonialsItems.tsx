@@ -15,7 +15,7 @@ export const TestimonialsItems: FC<Props> = (props: Props) => {
           <p>
             <i className="bx bxs-quote-alt-left quote-icon-left" />
             <span className="dangerous-html">
-              <InnerHTML html={item.message} />
+              <InnerHTML html={item.message || 'N/A'} />
             </span>
             <i className="bx bxs-quote-alt-right quote-icon-right" />
           </p>
@@ -25,10 +25,10 @@ export const TestimonialsItems: FC<Props> = (props: Props) => {
             alt=""
           />
           <h3 className="dangerous-html">
-            <InnerHTML html={item.name} />
+            <InnerHTML html={item.name || 'N/A'} />
           </h3>
           <h4 className="dangerous-html">
-            <InnerHTML html={item.title} />
+            <InnerHTML html={item.title || 'N/A'} />
           </h4>
         </div>
       ))}
