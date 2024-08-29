@@ -17,8 +17,11 @@
     "xmldom": "^0.6.0"
   },
   "scripts": {
-    "cypress:run": "cypress open --browser chrome",
-    "test": "start-test 3001 cypress:run",
+    "cypress:open": "cypress open --e2e --browser chrome",
+    "cypress:run": "cypress run --e2e --browser chrome",
+    "test:e2e:gui": "start-server-and-test 3001 cypress:open",
+    "test:e2e:ci": "start-server-and-test 3001 cypress:run",
+    "test": "npm run test:e2e:ci",
     "start": "cross-env PORT=3001 NODE_OPTIONS=--openssl-legacy-provider react-scripts start",
     "build": "cross-env NODE_OPTIONS=--openssl-legacy-provider react-scripts build",
     "eject": "react-scripts eject",
@@ -55,7 +58,7 @@
     "@typescript-eslint/eslint-plugin": "^4.15.0",
     "@typescript-eslint/parser": "^4.15.0",
     "cross-env": "^7.0.3",
-    "cypress": "^6.4.0",
+    "cypress": "^13.14.0",
     "eslint": "^7.20.0",
     "eslint-config-prettier": "^7.2.0",
     "eslint-plugin-prettier": "^4.2.1",
