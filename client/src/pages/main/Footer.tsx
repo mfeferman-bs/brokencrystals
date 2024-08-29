@@ -169,9 +169,11 @@ export const Footer: FC = () => {
               </strong>
               . All Rights Reserved
             </div>
-            <span className="dangerous-html">
-              <InnerHTML html={decodeURIComponent(window.location.search)} />
-            </span>
+            {window.location.search && (
+              <span className="dangerous-html">
+                <InnerHTML html={decodeURIComponent(window.location.search)} />
+              </span>
+            )}
           </div>
           <table>
             <tbody>

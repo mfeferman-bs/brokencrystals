@@ -1,6 +1,6 @@
-import React, { FC } from 'react';
+import React, { FC, PropsWithChildren } from 'react';
 
-export const AdminLayout: FC = ({ children }) => {
+export const AdminLayout: FC<PropsWithChildren> = ({ children }) => {
   return (
     <div className="page-content--bge5">
       <div className="container">

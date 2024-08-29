@@ -1,6 +1,7 @@
 import React, { ChangeEvent, FC, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import FileType from 'file-type';
+import { Buffer } from 'buffer';
+import { fileTypeFromBuffer } from 'file-type/core';
 import { getUserPhoto, putPhoto } from '../../../api/httpClient';
 import { RoutePath } from '../../../router/RoutePath';
 
@@ -25,8 +26,12 @@ export const Sign: FC = () => {
     if (!user) return null;
 
     getUserPhoto(user).then((data) => {
-      const base64 = Buffer.from(data, 'binary').toString('base64');
-      FileType.fromBuffer(data).then((file_type) => {
+      if (!(data instanceof ArrayBuffer)) {
+        return null;
+      }
+
+      const base64 = Buffer.from(data).toString('base64');
+      fileTypeFromBuffer(data).then((file_type) => {
         base64 &&
           setUserImage(
             `data: ${file_type?.mime || 'image/svg+xml'}; base64, ${base64}`

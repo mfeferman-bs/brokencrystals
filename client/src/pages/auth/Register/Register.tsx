@@ -73,7 +73,6 @@ export const Register: FC = () => {
             <select
               className="form-control"
               name="op"
-              placeholder="Authentication Type"
               value={authMode}
               onChange={onAuthModeChange}
             >

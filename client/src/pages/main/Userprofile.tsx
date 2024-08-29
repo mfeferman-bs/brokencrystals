@@ -1,5 +1,5 @@
 import React, { FormEvent, useEffect, useState } from 'react';
-import { Redirect } from 'react-router';
+import { Navigate } from 'react-router';
 import {
   getAdminStatus,
   getUserDataById,
@@ -111,8 +111,9 @@ export const Userprofile = () => {
           </div>
         </AuthLayout>
       ) : (
-        <Redirect
-          to={{ pathname: RoutePath.Login, state: { from: '/userprofile' } }}
+        <Navigate
+          to={{ pathname: RoutePath.Login }}
+          state={{ from: '/userprofile' }}
         />
       )}
     </>

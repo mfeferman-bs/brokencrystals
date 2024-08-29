@@ -9,11 +9,13 @@
 
   // Preloader
   $(window).on('load', function() {
-    if ($('#preloader').length) {
-      $('#preloader').delay(100).fadeOut('slow', function() {
-        $(this).remove();
-      });
-    }
+    setTimeout(() => {
+      if ($('#preloader').length) {
+        $('#preloader').delay(100).fadeOut('slow', function() {
+          $(this).remove();
+        });
+      }  
+    }, 100);
   });
 
   $(document).ready(function() {

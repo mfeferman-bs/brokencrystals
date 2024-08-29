@@ -28,8 +28,10 @@ COPY --chown=node:node client/public ./client/public
 COPY --chown=node:node client/typings ./client/typings
 COPY --chown=node:node client/vcs ./client/vcs
 COPY --chown=node:node client/tsconfig.json ./client/tsconfig.json
+COPY --chown=node:node client/.eslintrc.js ./client/
+COPY --chown=node:node client/.prettierignore ./client/
+COPY --chown=node:node client/.prettierrc ./client/
 
-ENV NODE_OPTIONS=--openssl-legacy-provider
 ENV CYPRESS_INSTALL_BINARY=0
 RUN npm ci --prefix=client --no-audit
 RUN npm run build --prefix=client
