@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { Product } from '../../interfaces/Product';
 import { viewProduct } from '../../api/httpClient';
 
@@ -6,7 +6,15 @@ interface Props {
   product: Product;
 }
 
+const init = () => {
+  (window as any).jQuery('.venobox').venobox();
+};
+
 export const ProductView: FC<Props> = (props: Props) => {
+  useEffect(() => {
+    init();
+  }, []);
+
   return (
     <div
       className={`col-lg-4 col-md-6 portfolio-item filter-${props.product.category}`}
