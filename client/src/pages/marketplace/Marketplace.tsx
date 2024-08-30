@@ -158,7 +158,7 @@ export const Marketplace: FC<Props> = (props: Props) => {
                   portfolioQueryFilter,
                   product
                 ) ? (
-                  <ProductView product={product} key={i} />
+                  <ProductView product={product} key={product.id} />
                 ) : (
                   <></>
                 )
