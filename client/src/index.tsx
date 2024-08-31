@@ -17,7 +17,6 @@ function AppWrapper({ onRender }: { onRender: () => void }) {
   );
 }
 
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const root = createRoot(document.getElementById('root')!);
 root.render(
   // <React.StrictMode>

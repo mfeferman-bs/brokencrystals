@@ -11,7 +11,9 @@ export function makeApiRequest<T>(
     .request(config)
     .then((response) => {
       const token = response.headers.authorization;
-      token && sessionStorage.setItem('token', token);
+      if (token) {
+        sessionStorage.setItem('token', token);
+      }
 
       return response.data;
     })

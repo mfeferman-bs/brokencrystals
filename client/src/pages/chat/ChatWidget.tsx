@@ -48,7 +48,7 @@ export const ChatWidget: FC = () => {
         content: answer
       };
       setChatMessages((messages) => [...messages, serverMessage]);
-    } catch (error) {
+    } catch {
       setChatMessages((messages) => [
         ...messages,
         {

@@ -30,7 +30,9 @@ export const TestimonialsForm: FC<Props> = (props: Props) => {
     e.preventDefault();
 
     postTestimonials(form).then(() => {
-      setNewTestimonial && setNewTestimonial(form);
+      if (setNewTestimonial) {
+        setNewTestimonial(form);
+      }
       setForm(defaultTestimonial);
     });
   };

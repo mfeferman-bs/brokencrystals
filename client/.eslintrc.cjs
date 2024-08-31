@@ -7,11 +7,7 @@ module.exports = {
   },
   ignorePatterns: ['cypress', 'node_modules', 'build', 'public', 'assets'],
   plugins: ['@typescript-eslint/eslint-plugin'],
-  extends: [
-    'plugin:@typescript-eslint/recommended',
-    'prettier/@typescript-eslint',
-    'plugin:prettier/recommended'
-  ],
+  extends: ['plugin:@typescript-eslint/recommended', 'prettier'],
   env: {
     browser: true
   },
@@ -20,5 +16,14 @@ module.exports = {
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off'
-  }
+  },
+  overrides: [
+    {
+      files: ['cypress/**/*.ts', 'cypress.config.ts'],
+      parserOptions: {
+        project: ['./cypress/tsconfig.json'],
+        tsconfigRootDir: __dirname
+      }
+    }
+  ]
 };

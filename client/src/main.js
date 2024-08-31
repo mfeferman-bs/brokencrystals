@@ -100,7 +100,7 @@ export const initDependencies = () => {
     );
     $('body').append('<div class="mobile-nav-overly"></div>');
 
-    $(document).on('click', '.mobile-nav-toggle', function (e) {
+    $(document).on('click', '.mobile-nav-toggle', function () {
       $('body').toggleClass('mobile-nav-active');
       $('.mobile-nav-toggle i').toggleClass(
         'icofont-navigation-menu icofont-close'
