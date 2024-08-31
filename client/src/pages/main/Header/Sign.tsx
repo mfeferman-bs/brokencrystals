@@ -31,12 +31,13 @@ export const Sign: FC = () => {
       }
 
       const base64 = Buffer.from(data).toString('base64');
-      fileTypeFromBuffer(data).then((file_type) => {
-        base64 &&
+      if (base64) {
+        fileTypeFromBuffer(data).then((file_type) => {
           setUserImage(
             `data: ${file_type?.mime || 'image/svg+xml'}; base64, ${base64}`
           );
-      });
+        });
+      }
     });
   };
 

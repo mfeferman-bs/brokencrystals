@@ -90,12 +90,13 @@ export const Login: FC = () => {
 
   const sendLdap = () => {
     const { ldapProfileLink } = loginResponse || {};
-    ldapProfileLink &&
+    if (ldapProfileLink) {
       getLdap(ldapProfileLink)
         .then((data) => setLdapResponse(data))
         .then(() => {
           window.location.href = state ? state.from : '/';
         });
+    }
   };
 
   const appendParams = (data: LoginUser): LoginUser => {

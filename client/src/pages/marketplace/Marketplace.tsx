@@ -51,12 +51,14 @@ export const Marketplace: FC<Props> = (props: Props) => {
   };
 
   useEffect(() => {
-    props.preview
-      ? getLatestProducts().then((data) => setProducts(data))
-      : getProducts(
-          new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
-          new Date(new Date().setDate(new Date().getDate() + 1))
-        ).then((data) => setProducts(data));
+    if (props.preview) {
+      getLatestProducts().then((data) => setProducts(data));
+    } else {
+      getProducts(
+        new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
+        new Date(new Date().setDate(new Date().getDate() + 1))
+      ).then((data) => setProducts(data));
+    }
   }, []);
 
   useEffect(() => {
@@ -153,7 +155,7 @@ export const Marketplace: FC<Props> = (props: Props) => {
           )}
           <div className="row portfolio-container">
             {products &&
-              products.map((product, i) =>
+              products.map((product) =>
                 searchStringInProductNameOrDescription(
                   portfolioQueryFilter,
                   product
