@@ -1,6 +1,7 @@
 /node_modules
-/build
+/dist
 /public/config.js
 /public/assets
 /public/css
 /public/vendor
+/vcs

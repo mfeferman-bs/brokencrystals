@@ -17,7 +17,7 @@ import splitUriIntoParamsPPVulnerable from '../../utils/url';
 interface Props {
   preview: boolean;
 }
-const path = process.env.NODE_ENV === 'production' ? '/home/node/' : '';
+const path = import.meta.env.NODE_ENV === 'production' ? '/home/node/' : '';
 
 const extractVideoUrlParam = (): string | null => {
   const { searchParams } = new URL(window.location.href);
