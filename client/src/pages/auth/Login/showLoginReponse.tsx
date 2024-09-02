@@ -1,5 +1,5 @@
 import InnerHTML from 'dangerously-set-html-content';
-import { LoginResponse } from '../../../interfaces/User';
+import type { LoginResponse } from '../../../interfaces/User';
 
 export function showLoginResponse({ email, ldapProfileLink }: LoginResponse) {
   const fields = [

@@ -1,4 +1,5 @@
-import { FormEvent, useEffect, useState } from 'react';
+import type { FormEvent } from 'react';
+import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router';
 import {
   getAdminStatus,
@@ -6,7 +7,7 @@ import {
   putUserData,
   removeUserPhotoById
 } from '../../api/httpClient';
-import { UserData } from '../../interfaces/User';
+import type { UserData } from '../../interfaces/User';
 import { RoutePath } from '../../router/RoutePath';
 import AuthLayout from '../auth/AuthLayout';
 

@@ -1,4 +1,5 @@
-import { FC, useEffect } from 'react';
+import type { FC } from 'react';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { goTo, postMetadata, getSpawnData } from '../../../api/httpClient';
 import Nav from './Nav';

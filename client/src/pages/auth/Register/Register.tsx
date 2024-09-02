@@ -1,6 +1,8 @@
-import { FC, FormEvent, useState } from 'react';
+import type { FC, FormEvent } from 'react';
+import { useState } from 'react';
 import { postUser } from '../../../api/httpClient';
-import { RegistrationUser, LoginFormMode } from '../../../interfaces/User';
+import type { RegistrationUser } from '../../../interfaces/User';
+import { LoginFormMode } from '../../../interfaces/User';
 import AuthLayout from '../AuthLayout';
 import { Link } from 'react-router-dom';
 import showRegResponse from './showRegReponse';

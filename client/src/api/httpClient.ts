@@ -1,14 +1,11 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { Testimonial } from '../interfaces/Testimonial';
-import {
-  LoginFormMode,
-  LoginUser,
-  RegistrationUser,
-  UserData
-} from '../interfaces/User';
-import { Product } from '../interfaces/Product';
-import { OidcClient } from '../interfaces/Auth';
-import { ChatMessage } from '../interfaces/ChatMessage';
+import type { AxiosInstance, AxiosRequestConfig } from 'axios';
+import axios from 'axios';
+import type { Testimonial } from '../interfaces/Testimonial';
+import type { LoginUser, RegistrationUser, UserData } from '../interfaces/User';
+import { LoginFormMode } from '../interfaces/User';
+import type { Product } from '../interfaces/Product';
+import type { OidcClient } from '../interfaces/Auth';
+import type { ChatMessage } from '../interfaces/ChatMessage';
 import { ApiUrl } from './ApiUrl';
 import { makeApiRequest } from './makeApiRequest';
 

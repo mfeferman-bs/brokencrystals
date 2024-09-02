@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren } from 'react';
+import type { FC, PropsWithChildren } from 'react';
 
 export const AdminLayout: FC<PropsWithChildren> = ({ children }) => {
   return (

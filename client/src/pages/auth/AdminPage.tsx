@@ -1,5 +1,6 @@
-import { ChangeEvent, FC, useEffect, useState } from 'react';
-import { UserData } from '../../interfaces/User';
+import type { ChangeEvent, FC } from 'react';
+import { useEffect, useState } from 'react';
+import type { UserData } from '../../interfaces/User';
 import { getAdminStatus, searchUsers } from '../../api/httpClient';
 import AdminLayout from './AdminLayout';
 

@@ -1,8 +1,9 @@
-import { AxiosRequestConfig } from 'axios';
+import type { AxiosRequestConfig } from 'axios';
 import getBrowserFingerprint from 'get-browser-fingerprint';
-import { FC, FormEvent, useEffect, useState } from 'react';
+import type { FC, FormEvent } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { OidcClient } from '../../../interfaces/Auth';
+import type { OidcClient } from '../../../interfaces/Auth';
 import { RoutePath } from '../../../router/RoutePath';
 import {
   getLdap,
@@ -12,13 +13,13 @@ import {
   loadDomXsrfToken,
   getOidcClient
 } from '../../../api/httpClient';
-import {
-  LoginFormMode,
+import type {
   LoginResponse,
   LoginUser,
   UserData,
   RegistrationUser
 } from '../../../interfaces/User';
+import { LoginFormMode } from '../../../interfaces/User';
 import AuthLayout from '../AuthLayout';
 import showLdapResponse from './showLdapReponse';
 import showLoginResponse from './showLoginReponse';

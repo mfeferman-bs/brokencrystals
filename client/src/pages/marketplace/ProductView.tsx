@@ -1,5 +1,6 @@
-import { FC, useEffect } from 'react';
-import { Product } from '../../interfaces/Product';
+import type { FC } from 'react';
+import { useEffect } from 'react';
+import type { Product } from '../../interfaces/Product';
 import { viewProduct } from '../../api/httpClient';
 
 interface Props {

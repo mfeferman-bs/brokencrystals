@@ -1,9 +1,11 @@
-import { AxiosRequestConfig } from 'axios';
-import { FC, FormEvent, useState } from 'react';
+import type { AxiosRequestConfig } from 'axios';
+import type { FC, FormEvent } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { RoutePath } from '../../../router/RoutePath';
 import { getUserData } from '../../../api/httpClient';
-import { LoginFormMode, LoginUser, UserData } from '../../../interfaces/User';
+import type { LoginUser, UserData } from '../../../interfaces/User';
+import { LoginFormMode } from '../../../interfaces/User';
 import AuthLayout from '../AuthLayout';
 
 const defaultLoginUser: LoginUser = {
