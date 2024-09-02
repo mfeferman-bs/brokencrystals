@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { sendSupportEmailRequest } from 'src/api/httpClient';
+import { sendSupportEmailRequest } from '../../api/httpClient';
 
 export const Contact = (props: { mapTitle: string | null }) => {
   useEffect(() => {

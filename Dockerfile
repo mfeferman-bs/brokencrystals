@@ -28,6 +28,8 @@ COPY --chown=node:node client/public ./client/public
 COPY --chown=node:node client/typings ./client/typings
 COPY --chown=node:node client/vcs ./client/vcs
 COPY --chown=node:node client/tsconfig.json ./client/tsconfig.json
+COPY --chown=node:node client/vite.config.ts ./client/vite.config.ts
+COPY --chown=node:node client/index.html ./client/index.html
 
 ENV CYPRESS_INSTALL_BINARY=0
 RUN npm ci --prefix=client --no-audit
@@ -51,7 +53,7 @@ COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
 COPY --chown=node:node --from=build /usr/src/app/package*.json ./
 COPY --chown=node:node --from=build /usr/src/app/dist ./dist
 
-COPY --chown=node:node --from=build /usr/src/app/client/build ./client/build
+COPY --chown=node:node --from=build /usr/src/app/client/dist ./client/dist
 COPY --chown=node:node --from=build /usr/src/app/client/vcs ./client/vcs
 
 CMD ["npm", "run", "start:prod"]

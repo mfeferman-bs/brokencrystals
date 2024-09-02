@@ -106,7 +106,7 @@ async function bootstrap() {
     }
 
     readFile(
-      join(__dirname, '..', 'client', 'build', 'index.html'),
+      join(__dirname, '..', 'client', 'dist', 'index.html'),
       'utf8',
       (err, data) => {
         if (err) {
@@ -122,7 +122,7 @@ async function bootstrap() {
   });
 
   await server.register(fastifyStatic, {
-    root: join(__dirname, '..', 'client', 'build'),
+    root: join(__dirname, '..', 'client', 'dist'),
     prefix: `/`,
     decorateReply: false,
     redirect: false,
@@ -146,7 +146,7 @@ async function bootstrap() {
   }
 
   await server.register(fastifyStatic, {
-    root: join(__dirname, '..', 'client', 'build', 'vendor'),
+    root: join(__dirname, '..', 'client', 'dist', 'vendor'),
     prefix: `/vendor`,
     decorateReply: false,
     redirect: true,

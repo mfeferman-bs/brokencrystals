@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
-    "typeRoots": ["./typings", "./node_modules/@types"],
+    "typeRoots": ["./typings", "./node_modules/@types", "./node_modules"],
+    "types": ["vite/client"],
     "jsx": "react-jsx",
     "target": "es6",
-    "module": "esnext",
+    "module": "ESNext",
     "baseUrl": ".",
     "strict": true,
     "noFallthroughCasesInSwitch": true,

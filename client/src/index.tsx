@@ -4,7 +4,6 @@ import { BrowserRouter } from 'react-router-dom';
 import { AppRoutes } from './router/AppRoutes';
 import { initDependencies } from './main';
 
-// New wrapper component
 function AppWrapper({ onRender }: { onRender: () => void }) {
   useEffect(() => {
     onRender();

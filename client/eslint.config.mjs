@@ -7,7 +7,7 @@ export default tseslint.config(
   eslint.configs.recommended,
   ...tseslint.configs.strict,
   {
-    ignores: ['**/build/', '**/public/', '**/assets/']
+    ignores: ['**/dist/', '**/public/', '**/vcs/']
   },
   {
     files: ['**/*.js'],
