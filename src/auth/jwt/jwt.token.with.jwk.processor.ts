@@ -5,7 +5,7 @@ import { JwtTokenProcessor as JwtTokenProcessor } from './jwt.token.processor';
 export class JwtTokenWithJWKProcessor extends JwtTokenProcessor {
   constructor(
     private key: string,
-    private jwk: jose.JWK,
+    private jwk: jose.JWK
   ) {
     super(new Logger(JwtTokenWithJWKProcessor.name));
   }
@@ -38,7 +38,7 @@ export class JwtTokenWithJWKProcessor extends JwtTokenProcessor {
       .setProtectedHeader({
         typ: 'JWT',
         alg: 'RS256',
-        jwk: this.jwk,
+        jwk: this.jwk
       })
       .sign(pkcs8);
   }

@@ -21,7 +21,7 @@ import {
   SerializeOptions,
   UnauthorizedException,
   UseGuards,
-  UseInterceptors,
+  UseInterceptors
 } from '@nestjs/common';
 import {
   ApiConflictResponse,
@@ -33,7 +33,7 @@ import {
   ApiOperation,
   ApiQuery,
   ApiTags,
-  ApiUnauthorizedResponse,
+  ApiUnauthorizedResponse
 } from '@nestjs/swagger';
 import { CreateUserRequest, SignupMode } from './api/CreateUserRequest';
 import { UserDto } from './api/UserDto';
@@ -58,7 +58,7 @@ import {
   SWAGGER_DESC_ADMIN_RIGHTS,
   SWAGGER_DESC_FIND_USERS,
   SWAGGER_DESC_FIND_FULL_USER_INFO,
-  SWAGGER_DESC_DELETE_PHOTO_USER_BY_ID,
+  SWAGGER_DESC_DELETE_PHOTO_USER_BY_ID
 } from './users.controller.swagger.desc';
 import { AdminGuard } from './users.guard';
 import { PermissionDto } from './api/PermissionDto';
@@ -74,12 +74,12 @@ export class UsersController {
 
   constructor(
     private readonly usersService: UsersService,
-    private readonly keyCloakService: KeyCloakService,
+    private readonly keyCloakService: KeyCloakService
   ) {}
 
   @Options()
   @ApiOperation({
-    description: SWAGGER_DESC_OPTIONS_REQUEST,
+    description: SWAGGER_DESC_OPTIONS_REQUEST
   })
   @Header('Access-Control-Request-Headers', 'OPTIONS, GET, POST, DELETE')
   async getTestOptions(): Promise<void> {
@@ -90,11 +90,11 @@ export class UsersController {
   @ApiQuery({ name: 'email', example: 'john.doe@example.com', required: true })
   @SerializeOptions({ groups: [BASIC_USER_INFO] })
   @ApiOperation({
-    description: SWAGGER_DESC_FIND_USER,
+    description: SWAGGER_DESC_FIND_USER
   })
   @ApiOkResponse({
     type: UserDto,
-    description: 'Returns basic user info if it exists',
+    description: 'Returns basic user info if it exists'
   })
   @ApiNotFoundResponse({
     description: 'User not found',
@@ -102,9 +102,9 @@ export class UsersController {
       type: 'object',
       properties: {
         statusCode: { type: 'number' },
-        message: { type: 'string' },
-      },
-    },
+        message: { type: 'string' }
+      }
+    }
   })
   async getByEmail(@Param('email') email: string): Promise<UserDto> {
     try {
@@ -119,11 +119,11 @@ export class UsersController {
   @ApiQuery({ name: 'id', example: 1, required: true })
   @SerializeOptions({ groups: [BASIC_USER_INFO] })
   @ApiOperation({
-    description: SWAGGER_DESC_FIND_USER,
+    description: SWAGGER_DESC_FIND_USER
   })
   @ApiOkResponse({
     type: UserDto,
-    description: 'Returns basic user info if it exists',
+    description: 'Returns basic user info if it exists'
   })
   @ApiNotFoundResponse({
     description: 'User not found',
@@ -131,9 +131,9 @@ export class UsersController {
       type: 'object',
       properties: {
         statusCode: { type: 'number' },
-        message: { type: 'string' },
-      },
-    },
+        message: { type: 'string' }
+      }
+    }
   })
   async getById(@Param('id') id: number): Promise<UserDto> {
     try {
@@ -148,11 +148,11 @@ export class UsersController {
   @ApiQuery({ name: 'email', example: 'john.doe@example.com', required: true })
   @SerializeOptions({ groups: [FULL_USER_INFO] })
   @ApiOperation({
-    description: SWAGGER_DESC_FIND_FULL_USER_INFO,
+    description: SWAGGER_DESC_FIND_FULL_USER_INFO
   })
   @ApiOkResponse({
     type: UserDto,
-    description: 'Returns full user info if it exists',
+    description: 'Returns full user info if it exists'
   })
   @ApiNotFoundResponse({
     description: 'User not found',
@@ -160,9 +160,9 @@ export class UsersController {
       type: 'object',
       properties: {
         statusCode: { type: 'number' },
-        message: { type: 'string' },
-      },
-    },
+        message: { type: 'string' }
+      }
+    }
   })
   async getFullUserInfo(@Param('email') email: string): Promise<UserDto> {
     try {
@@ -177,11 +177,11 @@ export class UsersController {
   @ApiQuery({ name: 'name', example: 'john', required: true })
   @SerializeOptions({ groups: [FULL_USER_INFO] })
   @ApiOperation({
-    description: SWAGGER_DESC_FIND_USERS,
+    description: SWAGGER_DESC_FIND_USERS
   })
   @ApiOkResponse({
     type: UserDto,
-    description: SWAGGER_DESC_FIND_USERS,
+    description: SWAGGER_DESC_FIND_USERS
   })
   async searchByName(@Param('name') name: string): Promise<UserDto[]> {
     try {
@@ -198,27 +198,27 @@ export class UsersController {
   @UseGuards(AuthGuard)
   @JwtType(JwtProcessorType.RSA)
   @ApiOperation({
-    description: SWAGGER_DESC_PHOTO_USER_BY_EMAIL,
+    description: SWAGGER_DESC_PHOTO_USER_BY_EMAIL
   })
   @ApiOkResponse({
-    description: 'Returns user profile photo',
+    description: 'Returns user profile photo'
   })
   @ApiNoContentResponse({
-    description: 'Returns empty content if photo is not set',
+    description: 'Returns empty content if photo is not set'
   })
   @ApiForbiddenResponse({
-    description: 'Returns then user is not authenticated',
+    description: 'Returns then user is not authenticated'
   })
   async getUserPhoto(
     @Param('email') email: string,
-    @Res({ passthrough: true }) res: FastifyReply,
+    @Res({ passthrough: true }) res: FastifyReply
   ) {
     this.logger.debug(`Find a user photo by email: ${email}`);
     const user = await this.usersService.findByEmail(email);
     if (!user) {
       throw new NotFoundException({
         error: 'Could not file user',
-        location: __filename,
+        location: __filename
       });
     }
 
@@ -232,7 +232,7 @@ export class UsersController {
     } catch (err) {
       throw new InternalServerErrorException({
         error: err.message,
-        location: __filename,
+        location: __filename
       });
     }
   }
@@ -242,23 +242,23 @@ export class UsersController {
   @UseGuards(AuthGuard)
   @JwtType(JwtProcessorType.RSA)
   @ApiOperation({
-    description: SWAGGER_DESC_DELETE_PHOTO_USER_BY_ID,
+    description: SWAGGER_DESC_DELETE_PHOTO_USER_BY_ID
   })
   @ApiOkResponse({
-    description: 'Deletes user profile photo',
+    description: 'Deletes user profile photo'
   })
   @ApiNoContentResponse({
-    description: 'Returns empty content if there was no user profile photo',
+    description: 'Returns empty content if there was no user profile photo'
   })
   @ApiForbiddenResponse({
-    description: 'Returns when user is not authenticated',
+    description: 'Returns when user is not authenticated'
   })
   @ApiUnauthorizedResponse({
-    description: 'Returns when isAdmin is false',
+    description: 'Returns when isAdmin is false'
   })
   async deleteUserPhotoById(
     @Param('id') id: number,
-    @Query('isAdmin') isAdminParam: string,
+    @Query('isAdmin') isAdminParam: string
   ) {
     isAdminParam = isAdminParam.toLowerCase();
     const isAdmin =
@@ -271,7 +271,7 @@ export class UsersController {
     if (!user) {
       throw new NotFoundException({
         error: 'Could not file user',
-        location: __filename,
+        location: __filename
       });
     }
 
@@ -283,14 +283,14 @@ export class UsersController {
     name: 'query',
     example:
       '(&(objectClass=person)(objectClass=user)(email=john.doe@example.com))',
-    required: true,
+    required: true
   })
   @ApiOperation({
-    description: SWAGGER_DESC_LDAP_SEARCH,
+    description: SWAGGER_DESC_LDAP_SEARCH
   })
   @ApiOkResponse({
     type: UserDto,
-    isArray: true,
+    isArray: true
   })
   async ldapQuery(@Query('query') query: string): Promise<UserDto[]> {
     this.logger.debug(`Call ldapQuery: ${query}`);
@@ -311,7 +311,7 @@ export class UsersController {
     } catch (err) {
       throw new InternalServerErrorException({
         error: err.message,
-        location: __filename,
+        location: __filename
       });
     }
 
@@ -324,7 +324,7 @@ export class UsersController {
 
   @Post('/basic')
   @ApiOperation({
-    description: SWAGGER_DESC_CREATE_BASIC_USER,
+    description: SWAGGER_DESC_CREATE_BASIC_USER
   })
   @ApiConflictResponse({
     schema: {
@@ -332,14 +332,14 @@ export class UsersController {
       properties: {
         statusCode: { type: 'number' },
         message: { type: 'string' },
-        error: { type: 'string' },
-      },
+        error: { type: 'string' }
+      }
     },
-    description: 'User Already exists',
+    description: 'User Already exists'
   })
   @ApiCreatedResponse({
     type: UserDto,
-    description: 'User created',
+    description: 'User created'
   })
   async createUser(@Body() user: CreateUserRequest): Promise<UserDto> {
     try {
@@ -351,31 +351,31 @@ export class UsersController {
       }
 
       return new UserDto(
-        await this.usersService.createUser(user, user.op === SignupMode.BASIC),
+        await this.usersService.createUser(user, user.op === SignupMode.BASIC)
       );
     } catch (err) {
       throw new HttpException(
         err.message ?? 'Something went wrong',
-        err.status ?? HttpStatus.INTERNAL_SERVER_ERROR,
+        err.status ?? HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
   }
 
   @Post('/oidc')
   @ApiOperation({
-    description: SWAGGER_DESC_CREATE_OIDC_USER,
+    description: SWAGGER_DESC_CREATE_OIDC_USER
   })
   @ApiConflictResponse({
     schema: {
       type: 'object',
       properties: {
-        errorMessage: { type: 'string' },
-      },
+        errorMessage: { type: 'string' }
+      }
     },
-    description: 'User Already exists',
+    description: 'User Already exists'
   })
   @ApiCreatedResponse({
-    description: 'User created, returns empty object',
+    description: 'User created, returns empty object'
   })
   async createOIDCUser(@Body() user: CreateUserRequest): Promise<UserDto> {
     try {
@@ -392,8 +392,8 @@ export class UsersController {
           email: user.email,
           firstName: user.firstName,
           lastName: user.lastName,
-          password: user.password,
-        }),
+          password: user.password
+        })
       );
 
       this.createUser(user);
@@ -402,7 +402,7 @@ export class UsersController {
     } catch (err) {
       throw new HttpException(
         err.response.data ?? 'Something went wrong',
-        err.response.status ?? 500,
+        err.response.status ?? 500
       );
     }
   }
@@ -412,7 +412,7 @@ export class UsersController {
   @UseGuards(AuthGuard)
   @JwtType(JwtProcessorType.RSA)
   @ApiOperation({
-    description: SWAGGER_DESC_UPDATE_USER_INFO,
+    description: SWAGGER_DESC_UPDATE_USER_INFO
   })
   @ApiForbiddenResponse({
     description: 'invalid credentials',
@@ -421,17 +421,17 @@ export class UsersController {
       properties: {
         statusCode: { type: 'number' },
         message: { type: 'string' },
-        error: { type: 'string' },
-      },
-    },
+        error: { type: 'string' }
+      }
+    }
   })
   @ApiOkResponse({
-    description: 'Returns updated user',
+    description: 'Returns updated user'
   })
   async changeUserInfo(
     @Body() newData: UserDto,
     @Param('email') email: string,
-    @Req() req: FastifyRequest,
+    @Req() req: FastifyRequest
   ): Promise<UserDto> {
     try {
       const user = await this.usersService.findByEmail(email);
@@ -445,7 +445,7 @@ export class UsersController {
     } catch (err) {
       throw new HttpException(
         err.message || 'Internal server error',
-        err.status || 500,
+        err.status || 500
       );
     }
   }
@@ -455,7 +455,7 @@ export class UsersController {
   @UseGuards(AuthGuard)
   @JwtType(JwtProcessorType.RSA)
   @ApiOperation({
-    description: SWAGGER_DESC_FIND_USER,
+    description: SWAGGER_DESC_FIND_USER
   })
   @ApiForbiddenResponse({
     description: 'invalid credentials',
@@ -464,17 +464,17 @@ export class UsersController {
       properties: {
         statusCode: { type: 'number' },
         message: { type: 'string' },
-        error: { type: 'string' },
-      },
-    },
+        error: { type: 'string' }
+      }
+    }
   })
   @ApiNotFoundResponse()
   @ApiOkResponse({
-    description: 'Returns user info',
+    description: 'Returns user info'
   })
   async getUserInfo(
     @Param('email') email: string,
-    @Req() req: FastifyRequest,
+    @Req() req: FastifyRequest
   ): Promise<UserDto> {
     try {
       const user = await this.usersService.findByEmail(email);
@@ -489,7 +489,7 @@ export class UsersController {
     } catch (err) {
       throw new HttpException(
         err.message || 'Internal server error',
-        err.status || 500,
+        err.status || 500
       );
     }
   }
@@ -499,7 +499,7 @@ export class UsersController {
   @UseGuards(AuthGuard, AdminGuard)
   @JwtType(JwtProcessorType.RSA)
   @ApiOperation({
-    description: SWAGGER_DESC_ADMIN_RIGHTS,
+    description: SWAGGER_DESC_ADMIN_RIGHTS
   })
   @ApiForbiddenResponse({
     description: 'user has no admin rights',
@@ -507,12 +507,12 @@ export class UsersController {
       type: 'object',
       properties: {
         statusCode: { type: 'number' },
-        message: { type: 'string' },
-      },
-    },
+        message: { type: 'string' }
+      }
+    }
   })
   @ApiOkResponse({
-    description: 'Returns true if user has admin rights',
+    description: 'Returns true if user has admin rights'
   })
   getAdminStatus(@Param('email') email: string): Promise<PermissionDto> {
     return this.usersService.getPermissions(email);
@@ -523,10 +523,10 @@ export class UsersController {
   @UseGuards(AuthGuard)
   @JwtType(JwtProcessorType.RSA)
   @ApiOperation({
-    description: SWAGGER_DESC_UPLOAD_USER_PHOTO,
+    description: SWAGGER_DESC_UPLOAD_USER_PHOTO
   })
   @ApiOkResponse({
-    description: 'Photo updated',
+    description: 'Photo updated'
   })
   @UseInterceptors(AnyFilesInterceptor)
   async uploadFile(@Param('email') email: string, @Req() req: FastifyRequest) {
@@ -540,11 +540,11 @@ export class UsersController {
         const xmlDoc = parseXml(xml, {
           noent: true,
           dtdvalid: true,
-          recover: true,
+          recover: true
         });
         await this.usersService.updatePhoto(
           email,
-          Buffer.from(xmlDoc.toString(), 'utf8'),
+          Buffer.from(xmlDoc.toString(), 'utf8')
         );
         return xmlDoc.toString(true);
       } else {
@@ -553,7 +553,7 @@ export class UsersController {
     } catch (err) {
       throw new InternalServerErrorException({
         error: err.message,
-        location: __filename,
+        location: __filename
       });
     }
   }
@@ -562,8 +562,8 @@ export class UsersController {
     return JSON.parse(
       Buffer.from(
         request.headers.authorization.split('.')[1],
-        'base64',
-      ).toString(),
+        'base64'
+      ).toString()
     ).user;
   }
 
@@ -579,7 +579,7 @@ export class UsersController {
       }
       throw new HttpException(
         err.message ?? 'Something went wrong',
-        err.status ?? HttpStatus.INTERNAL_SERVER_ERROR,
+        err.status ?? HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
   }

@@ -30,17 +30,17 @@ import { ChatModule } from './chat/chat.module';
     TestimonialsModule,
     ProductsModule,
     ConfigModule.forRoot({
-      isGlobal: true,
+      isGlobal: true
     }),
     HttpClientModule,
     GraphQLModule.forRoot<MercuriusDriverConfig>({
       driver: MercuriusDriver,
       graphiql: true,
-      autoSchemaFile: true,
+      autoSchemaFile: true
     }),
     PartnersModule,
     EmailModule,
-    ChatModule,
+    ChatModule
   ],
   controllers: [AppController],
   providers: [
@@ -48,8 +48,8 @@ import { ChatModule } from './chat/chat.module';
     AppService,
     UsersService,
     ConfigService,
-    AppResolver,
-  ],
+    AppResolver
+  ]
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {

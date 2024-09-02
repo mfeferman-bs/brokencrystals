@@ -2,7 +2,7 @@ import {
   EntityManager,
   EntityRepository,
   NotFoundError,
-  wrap,
+  wrap
 } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
@@ -26,7 +26,7 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly usersRepository: EntityRepository<User>,
-    private readonly em: EntityManager,
+    private readonly em: EntityManager
   ) {}
 
   async createUser(user: UserDto, isBasicUser = true): Promise<User> {
@@ -55,7 +55,7 @@ export class UsersService {
       throw new NotFoundError('Could not find user');
     }
     wrap(user).assign({
-      photo,
+      photo
     });
 
     await this.em.persistAndFlush(user);
@@ -78,7 +78,7 @@ export class UsersService {
     this.log.debug(`updateUserInfo ${oldUser.email}`);
     const newUser = oldUser;
     wrap(newUser).assign({
-      ...newData,
+      ...newData
     });
     await this.em.persistAndFlush(newUser);
     const poisonedUser = Object.create(newUser);
@@ -88,7 +88,7 @@ export class UsersService {
       email: email,
       firstName: firstName,
       lastName: lastName,
-      ...poisonedUser.__proto__,
+      ...poisonedUser.__proto__
     };
   }
 
@@ -114,9 +114,9 @@ export class UsersService {
     this.log.debug(`Called searchUsersByName`);
     return this.usersRepository.find(
       {
-        firstName: { $like: query + '%' },
+        firstName: { $like: query + '%' }
       },
-      limit ? { limit } : {},
+      limit ? { limit } : {}
     );
   }
 
@@ -124,7 +124,7 @@ export class UsersService {
     const user = await this.usersRepository.findOne({ email });
 
     return new PermissionDto({
-      isAdmin: user.isAdmin,
+      isAdmin: user.isAdmin
     });
   }
 

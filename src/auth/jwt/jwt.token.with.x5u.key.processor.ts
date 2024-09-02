@@ -6,7 +6,7 @@ export class JwtTokenWithX5UKeyProcessor extends JwtTokenProcessor {
   constructor(
     private key: string,
     private httpClient: HttpClientService,
-    private x5uUrl: string,
+    private x5uUrl: string
   ) {
     super(new Logger(JwtTokenWithX5UKeyProcessor.name));
   }
@@ -31,7 +31,7 @@ export class JwtTokenWithX5UKeyProcessor extends JwtTokenProcessor {
       .setProtectedHeader({
         typ: 'JWT',
         alg: 'RS256',
-        x5u: this.x5uUrl,
+        x5u: this.x5uUrl
       })
       .sign(pkcs8);
   }

@@ -11,9 +11,9 @@ describe('FileController', () => {
       providers: [
         {
           provide: FileService,
-          useValue: {},
-        },
-      ],
+          useValue: {}
+        }
+      ]
     }).compile();
 
     controller = module.get<FileController>(FileController);

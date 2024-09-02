@@ -5,7 +5,7 @@ import { encode, decode } from 'jwt-simple';
 export class JwtTokenWithHMACKeysProcessor extends JwtTokenProcessor {
   constructor(
     private publicKey: string,
-    private privateKey: string,
+    private privateKey: string
   ) {
     super(new Logger(JwtTokenWithHMACKeysProcessor.name));
   }

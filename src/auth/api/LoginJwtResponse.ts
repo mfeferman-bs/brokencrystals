@@ -8,7 +8,7 @@ export class LoginJwtResponse {
   email: string;
 
   @ApiProperty({
-    description: 'ldap query link for user details',
+    description: 'ldap query link for user details'
   })
   ldapProfileLink: string;
 }

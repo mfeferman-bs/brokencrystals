@@ -24,10 +24,10 @@ describe('/api', () => {
           headers: {
             Accept: 'application/json, text/plain, */*',
             'Content-Type': 'text/plain',
-            Origin: process.env.SEC_TESTER_TARGET,
+            Origin: process.env.SEC_TESTER_TARGET
           },
           body: `Some text`,
-          url: `${process.env.SEC_TESTER_TARGET}/api/render`,
+          url: `${process.env.SEC_TESTER_TARGET}/api/render`
         });
     });
   });

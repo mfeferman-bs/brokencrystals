@@ -5,18 +5,18 @@ import {
   HttpException,
   HttpStatus,
   Logger,
-  Query,
+  Query
 } from '@nestjs/common';
 import {
   ApiOkResponse,
   ApiOperation,
   ApiQuery,
-  ApiTags,
+  ApiTags
 } from '@nestjs/swagger';
 import {
   API_DESC_QUERY_PARTNERS_RAW,
   API_DESC_PARTNERS_LOGIN,
-  API_DESC_SEARCH_PARTNERS_NAMES,
+  API_DESC_SEARCH_PARTNERS_NAMES
 } from './partners.controller.swagger.desc';
 import { PartnersService } from './partners.service';
 
@@ -33,14 +33,14 @@ export class PartnersController {
     name: 'xpath',
     type: 'string',
     example: '/partners/partner/name',
-    required: true,
+    required: true
   })
   @Header('content-type', 'text/xml')
   @ApiOperation({
-    description: API_DESC_QUERY_PARTNERS_RAW,
+    description: API_DESC_QUERY_PARTNERS_RAW
   })
   @ApiOkResponse({
-    type: String,
+    type: String
   })
   async queryPartnersRaw(@Query('xpath') xpath: string): Promise<string> {
     this.logger.debug(`Getting partners with xpath expression "${xpath}"`);
@@ -50,7 +50,7 @@ export class PartnersController {
     } catch (err) {
       throw new HttpException(
         `Failed to load XML using XPATH. Details: ${err}`,
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
   }
@@ -61,27 +61,27 @@ export class PartnersController {
     name: 'username',
     type: 'string',
     example: 'walter100',
-    required: true,
+    required: true
   })
   @ApiQuery({
     name: 'password',
     type: 'string',
     example: 'Heisenberg123',
-    required: true,
+    required: true
   })
   @Header('content-type', 'text/xml')
   @ApiOperation({
-    description: API_DESC_PARTNERS_LOGIN,
+    description: API_DESC_PARTNERS_LOGIN
   })
   @ApiOkResponse({
-    type: String,
+    type: String
   })
   async partnerLogin(
     @Query('username') username: string,
-    @Query('password') password: string,
+    @Query('password') password: string
   ): Promise<string> {
     this.logger.debug(
-      `Trying to login partner with username ${username} using password ${password}`,
+      `Trying to login partner with username ${username} using password ${password}`
     );
 
     try {
@@ -104,7 +104,7 @@ export class PartnersController {
 
       throw new HttpException(
         `Access denied to partner's account. ${errorMessage}`,
-        HttpStatus.FORBIDDEN,
+        HttpStatus.FORBIDDEN
       );
     }
   }
@@ -115,14 +115,14 @@ export class PartnersController {
     name: 'keyword',
     type: 'string',
     example: 'Walter',
-    required: true,
+    required: true
   })
   @Header('content-type', 'text/xml')
   @ApiOperation({
-    description: API_DESC_SEARCH_PARTNERS_NAMES,
+    description: API_DESC_SEARCH_PARTNERS_NAMES
   })
   @ApiOkResponse({
-    type: String,
+    type: String
   })
   async searchPartners(@Query('keyword') keyword: string): Promise<string> {
     this.logger.debug(`Searching partner names by the keyword "${keyword}"`);
@@ -140,7 +140,7 @@ export class PartnersController {
 
       throw new HttpException(
         `Couldn't find partners. ${errorMessage}`,
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
   }

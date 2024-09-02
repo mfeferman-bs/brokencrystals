@@ -6,7 +6,7 @@ import {
   Logger,
   Post,
   Query,
-  UseGuards,
+  UseGuards
 } from '@nestjs/common';
 import {
   ApiBody,
@@ -14,7 +14,7 @@ import {
   ApiOkResponse,
   ApiOperation,
   ApiQuery,
-  ApiTags,
+  ApiTags
 } from '@nestjs/swagger';
 import { AuthGuard } from '../auth/auth.guard';
 import { JwtProcessorType } from '../auth/auth.service';
@@ -24,7 +24,7 @@ import { TestimonialDto } from './api/TestimonialDto';
 import {
   API_DESC_CREATE_TESTIMONIAL,
   API_DESC_GET_TESTIMONIALS,
-  API_DESC_GET_TESTIMONIALS_ON_SQL_QUERY,
+  API_DESC_GET_TESTIMONIALS_ON_SQL_QUERY
 } from './testimonials.controller.api.desc';
 import { TestimonialsService } from './testimonials.service';
 
@@ -37,15 +37,15 @@ export class TestimonialsController {
 
   @Post()
   @ApiBody({
-    type: TestimonialDto,
+    type: TestimonialDto
   })
   @UseGuards(AuthGuard)
   @JwtType(JwtProcessorType.RSA)
   @ApiOperation({
-    description: API_DESC_CREATE_TESTIMONIAL,
+    description: API_DESC_CREATE_TESTIMONIAL
   })
   @ApiOkResponse({
-    type: TestimonialDto,
+    type: TestimonialDto
   })
   @ApiForbiddenResponse({
     schema: {
@@ -53,35 +53,35 @@ export class TestimonialsController {
       properties: {
         statusCode: { type: 'number' },
         message: { type: 'string' },
-        error: { type: 'string' },
-      },
-    },
+        error: { type: 'string' }
+      }
+    }
   })
   async createTestimonial(
-    @Body() req: CreateTestimonialRequest,
+    @Body() req: CreateTestimonialRequest
   ): Promise<CreateTestimonialRequest> {
     this.logger.debug('Create testimonial.');
     return TestimonialDto.covertToApi(
       await this.testimonialsService.createTestimonial(
         req.message,
         req.name,
-        req.title,
-      ),
+        req.title
+      )
     );
   }
 
   @Get()
   @ApiOperation({
-    description: API_DESC_GET_TESTIMONIALS,
+    description: API_DESC_GET_TESTIMONIALS
   })
   @ApiOkResponse({
     type: TestimonialDto,
-    isArray: true,
+    isArray: true
   })
   async getTestimonials(): Promise<TestimonialDto[]> {
     this.logger.debug('Get all testimonials.');
     return (await this.testimonialsService.findAll()).map<TestimonialDto>(
-      TestimonialDto.covertToApi,
+      TestimonialDto.covertToApi
     );
   }
 
@@ -89,14 +89,14 @@ export class TestimonialsController {
   @ApiQuery({
     name: 'query',
     example: 'select count(*) as count from testimonial',
-    required: true,
+    required: true
   })
   @Header('content-type', 'text/html')
   @ApiOperation({
-    description: API_DESC_GET_TESTIMONIALS_ON_SQL_QUERY,
+    description: API_DESC_GET_TESTIMONIALS_ON_SQL_QUERY
   })
   @ApiOkResponse({
-    type: String,
+    type: String
   })
   async getCount(@Query('query') query: string): Promise<number> {
     this.logger.debug('Get count of testimonials.');

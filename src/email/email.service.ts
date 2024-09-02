@@ -12,8 +12,8 @@ export class EmailService {
     secure: false,
     auth: {
       user: 'mailcatcher',
-      pass: 'mailcatcher',
-    },
+      pass: 'mailcatcher'
+    }
   };
 
   private readonly transporter = createTransport(this.smtpServerDetails);
@@ -25,11 +25,11 @@ export class EmailService {
     from: string,
     to: string,
     subject: string,
-    body: string,
+    body: string
   ): Promise<boolean> {
     this.logger.debug(`Sending mail from "${from}" to "${to}"`);
     this.logger.debug(
-      `Mail subject is (trimmed): "${subject.substring(0, 64)}"`,
+      `Mail subject is (trimmed): "${subject.substring(0, 64)}"`
     );
     this.logger.debug(`Mail body is (trimmed): "${body.substring(0, 64)}"`);
 
@@ -37,7 +37,7 @@ export class EmailService {
       from,
       to,
       subject,
-      body,
+      body
     );
 
     const response = await this.transporter.sendMail(mailOptions);
@@ -55,7 +55,7 @@ export class EmailService {
     from: string,
     to: string,
     subject: string,
-    body: string,
+    body: string
   ) {
     to = to.replace('\n', '%0A');
     this.logger.debug(`Creating vulnerable mailOptions. "to" param is: ${to}`);
@@ -88,7 +88,7 @@ export class EmailService {
     }
 
     this.logger.debug(
-      `parsedFrom: ${parsedFrom} | parsedTo: ${parsedTo} | parsedCc: ${parsedCc} | parsedBcc: ${parsedBcc}`,
+      `parsedFrom: ${parsedFrom} | parsedTo: ${parsedTo} | parsedCc: ${parsedCc} | parsedBcc: ${parsedBcc}`
     );
 
     // Build final raw email
@@ -116,9 +116,9 @@ export class EmailService {
         from: parsedFrom,
         to: parsedTo,
         cc: parsedCc ? [parsedCc] : [],
-        bcc: parsedCc ? [parsedCc] : [],
+        bcc: parsedCc ? [parsedCc] : []
       },
-      raw: rawContent,
+      raw: rawContent
     };
 
     return mailOptions;
@@ -132,7 +132,7 @@ export class EmailService {
       .then((res) =>
         res.status == HttpStatus.OK
           ? res.data
-          : { error: 'Failed to get emails' },
+          : { error: 'Failed to get emails' }
       );
 
     if (withSource) {
@@ -153,12 +153,12 @@ export class EmailService {
       .then((res) =>
         res.status == HttpStatus.OK
           ? res.data
-          : { error: 'Failed to get emails' },
+          : { error: 'Failed to get emails' }
       )
       .catch((err) =>
         this.logger.debug(
-          `Failed to fetch email source with id ${emailId} via "${sourceUrl}". Error: ${err}`,
-        ),
+          `Failed to fetch email source with id ${emailId} via "${sourceUrl}". Error: ${err}`
+        )
       );
   }
 
@@ -167,7 +167,7 @@ export class EmailService {
 
     return await axios
       .get(this.MAIL_CATCHER_MESSAGES_URL, {
-        method: 'DELETE',
+        method: 'DELETE'
       })
       .then((res) => res.status == HttpStatus.OK);
   }

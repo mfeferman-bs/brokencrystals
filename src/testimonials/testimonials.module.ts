@@ -10,6 +10,6 @@ import { TestimonialsService } from './testimonials.service';
   imports: [OrmModule, AuthModule, UsersModule],
   controllers: [TestimonialsController],
   providers: [TestimonialsService, TestimonialsResolver],
-  exports: [TestimonialsService],
+  exports: [TestimonialsService]
 })
 export class TestimonialsModule {}

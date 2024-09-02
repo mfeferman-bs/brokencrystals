@@ -33,7 +33,7 @@ export class ChatService {
       !process.env.CHAT_API_TOKEN
     ) {
       throw new Error(
-        'Chat API environment variables are missing. CHAT_API_URL, CHAT_API_MODEL, CHAT_API_TOKEN are mandatory.',
+        'Chat API environment variables are missing. CHAT_API_URL, CHAT_API_MODEL, CHAT_API_TOKEN are mandatory.'
       );
     }
 
@@ -42,7 +42,7 @@ export class ChatService {
       messages,
       max_tokens:
         +process.env.CHAT_API_MAX_TOKENS || DEFAULT_CHAT_API_MAX_TOKENS,
-      stream: false,
+      stream: false
     };
 
     const res = await this.httpClient.post<ChatResponse>(
@@ -51,9 +51,9 @@ export class ChatService {
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${process.env.CHAT_API_TOKEN}`,
-        },
-      },
+          Authorization: `Bearer ${process.env.CHAT_API_TOKEN}`
+        }
+      }
     );
 
     return res?.choices?.[0]?.message?.content;

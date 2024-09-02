@@ -7,14 +7,14 @@ import {
   HttpStatus,
   Logger,
   Query,
-  Res,
+  Res
 } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { EmailService } from './email.service';
 import {
   SWAGGER_DESC_DELTE_EMAILS,
   SWAGGER_DESC_GET_EMAILS,
-  SWAGGER_DESC_SEND_EMAIL,
+  SWAGGER_DESC_SEND_EMAIL
 } from './email.controller.swagger.desc';
 import splitUriIntoParamsPPVulnerable from '../utils/url';
 
@@ -31,25 +31,25 @@ export class EmailController {
   @ApiQuery({
     name: 'name',
     example: 'Bob Dylan',
-    required: true,
+    required: true
   })
   @ApiQuery({
     name: 'to',
     example: 'username@email.com',
-    required: true,
+    required: true
   })
   @ApiQuery({
     name: 'subject',
     example: 'Help Request',
-    required: true,
+    required: true
   })
   @ApiQuery({
     name: 'content',
     example: 'I would like to request help regarding..',
-    required: true,
+    required: true
   })
   @ApiOperation({
-    description: SWAGGER_DESC_SEND_EMAIL,
+    description: SWAGGER_DESC_SEND_EMAIL
   })
   @Header('Content-Type', 'application/json')
   async sendSupportEmail(
@@ -58,14 +58,14 @@ export class EmailController {
     @Query('subject') subject: string,
     @Query('content') content: string,
     @Query() query,
-    @Res({ passthrough: true }) res: FastifyReply,
+    @Res({ passthrough: true }) res: FastifyReply
   ) {
     this.logger.log('Sending a support Email');
 
     // This is defined here intentionally so we don't override responseJson.status after the prototype pollution has occurred
     const responseJson = {
       message: {},
-      status: HttpStatus.OK,
+      status: HttpStatus.OK
     };
 
     // "Accidentally" forgot this here while coding... Oops.
@@ -95,7 +95,7 @@ export class EmailController {
       this.BC_EMAIL_ADDRESS,
       to,
       mailSubject,
-      mailBody,
+      mailBody
     );
 
     if (didSucceed) {
@@ -111,12 +111,12 @@ export class EmailController {
 
   @Get('/getEmails')
   @ApiOperation({
-    description: SWAGGER_DESC_GET_EMAILS,
+    description: SWAGGER_DESC_GET_EMAILS
   })
   @ApiQuery({
     name: 'withSource',
     example: 'true',
-    required: true,
+    required: true
   })
   async getEmails(@Query('withSource') withSourceStr: string) {
     const withSource = withSourceStr === 'true';
@@ -127,7 +127,7 @@ export class EmailController {
 
   @Delete('/deleteEmails')
   @ApiOperation({
-    description: SWAGGER_DESC_DELTE_EMAILS,
+    description: SWAGGER_DESC_DELTE_EMAILS
   })
   async deleteEmails() {
     this.logger.log('Deleting Emails');

@@ -15,7 +15,7 @@ export class TestimonialDto {
     return {
       message: t.message,
       name: t.name,
-      title: t.title,
+      title: t.title
     };
   }
 }

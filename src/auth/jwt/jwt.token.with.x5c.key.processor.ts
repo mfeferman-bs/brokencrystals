@@ -24,7 +24,7 @@ export class JwtTokenWithX5CKeyProcessor extends JwtTokenProcessor {
       .setProtectedHeader({
         typ: 'JWT',
         alg: 'RS256',
-        x5c: [this.key],
+        x5c: [this.key]
       })
       .sign(pkcs8);
   }

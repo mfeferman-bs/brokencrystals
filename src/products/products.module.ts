@@ -10,6 +10,6 @@ import { ProductsResolver } from './products.resolver';
   imports: [OrmModule, AuthModule, UsersModule],
   controllers: [ProductsController],
   providers: [ProductsService, ProductsResolver],
-  exports: [ProductsService],
+  exports: [ProductsService]
 })
 export class ProductsModule {}

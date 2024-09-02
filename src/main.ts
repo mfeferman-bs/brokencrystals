@@ -10,7 +10,7 @@ import { readFileSync, readFile, readdirSync } from 'fs';
 import cluster from 'cluster';
 import {
   FastifyAdapter,
-  NestFastifyApplication,
+  NestFastifyApplication
 } from '@nestjs/platform-fastify';
 import fmp from '@fastify/multipart';
 import { randomBytes } from 'crypto';
@@ -48,7 +48,7 @@ const renderDirList: ListRender = (dirs, files) => {
               <td>
                 -
               </td>
-            </tr>`,
+            </tr>`
         )}
         <br/>
         ${files.map(
@@ -63,7 +63,7 @@ const renderDirList: ListRender = (dirs, files) => {
               <td>
                 ${file.stats.size}
               </td>
-            </tr>`,
+            </tr>`
         )}
       </table>
       <hr>
@@ -82,13 +82,13 @@ async function bootstrap() {
       process.env.NODE_ENV === 'production'
         ? {
             cert: readFileSync(
-              '/etc/letsencrypt/live/brokencrystals.com/fullchain.pem',
+              '/etc/letsencrypt/live/brokencrystals.com/fullchain.pem'
             ),
             key: readFileSync(
-              '/etc/letsencrypt/live/brokencrystals.com/privkey.pem',
-            ),
+              '/etc/letsencrypt/live/brokencrystals.com/privkey.pem'
+            )
           }
-        : null,
+        : null
   });
 
   server.setDefaultRoute((req, res) => {
@@ -99,9 +99,9 @@ async function bootstrap() {
           success: false,
           error: {
             kind: 'user_input',
-            message: 'Not Found',
-          },
-        }),
+            message: 'Not Found'
+          }
+        })
       );
     }
 
@@ -117,7 +117,7 @@ async function bootstrap() {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'text/html');
         res.end(data);
-      },
+      }
     );
   });
 
@@ -127,7 +127,7 @@ async function bootstrap() {
     decorateReply: false,
     redirect: false,
     wildcard: false,
-    serveDotFiles: true,
+    serveDotFiles: true
   });
 
   for (const dir of readdirSync(join(__dirname, '..', 'client', 'vcs'))) {
@@ -139,9 +139,9 @@ async function bootstrap() {
       index: false,
       list: {
         format: 'html',
-        render: renderDirList,
+        render: renderDirList
       },
-      serveDotFiles: true,
+      serveDotFiles: true
     });
   }
 
@@ -153,9 +153,9 @@ async function bootstrap() {
     index: false,
     list: {
       format: 'html',
-      render: renderDirList,
+      render: renderDirList
     },
-    serveDotFiles: true,
+    serveDotFiles: true
   });
 
   const app: NestFastifyApplication = await NestFactory.create(
@@ -165,8 +165,8 @@ async function bootstrap() {
       logger:
         process.env.NODE_ENV === 'production'
           ? ['error']
-          : ['debug', 'log', 'warn', 'error'],
-    },
+          : ['debug', 'log', 'warn', 'error']
+    }
   );
 
   await server.register(fastifyCookie);
@@ -176,8 +176,8 @@ async function bootstrap() {
     cookieName: 'connect.sid',
     cookie: {
       secure: false,
-      httpOnly: false,
-    },
+      httpOnly: false
+    }
   });
   server.addContentTypeParser('*', (req) => rawbody(req.raw));
 
@@ -220,7 +220,7 @@ async function bootstrap() {
   * [Chat](#/Chat%20controller) — operations with chat
 
 
-  `,
+  `
     )
     .setVersion('1.0')
     .addServer(process.env.URL)
@@ -242,7 +242,7 @@ if (cluster.isPrimary && process.env.NODE_ENV === 'production') {
 
   cluster.on('exit', (worker, code, signal) => {
     console.log(
-      `Worker ${worker.process.pid} died with code ${code} and signal ${signal}`,
+      `Worker ${worker.process.pid} died with code ${code} and signal ${signal}`
     );
     console.log('Starting a new worker');
     cluster.fork();

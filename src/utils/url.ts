@@ -2,7 +2,7 @@
 // VULNERABLE TO PROTOTYPE POLLUTION!
 const splitUriIntoParamsPPVulnerable = (
   params,
-  coerce = undefined,
+  coerce = undefined
 ): Record<string, unknown> => {
   if (params.charAt(0) === '?') {
     params = params.substring(1);

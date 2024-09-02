@@ -3,7 +3,7 @@ import {
   Injectable,
   Logger,
   UnauthorizedException,
-  ExecutionContext,
+  ExecutionContext
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthService, JwtProcessorType } from './auth.service';
@@ -19,7 +19,7 @@ export class AuthGuard implements CanActivate {
 
   constructor(
     private readonly authService: AuthService,
-    private readonly reflector: Reflector,
+    private readonly reflector: Reflector
   ) {}
 
   async canActivate(context: ExecutionContext) {
@@ -37,7 +37,7 @@ export class AuthGuard implements CanActivate {
       this.logger.debug(`Failed to validate token: ${err.message}`);
       throw new UnauthorizedException({
         error: 'Unauthorized',
-        line: __filename,
+        line: __filename
       });
     }
   }
@@ -64,11 +64,11 @@ export class AuthGuard implements CanActivate {
 
   private async verifyToken(
     token: string,
-    context: ExecutionContext,
+    context: ExecutionContext
   ): Promise<boolean> {
     const processorType = this.reflector.get<JwtProcessorType>(
       JwTypeMetadataField,
-      context.getHandler(),
+      context.getHandler()
     );
 
     try {
@@ -76,7 +76,7 @@ export class AuthGuard implements CanActivate {
     } catch {
       return !!(await this.authService.validateToken(
         token,
-        JwtProcessorType.BEARER,
+        JwtProcessorType.BEARER
       ));
     }
   }

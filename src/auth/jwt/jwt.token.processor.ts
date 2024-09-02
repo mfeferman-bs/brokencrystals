@@ -36,7 +36,7 @@ export abstract class JwtTokenProcessor {
       !chainText ||
       (idx = Math.max(
         chainText.indexOf(JwtTokenProcessor.END_CERTIFICATE_MARK),
-        chainText.indexOf(JwtTokenProcessor.END_PUBLIC_KEY_MARK),
+        chainText.indexOf(JwtTokenProcessor.END_PUBLIC_KEY_MARK)
       )) === -1
     ) {
       throw new Error('Invalid certificate');
@@ -44,7 +44,7 @@ export abstract class JwtTokenProcessor {
 
     const key = chainText.slice(
       0,
-      idx + JwtTokenProcessor.END_CERTIFICATE_MARK.length,
+      idx + JwtTokenProcessor.END_CERTIFICATE_MARK.length
     );
     this.log.debug(`Extracted key\n${key}`);
     return key;

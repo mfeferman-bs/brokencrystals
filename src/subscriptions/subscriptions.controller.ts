@@ -3,7 +3,7 @@ import {
   ApiCreatedResponse,
   ApiOperation,
   ApiQuery,
-  ApiTags,
+  ApiTags
 } from '@nestjs/swagger';
 import { SWAGGER_DESC_CREATE_SUBSCRIPTION } from './subscriptions.controller.swagger.desc';
 
@@ -16,13 +16,13 @@ export class SubscriptionsController {
   @ApiQuery({
     name: 'email',
     example: 'john.doe@example.com',
-    required: true,
+    required: true
   })
   @ApiOperation({
-    description: SWAGGER_DESC_CREATE_SUBSCRIPTION,
+    description: SWAGGER_DESC_CREATE_SUBSCRIPTION
   })
   @ApiCreatedResponse({
-    description: 'Returns subscribed email',
+    description: 'Returns subscribed email'
   })
   async subscribe(@Query('email') email: string): Promise<string> {
     this.logger.log(`Subscribed with email ${email}`);

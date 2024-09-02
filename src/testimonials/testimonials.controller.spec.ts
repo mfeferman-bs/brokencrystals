@@ -12,13 +12,13 @@ describe('TestimonialsController', () => {
       providers: [
         {
           provide: TestimonialsService,
-          useValue: {},
+          useValue: {}
         },
         {
           provide: AuthService,
-          useValue: {},
-        },
-      ],
+          useValue: {}
+        }
+      ]
     }).compile();
 
     controller = module.get<TestimonialsController>(TestimonialsController);

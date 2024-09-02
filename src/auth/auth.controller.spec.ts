@@ -13,17 +13,17 @@ describe('AuthController', () => {
       providers: [
         {
           provide: UsersService,
-          useValue: {},
+          useValue: {}
         },
         {
           provide: KeyCloakService,
-          useValue: {},
+          useValue: {}
         },
         {
           provide: AuthService,
-          useValue: {},
-        },
-      ],
+          useValue: {}
+        }
+      ]
     }).compile();
 
     controller = module.get<AuthController>(AuthController);

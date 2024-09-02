@@ -21,7 +21,7 @@ export class User extends Base {
 
   @Property({
     nullable: true,
-    type: BlobType,
+    type: BlobType
   })
   photo: Buffer;
 

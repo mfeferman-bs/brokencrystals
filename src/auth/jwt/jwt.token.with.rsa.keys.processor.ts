@@ -5,7 +5,7 @@ import { JwtTokenProcessor as JwtTokenProcessor } from './jwt.token.processor';
 export class JwtTokenWithRSAKeysProcessor extends JwtTokenProcessor {
   constructor(
     private publicKey: string,
-    private privateKey: string,
+    private privateKey: string
   ) {
     super(new Logger(JwtTokenWithRSAKeysProcessor.name));
   }
