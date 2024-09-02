@@ -5,7 +5,7 @@ import { postRender, postSubscriptions } from '../../api/httpClient';
 
 export const Footer: FC = () => {
   const [subscriptions, setSubscriptions] = useState<string>('');
-  const [subscriptionsResponse, setSubscriptionsResponse] = useState<any>();
+  const [subscriptionsResponse, setSubscriptionsResponse] = useState<string>();
 
   const [phone, setPhone] = useState<string>('');
 

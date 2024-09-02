@@ -13,7 +13,7 @@ interface Props {
 
 export const Testimonials: FC<Props> = (props: Props) => {
   const [testimonials, setTestimonials] = useState<Array<Testimonial>>([]);
-  const [newTestimonial, setNewTestimonial] = useState<any>();
+  const [newTestimonial, setNewTestimonial] = useState<Testimonial>();
   const [testimonialsCount, setTestimonialsCount] = useState<number>(0);
 
   useEffect(() => {
