@@ -103,9 +103,10 @@ export const Login: FC = () => {
     switch (mode) {
       case LoginFormMode.CSRF:
         return { ...data, csrf };
-      case LoginFormMode.DOM_BASED_CSRF:
+      case LoginFormMode.DOM_BASED_CSRF: {
         const fingerprint = getBrowserFingerprint();
         return { ...data, csrf, fingerprint };
+      }
       default:
         return data;
     }

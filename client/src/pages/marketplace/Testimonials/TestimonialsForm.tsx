@@ -1,4 +1,4 @@
-import { Dispatch, FC, FormEvent, SetStateAction, useState } from 'react';
+import { Dispatch, FC, FormEvent, useState } from 'react';
 import { postTestimonials } from '../../../api/httpClient';
 import { Testimonial } from '../../../interfaces/Testimonial';
 
@@ -9,7 +9,7 @@ const defaultTestimonial: Testimonial = {
 };
 
 interface Props {
-  setNewTestimonial: Dispatch<SetStateAction<Testimonial>>;
+  setNewTestimonial: Dispatch<Testimonial>;
 }
 
 export const TestimonialsForm: FC<Props> = (props: Props) => {

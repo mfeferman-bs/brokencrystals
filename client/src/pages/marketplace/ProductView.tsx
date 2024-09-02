@@ -7,6 +7,7 @@ interface Props {
 }
 
 const init = () => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (window as any).jQuery('.venobox').venobox();
 };
 

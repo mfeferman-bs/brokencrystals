@@ -20,6 +20,8 @@ function formatDateToYYYYMMDD(date: Date): string {
   return `${dd}-${mm}-${yyyy}`;
 }
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 export const httpClient: AxiosInstance = axios.create();
 
 export function getTestimonials(): Promise<any> {

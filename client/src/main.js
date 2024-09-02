@@ -239,6 +239,7 @@ export const initDependencies = () => {
 
   // Init AOS
   function aos_init() {
+    // eslint-disable-next-line no-undef
     AOS.init({
       duration: 1000,
       once: true

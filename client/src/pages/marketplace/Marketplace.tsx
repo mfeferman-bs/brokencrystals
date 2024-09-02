@@ -87,12 +87,14 @@ export const Marketplace: FC<Props> = (props: Props) => {
   };
 
   // Note: This function is vulnerable to Prototype Pollution
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const currentUriParams: Record<string, any> = splitUriIntoParamsPPVulnerable(
     document.location.search
   );
 
   const [portfolioQueryFilter, setPortfolioQueryFilter] = useState(
     currentUriParams &&
+      // eslint-disable-next-line no-prototype-builtins
       currentUriParams.hasOwnProperty('portfolio_query_filter')
       ? currentUriParams['portfolio_query_filter']
       : ''
