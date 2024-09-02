@@ -1,6 +1,6 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import InnerHTML from 'dangerously-set-html-content';
-import { Testimonial } from '../../../interfaces/Testimonial';
+import type { Testimonial } from '../../../interfaces/Testimonial';
 
 interface Props {
   testimonials: Array<Testimonial>;

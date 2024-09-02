@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import Marketplace from '../marketplace/Marketplace';
 import Counts from './Counts';
 import Hero from './Hero';

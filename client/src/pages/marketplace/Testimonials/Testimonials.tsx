@@ -1,6 +1,7 @@
-import { FC, useEffect, useState } from 'react';
+import type { FC } from 'react';
+import { useEffect, useState } from 'react';
 import { getTestimonials, getTestimonialsCount } from '../../../api/httpClient';
-import { Testimonial } from '../../../interfaces/Testimonial';
+import type { Testimonial } from '../../../interfaces/Testimonial';
 import OwlCarousel from 'react-owl-carousel';
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';

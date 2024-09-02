@@ -1,6 +1,7 @@
-import { Dispatch, FC, FormEvent, useState } from 'react';
+import type { Dispatch, FC, FormEvent } from 'react';
+import { useState } from 'react';
 import { postTestimonials } from '../../../api/httpClient';
-import { Testimonial } from '../../../interfaces/Testimonial';
+import type { Testimonial } from '../../../interfaces/Testimonial';
 
 const defaultTestimonial: Testimonial = {
   name: '',

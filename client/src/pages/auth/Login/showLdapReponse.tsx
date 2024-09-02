@@ -1,4 +1,4 @@
-import { RegistrationUser } from '../../../interfaces/User';
+import type { RegistrationUser } from '../../../interfaces/User';
 import showRegResponse from '../Register/showRegReponse';
 
 export function showLdapResponse(ldapResponse: Array<RegistrationUser>) {

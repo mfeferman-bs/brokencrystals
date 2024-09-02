@@ -1,5 +1,5 @@
 import InnerHTML from 'dangerously-set-html-content';
-import { RegistrationUser } from '../../../interfaces/User';
+import type { RegistrationUser } from '../../../interfaces/User';
 
 export function showRegResponse({
   email,

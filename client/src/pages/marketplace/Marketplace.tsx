@@ -1,5 +1,6 @@
-import { ChangeEvent, FC, MouseEvent, useEffect, useState } from 'react';
-import { Product } from '../../interfaces/Product';
+import type { ChangeEvent, FC, MouseEvent } from 'react';
+import { useEffect, useState } from 'react';
+import type { Product } from '../../interfaces/Product';
 import {
   getProducts,
   getLatestProducts,

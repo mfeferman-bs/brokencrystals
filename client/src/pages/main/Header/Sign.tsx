@@ -1,4 +1,5 @@
-import { ChangeEvent, FC, useEffect, useState } from 'react';
+import type { ChangeEvent, FC } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Buffer } from 'buffer';
 import { fileTypeFromBuffer } from 'file-type/core';

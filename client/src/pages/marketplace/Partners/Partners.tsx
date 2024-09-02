@@ -1,4 +1,5 @@
-import { FC, useEffect, useState } from 'react';
+import type { FC } from 'react';
+import { useEffect, useState } from 'react';
 import { DOMParser } from 'xmldom';
 
 import OwlCarousel from 'react-owl-carousel';
@@ -6,7 +7,7 @@ import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
 
 import { searchPartners, partnerLogin } from '../../../api/httpClient';
-import { Partner } from '../../../interfaces/Partner';
+import type { Partner } from '../../../interfaces/Partner';
 
 export const Partners: FC = () => {
   const PARTNER_DEFAULT_USERNAME = 'walter100';
