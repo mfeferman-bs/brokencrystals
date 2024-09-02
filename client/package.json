@@ -4,7 +4,7 @@
   "proxy": "http://localhost:3000",
   "private": true,
   "dependencies": {
-    "axios": "^0.21.4",
+    "axios": "^1.7.7",
     "buffer": "^6.0.3",
     "dangerously-set-html-content": "1.1.0",
     "file-type": "^19.4.1",
