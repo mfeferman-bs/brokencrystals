@@ -19,12 +19,12 @@ describe('/api', () => {
       await runner
         .createScan({
           tests: [TestType.COOKIE_SECURITY],
-          name: 'COOKIE_SECURITY',
+          name: 'COOKIE_SECURITY'
         })
         .timeout(timeout)
         .run({
           method: 'GET',
-          url: `${process.env.SEC_TESTER_TARGET}/api/config`,
+          url: `${process.env.SEC_TESTER_TARGET}/api/config`
         });
     });
 
@@ -32,12 +32,12 @@ describe('/api', () => {
       await runner
         .createScan({
           tests: [TestType.HEADER_SECURITY],
-          name: 'HEADER_SECURITY',
+          name: 'HEADER_SECURITY'
         })
         .timeout(timeout)
         .run({
           method: 'GET',
-          url: `${process.env.SEC_TESTER_TARGET}/api/config?query=no-sec-headers`,
+          url: `${process.env.SEC_TESTER_TARGET}/api/config?query=no-sec-headers`
         });
     });
 
@@ -45,15 +45,15 @@ describe('/api', () => {
       await runner
         .createScan({
           tests: [TestType.FULL_PATH_DISCLOSURE],
-          name: 'FULL_PATH_DISCLOSURE',
+          name: 'FULL_PATH_DISCLOSURE'
         })
         .timeout(timeout)
         .run({
           method: 'GET',
           headers: {
-            cookie: `bc-calls-counter=${Date.now().toString()}`,
+            cookie: `bc-calls-counter=${Date.now().toString()}`
           },
-          url: `${process.env.SEC_TESTER_TARGET}/api/config`,
+          url: `${process.env.SEC_TESTER_TARGET}/api/config`
         });
     });
   });

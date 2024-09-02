@@ -18,7 +18,7 @@ services:
           '-U',
           '${POSTGRES_USER}',
           '-P',
-          '${POSTGRES_PASSWORD}',
+          '${POSTGRES_PASSWORD}'
         ]
       timeout: 45s
     volumes:
@@ -69,7 +69,7 @@ services:
           '-U',
           '${POSTGRES_USER}',
           '-P',
-          '${POSTGRES_PASSWORD}',
+          '${POSTGRES_PASSWORD}'
         ]
       timeout: 45s
     restart: on-failure

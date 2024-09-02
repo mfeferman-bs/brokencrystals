@@ -7,8 +7,8 @@ import { AuthService } from './auth.service';
 
 jest.mock('fs', () => ({
   readFileSync: jest.fn((path: string) =>
-    path.toLowerCase().includes('json') ? '{}' : 'mocked-key-content',
-  ),
+    path.toLowerCase().includes('json') ? '{}' : 'mocked-key-content'
+  )
 }));
 
 jest.mock('@mikro-orm/core', () => ({
@@ -17,8 +17,8 @@ jest.mock('@mikro-orm/core', () => ({
     find: jest.fn(),
     findOne: jest.fn(),
     persist: jest.fn(),
-    flush: jest.fn(),
-  })),
+    flush: jest.fn()
+  }))
 }));
 
 describe('AuthService', () => {
@@ -31,23 +31,23 @@ describe('AuthService', () => {
         {
           provide: EntityManager,
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          useFactory: () => new (EntityManager as any)(),
+          useFactory: () => new (EntityManager as any)()
         },
         {
           provide: KeyCloakService,
-          useValue: {},
+          useValue: {}
         },
         {
           provide: HttpClientService,
-          useValue: {},
+          useValue: {}
         },
         {
           provide: ConfigService,
           useValue: {
-            get: (key: string) => key,
-          },
-        },
-      ],
+            get: (key: string) => key
+          }
+        }
+      ]
     }).compile();
 
     service = module.get<AuthService>(AuthService);

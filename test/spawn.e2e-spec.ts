@@ -21,7 +21,7 @@ describe('/api', () => {
         .timeout(timeout)
         .run({
           method: 'GET',
-          url: `${process.env.SEC_TESTER_TARGET}/api/spawn?command=pwd`,
+          url: `${process.env.SEC_TESTER_TARGET}/api/spawn?command=pwd`
         });
     });
   });

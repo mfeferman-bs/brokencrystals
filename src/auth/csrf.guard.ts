@@ -3,7 +3,7 @@ import {
   CanActivate,
   UnauthorizedException,
   ExecutionContext,
-  Logger,
+  Logger
 } from '@nestjs/common';
 import { createHash } from 'crypto';
 import { FastifyRequest } from 'fastify';
@@ -49,7 +49,7 @@ export class CsrfGuard implements CanActivate {
   private throwError() {
     throw new UnauthorizedException({
       error: 'Invalid credentials',
-      location: __filename,
+      location: __filename
     });
   }
 }

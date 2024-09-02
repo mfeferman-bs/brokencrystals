@@ -9,7 +9,7 @@ import { ProductsService } from './products.service';
 import {
   API_DESC_GET_LATEST_PRODUCTS,
   API_DESC_GET_PRODUCTS,
-  API_DESC_GET_VIEW_PRODUCT,
+  API_DESC_GET_VIEW_PRODUCT
 } from './products.controller.api.desc';
 
 @Resolver(() => Product)
@@ -25,7 +25,7 @@ export class ProductsResolver {
   }
 
   @Query(() => [Product], {
-    description: API_DESC_GET_LATEST_PRODUCTS,
+    description: API_DESC_GET_LATEST_PRODUCTS
   })
   async latestProducts(): Promise<Product[]> {
     const products = await this.productsService.findLatest(3);
@@ -33,10 +33,10 @@ export class ProductsResolver {
   }
 
   @Mutation(() => Boolean, {
-    description: API_DESC_GET_VIEW_PRODUCT,
+    description: API_DESC_GET_VIEW_PRODUCT
   })
   async viewProduct(
-    @Args('productName') productName: string,
+    @Args('productName') productName: string
   ): Promise<boolean> {
     try {
       const query = `UPDATE product SET views_count = views_count + 1 WHERE name = '${productName}'`;
@@ -45,7 +45,7 @@ export class ProductsResolver {
     } catch (err) {
       throw new InternalServerErrorException({
         error: err.message,
-        location: __filename,
+        location: __filename
       });
     }
   }

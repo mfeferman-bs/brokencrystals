@@ -11,7 +11,7 @@ export class JwtTokenWithSqlKIDProcessor extends JwtTokenProcessor {
 
   constructor(
     private readonly em: EntityManager,
-    private key: string,
+    private key: string
   ) {
     super(new Logger(JwtTokenWithSqlKIDProcessor.name));
   }
@@ -23,7 +23,7 @@ export class JwtTokenWithSqlKIDProcessor extends JwtTokenProcessor {
 
     const query = JwtTokenWithSqlKIDProcessor.KID_FETCH_QUERY(
       this.key,
-      header.kid,
+      header.kid
     );
     this.log.debug(`Executing key fetching query: ${query}`);
     const keyRow: { key: string } = await this.em
@@ -39,10 +39,10 @@ export class JwtTokenWithSqlKIDProcessor extends JwtTokenProcessor {
     const header: JwtHeader = {
       alg: 'HS256',
       kid: `${JwtTokenWithSqlKIDProcessor.KID}`,
-      typ: 'JWT',
+      typ: 'JWT'
     };
     const token = encode(payload, this.key, 'HS256', {
-      header,
+      header
     });
     return token;
   }

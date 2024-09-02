@@ -6,7 +6,7 @@ describe('HttpclientService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [HttpClientService],
+      providers: [HttpClientService]
     }).compile();
 
     service = module.get<HttpClientService>(HttpClientService);

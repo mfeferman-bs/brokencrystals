@@ -11,12 +11,12 @@ import { Product } from '../model/product.entity';
     MikroOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) =>
-        new OrmConfigFactory(configService).buildConfig(),
+        new OrmConfigFactory(configService).buildConfig()
     }),
     MikroOrmModule.forFeature({
-      entities: [Testimonial, User, Product],
-    }),
+      entities: [Testimonial, User, Product]
+    })
   ],
-  exports: [MikroOrmModule],
+  exports: [MikroOrmModule]
 })
 export class OrmModule {}

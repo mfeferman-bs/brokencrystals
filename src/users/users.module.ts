@@ -11,6 +11,6 @@ import { UsersService } from './users.service';
   imports: [OrmModule, KeyCloakModule, forwardRef(() => AuthModule)],
   controllers: [UsersController],
   providers: [UsersService, KeyCloakService, HttpClientService],
-  exports: [UsersService, KeyCloakService, HttpClientService],
+  exports: [UsersService, KeyCloakService, HttpClientService]
 })
 export class UsersModule {}

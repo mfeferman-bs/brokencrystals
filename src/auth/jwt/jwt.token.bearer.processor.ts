@@ -7,7 +7,7 @@ import { KeyCloakService } from '../../keycloak/keycloak.service';
 export class JwtBearerTokenProcessor extends JwtTokenProcessor {
   constructor(
     private readonly key: string,
-    private readonly keyCloakService: KeyCloakService,
+    private readonly keyCloakService: KeyCloakService
   ) {
     super(new Logger(JwtBearerTokenProcessor.name));
   }
@@ -21,7 +21,7 @@ export class JwtBearerTokenProcessor extends JwtTokenProcessor {
 
     if (!header.kid) {
       this.log.debug(
-        `Invalid JWT token. Expected a known KID but found ${header.kid}.`,
+        `Invalid JWT token. Expected a known KID but found ${header.kid}.`
       );
       throw new Error('Authorization header contains an invalid JWT token.');
     }
@@ -48,7 +48,7 @@ export class JwtBearerTokenProcessor extends JwtTokenProcessor {
     } catch (e) {
       if (e.statusCode === 401) {
         throw new Error(
-          `JWT token is expired or user has globally signed out, disabled or been deleted.`,
+          `JWT token is expired or user has globally signed out, disabled or been deleted.`
         );
       }
       this.log.debug(`Failed to introspect JWT token. err: ${e.message}`);
@@ -58,7 +58,7 @@ export class JwtBearerTokenProcessor extends JwtTokenProcessor {
 
   private async decodeAndVerifyToken(
     token: string,
-    kid: string,
+    kid: string
   ): Promise<unknown> {
     try {
       return await this.keyCloakService.verifyToken(token, kid);
@@ -66,7 +66,7 @@ export class JwtBearerTokenProcessor extends JwtTokenProcessor {
       this.log.debug(`Invalid JWT token. jwt.verify() failed: ${e.message}.`);
       if (e instanceof TokenExpiredError) {
         throw new Error(
-          `Authorization header contains a JWT token that expired at ${e.expiredAt.toISOString()}.`,
+          `Authorization header contains a JWT token that expired at ${e.expiredAt.toISOString()}.`
         );
       }
       throw new Error('Authorization header contains an invalid JWT token.');

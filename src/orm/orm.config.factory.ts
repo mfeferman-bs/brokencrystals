@@ -19,27 +19,27 @@ export class OrmConfigFactory {
       entities: ['dist/model'],
       entitiesTs: ['src/model'],
       host: this.configService.get<string>(
-        OrmModuleConfigProperties.ENV_DATABASE_HOST,
+        OrmModuleConfigProperties.ENV_DATABASE_HOST
       ),
       dbName: this.configService.get<string>(
-        OrmModuleConfigProperties.ENV_DATABASE_SCHEMA,
+        OrmModuleConfigProperties.ENV_DATABASE_SCHEMA
       ),
       user: this.configService.get<string>(
-        OrmModuleConfigProperties.ENV_DATABASE_USER,
+        OrmModuleConfigProperties.ENV_DATABASE_USER
       ),
       password: this.configService.get<string>(
-        OrmModuleConfigProperties.ENV_DATABASE_PASSWORD,
+        OrmModuleConfigProperties.ENV_DATABASE_PASSWORD
       ),
       port: this.configService.get<number>(
-        OrmModuleConfigProperties.ENV_DATABASE_PORT,
+        OrmModuleConfigProperties.ENV_DATABASE_PORT
       ),
       metadataProvider: ReflectMetadataProvider,
       highlighter: new SqlHighlighter(),
       debug:
         this.configService.get<string>(
-          OrmModuleConfigProperties.ENV_DATABASE_PORT,
+          OrmModuleConfigProperties.ENV_DATABASE_PORT
         ) === 'true',
-      logger: logger.log.bind(logger),
+      logger: logger.log.bind(logger)
     });
 
     return config;

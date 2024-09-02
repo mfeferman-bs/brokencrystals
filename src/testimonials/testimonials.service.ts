@@ -11,7 +11,7 @@ export class TestimonialsService {
   constructor(
     @InjectRepository(Testimonial)
     private readonly testimonialsRepository: EntityRepository<Testimonial>,
-    private readonly em: EntityManager,
+    private readonly em: EntityManager
   ) {}
 
   async findAll(): Promise<Testimonial[]> {
@@ -22,15 +22,15 @@ export class TestimonialsService {
   async createTestimonial(
     message: string,
     name: string,
-    title: string,
+    title: string
   ): Promise<Testimonial> {
     this.logger.debug(
-      `Create a testimonial. Name: ${message}, title: ${title}, message: ${message}`,
+      `Create a testimonial. Name: ${message}, title: ${title}, message: ${message}`
     );
 
     const connection = this.em.getConnection();
     const legacyTestimonials: Testimonial[] = await connection.execute(
-      `select * from testimonial where id is not null order by created_at`,
+      `select * from testimonial where id is not null order by created_at`
     );
 
     if (legacyTestimonials?.length >= this.MAX_LIMIT) {
@@ -39,7 +39,7 @@ export class TestimonialsService {
         .map((x: Testimonial) => x.id);
 
       await connection.execute('delete from testimonial where id not in(?)', [
-        ids,
+        ids
       ]);
     }
 

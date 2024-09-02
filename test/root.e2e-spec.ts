@@ -21,7 +21,7 @@ describe('/', () => {
         .timeout(3000000)
         .run({
           method: 'GET',
-          url: `${process.env.SEC_TESTER_TARGET}`,
+          url: `${process.env.SEC_TESTER_TARGET}`
         });
     });
 
@@ -29,12 +29,12 @@ describe('/', () => {
       await runner
         .createScan({
           tests: [TestType.INSECURE_TLS_CONFIGURATION],
-          name: 'INSECURE_TLS_CONFIGURATION',
+          name: 'INSECURE_TLS_CONFIGURATION'
         })
         .timeout(timeout)
         .run({
           method: 'GET',
-          url: `${process.env.SEC_TESTER_TARGET}`,
+          url: `${process.env.SEC_TESTER_TARGET}`
         });
     });
   });

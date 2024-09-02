@@ -31,7 +31,7 @@ export class CloudProvidersMetaData {
         guest-attributes
         maintenance-event
         network-interfaces/
-    `.trim(),
+    `.trim()
     );
     this.providers.set(
       CloudProvidersMetaData.DIGITAL_OCEAN,
@@ -86,7 +86,7 @@ export class CloudProvidersMetaData {
           "dhcp_enabled": true
         }
       }
-      `.trim(),
+      `.trim()
     );
     this.providers.set(
       CloudProvidersMetaData.AZURE,
@@ -209,7 +209,7 @@ export class CloudProvidersMetaData {
               }]
           }
       }
-    `.trim(),
+    `.trim()
     );
     this.providers.set(
       CloudProvidersMetaData.AWS,
@@ -238,7 +238,7 @@ export class CloudProvidersMetaData {
         reservation-id
         security-groups
         services/
-    `.trim(),
+    `.trim()
     );
     this.providers.set(
       CloudProvidersMetaData.DIGITAL_OCEAN,
@@ -254,7 +254,7 @@ export class CloudProvidersMetaData {
         floating_ip/
         tags/
         features/
-    `.trim(),
+    `.trim()
     );
   }
 
@@ -270,7 +270,7 @@ export class CloudProvidersMetaData {
     } else {
       const { data } = await axios(providerUrl, {
         timeout: 5000,
-        responseType: 'text',
+        responseType: 'text'
       });
       return data;
     }

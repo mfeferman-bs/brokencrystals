@@ -6,7 +6,7 @@ import {
   Headers,
   InternalServerErrorException,
   Query,
-  BadRequestException,
+  BadRequestException
 } from '@nestjs/common';
 import {
   ApiOperation,
@@ -15,7 +15,7 @@ import {
   ApiForbiddenResponse,
   ApiInternalServerErrorResponse,
   ApiHeader,
-  ApiQuery,
+  ApiQuery
 } from '@nestjs/swagger';
 import { AuthGuard } from '../auth/auth.guard';
 import { JwtProcessorType } from '../auth/auth.service';
@@ -26,7 +26,7 @@ import { Product } from '../model/product.entity';
 import {
   API_DESC_GET_LATEST_PRODUCTS,
   API_DESC_GET_PRODUCTS,
-  API_DESC_GET_VIEW_PRODUCT,
+  API_DESC_GET_VIEW_PRODUCT
 } from './products.controller.api.desc';
 
 @Controller('/api/products')
@@ -49,11 +49,11 @@ export class ProductsController {
   @UseGuards(AuthGuard)
   @JwtType(JwtProcessorType.RSA)
   @ApiOperation({
-    description: API_DESC_GET_PRODUCTS,
+    description: API_DESC_GET_PRODUCTS
   })
   @ApiOkResponse({
     type: ProductDto,
-    isArray: true,
+    isArray: true
   })
   @ApiForbiddenResponse({
     schema: {
@@ -61,15 +61,15 @@ export class ProductsController {
       properties: {
         statusCode: { type: 'number' },
         message: { type: 'string' },
-        error: { type: 'string' },
-      },
-    },
+        error: { type: 'string' }
+      }
+    }
   })
   @ApiQuery({ name: 'date_from', example: '02-05-2001', required: false })
   @ApiQuery({ name: 'date_to', example: '02-05-2024', required: false })
   async getProducts(
     @Query('date_from') dateFrom: string,
-    @Query('date_to') dateTo: string,
+    @Query('date_to') dateTo: string
   ): Promise<ProductDto[]> {
     this.logger.debug('Get all products.');
     let df = new Date(new Date().setFullYear(new Date().getFullYear() - 1));
@@ -92,14 +92,14 @@ export class ProductsController {
   @Get('latest')
   @ApiQuery({ name: 'limit', example: 3, required: false })
   @ApiOperation({
-    description: API_DESC_GET_LATEST_PRODUCTS,
+    description: API_DESC_GET_LATEST_PRODUCTS
   })
   @ApiOkResponse({
     type: ProductDto,
-    isArray: true,
+    isArray: true
   })
   async getLatestProducts(
-    @Query('limit') limit: number,
+    @Query('limit') limit: number
   ): Promise<ProductDto[]> {
     this.logger.debug('Get latest products.');
     if (limit && isNaN(limit)) {
@@ -115,7 +115,7 @@ export class ProductsController {
   @Get('views')
   @ApiHeader({ name: 'x-product-name', example: 'Amethyst' })
   @ApiOperation({
-    description: API_DESC_GET_VIEW_PRODUCT,
+    description: API_DESC_GET_VIEW_PRODUCT
   })
   @ApiOkResponse()
   @ApiInternalServerErrorResponse({
@@ -123,12 +123,12 @@ export class ProductsController {
       type: 'object',
       properties: {
         error: { type: 'string' },
-        location: { type: 'string' },
-      },
-    },
+        location: { type: 'string' }
+      }
+    }
   })
   async viewProduct(
-    @Headers('x-product-name') productName: string,
+    @Headers('x-product-name') productName: string
   ): Promise<void> {
     try {
       const query = `UPDATE product SET views_count = views_count + 1 WHERE name = '${productName}'`;
@@ -136,7 +136,7 @@ export class ProductsController {
     } catch (err) {
       throw new InternalServerErrorException({
         error: err.message,
-        location: __filename,
+        location: __filename
       });
     }
   }

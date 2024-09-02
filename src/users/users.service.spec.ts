@@ -13,13 +13,13 @@ describe('UsersService', () => {
         UsersService,
         {
           provide: getRepositoryToken(User),
-          useValue: {},
+          useValue: {}
         },
         {
           provide: EntityManager,
-          useValue: {},
-        },
-      ],
+          useValue: {}
+        }
+      ]
     }).compile();
 
     service = module.get<UsersService>(UsersService);

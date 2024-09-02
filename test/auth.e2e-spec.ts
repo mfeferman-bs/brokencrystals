@@ -8,8 +8,8 @@ const generateToken = async (jwtType) => {
     {
       user: 'admin',
       password: 'admin',
-      op: 'basic',
-    },
+      op: 'basic'
+    }
   );
   return headers.authorization;
 };
@@ -37,7 +37,7 @@ describe('/api', () => {
         .run({
           method: 'GET',
           headers: { authorization: token },
-          url: `${process.env.SEC_TESTER_TARGET}/api/auth/jwt/${jwtType}/validate`,
+          url: `${process.env.SEC_TESTER_TARGET}/api/auth/jwt/${jwtType}/validate`
         });
     });
 
@@ -50,7 +50,7 @@ describe('/api', () => {
         .run({
           method: 'GET',
           headers: { authorization: token },
-          url: `${process.env.SEC_TESTER_TARGET}/api/auth/jwt/${jwtType}/validate`,
+          url: `${process.env.SEC_TESTER_TARGET}/api/auth/jwt/${jwtType}/validate`
         });
     });
 
@@ -63,7 +63,7 @@ describe('/api', () => {
         .run({
           method: 'GET',
           headers: { authorization: token },
-          url: `${process.env.SEC_TESTER_TARGET}/api/auth/jwt/${jwtType}/validate`,
+          url: `${process.env.SEC_TESTER_TARGET}/api/auth/jwt/${jwtType}/validate`
         });
     });
 
@@ -76,7 +76,7 @@ describe('/api', () => {
         .run({
           method: 'GET',
           headers: { authorization: token },
-          url: `${process.env.SEC_TESTER_TARGET}/api/auth/jwt/${jwtType}/validate`,
+          url: `${process.env.SEC_TESTER_TARGET}/api/auth/jwt/${jwtType}/validate`
         });
     });
 
@@ -89,7 +89,7 @@ describe('/api', () => {
         .run({
           method: 'GET',
           headers: { authorization: token },
-          url: `${process.env.SEC_TESTER_TARGET}/api/auth/jwt/${jwtType}/validate`,
+          url: `${process.env.SEC_TESTER_TARGET}/api/auth/jwt/${jwtType}/validate`
         });
     });
 
@@ -102,7 +102,7 @@ describe('/api', () => {
         .run({
           method: 'GET',
           headers: { authorization: token },
-          url: `${process.env.SEC_TESTER_TARGET}/api/auth/jwt/${jwtType}/validate`,
+          url: `${process.env.SEC_TESTER_TARGET}/api/auth/jwt/${jwtType}/validate`
         });
     });
   });

@@ -55,13 +55,13 @@ export class PartnersService {
   private getPartnersXMLObj(): Node {
     const partnersXMLObj = new DOMParser().parseFromString(
       this.XML_AUTHORS_STR,
-      'text/xml',
+      'text/xml'
     );
     return partnersXMLObj;
   }
 
   private selectPartnerPropertiesByXPATH(
-    xpathExpression: string,
+    xpathExpression: string
   ): SelectReturnType {
     const partnersXMLObj = this.getPartnersXMLObj();
     return xpath.select(xpathExpression, partnersXMLObj);
@@ -76,7 +76,7 @@ export class PartnersService {
 
     if (!Array.isArray(xmlNodes)) {
       this.logger.debug(
-        `xmlNodes's type wasn't 'Array', and it's value was: ${xmlNodes}`,
+        `xmlNodes's type wasn't 'Array', and it's value was: ${xmlNodes}`
       );
       xmlNodes = [];
     } else {

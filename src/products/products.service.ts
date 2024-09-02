@@ -3,7 +3,7 @@ import { InjectRepository } from '@mikro-orm/nestjs';
 import {
   Injectable,
   InternalServerErrorException,
-  Logger,
+  Logger
 } from '@nestjs/common';
 import { Product } from '../model/product.entity';
 
@@ -14,7 +14,7 @@ export class ProductsService {
   constructor(
     @InjectRepository(Product)
     private readonly productsRepository: EntityRepository<Product>,
-    private readonly em: EntityManager,
+    private readonly em: EntityManager
   ) {}
 
   private sleep(ms: number): Promise<void> {
@@ -23,9 +23,9 @@ export class ProductsService {
 
   async findAll(
     dateFrom: Date = new Date(
-      new Date().setFullYear(new Date().getFullYear() - 1),
+      new Date().setFullYear(new Date().getFullYear() - 1)
     ),
-    dateTo: Date = new Date(),
+    dateTo: Date = new Date()
   ): Promise<Product[]> {
     this.logger.debug(`Find all products from ${dateFrom} to ${dateTo}`);
     const diffInMilliseconds = Math.abs(dateTo.getTime() - dateFrom.getTime());
@@ -36,9 +36,9 @@ export class ProductsService {
     }
     return this.productsRepository.find(
       {
-        createdAt: { $gte: dateFrom, $lte: dateTo },
+        createdAt: { $gte: dateFrom, $lte: dateTo }
       },
-      { orderBy: { createdAt: 'desc' } },
+      { orderBy: { createdAt: 'desc' } }
     );
   }
 
@@ -46,7 +46,7 @@ export class ProductsService {
     this.logger.debug(`Find ${limit} latest products`);
     return this.productsRepository.find(
       {},
-      { limit, orderBy: { createdAt: 'desc' } },
+      { limit, orderBy: { createdAt: 'desc' } }
     );
   }
 

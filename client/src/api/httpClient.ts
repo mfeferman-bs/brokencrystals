@@ -215,7 +215,7 @@ export function putUserData(user: UserData): Promise<UserData> {
     method: 'put',
     headers: {
       'content-type': 'application/json',
-      'authorization':
+      authorization:
         sessionStorage.getItem('token') || localStorage.getItem('token')
     },
     data: user
@@ -231,7 +231,7 @@ export function putPhoto(photo: File, email: string): Promise<any> {
     method: 'put',
     headers: {
       'content-type': 'image/png',
-      'authorization':
+      authorization:
         sessionStorage.getItem('token') || localStorage.getItem('token')
     },
     data
@@ -287,7 +287,7 @@ export function viewProduct(productName: string): Promise<any> {
     url: `${ApiUrl.Products}/views`,
     method: 'get',
     headers: {
-      'authorization':
+      authorization:
         sessionStorage.getItem('token') || localStorage.getItem('token'),
       'x-product-name': productName
     }

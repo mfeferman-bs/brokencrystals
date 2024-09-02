@@ -7,6 +7,6 @@ import { HttpClientModule } from '../httpclient/httpclient.module';
   imports: [HttpClientModule],
   controllers: [ChatController],
   providers: [ChatService],
-  exports: [],
+  exports: []
 })
 export class ChatModule {}
