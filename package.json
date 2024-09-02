@@ -18,7 +18,9 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
-    "test:e2e": "jest --config ./test/jest-e2e.config.mjs"
+    "test:e2e": "jest --config ./test/jest-e2e.config.mjs",
+    "prepare": "husky",
+    "lint-staged": "lint-staged"
   },
   "dependencies": {
     "@fastify/cookie": "^9.4.0",
@@ -64,6 +66,8 @@
     "xpath": "0.0.34"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.4.1",
+    "@commitlint/config-conventional": "^19.4.1",
     "@eslint/js": "^9.9.1",
     "@mikro-orm/cli": "^6.3.7",
     "@nestjs/cli": "^10.4.5",
@@ -80,7 +84,9 @@
     "@types/libxmljs": "^0.18.13",
     "@types/node": "^18.19.46",
     "eslint": "^9.9.1",
+    "husky": "^9.1.5",
     "jest": "^29.7.0",
+    "lint-staged": "^15.2.10",
     "prettier": "^3.3.3",
     "typescript": "^5.5.4",
     "typescript-eslint": "^8.3.0"
@@ -93,5 +99,21 @@
   "engines": {
     "node": ">=18",
     "npm": ">=10"
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx,jsx}": [
+      "npm run lint -- --fix --no-warn-ignored",
+      "npm run format -- --write"
+    ],
+    "*.{json,md,html}": [
+      "npm run format -- --write"
+    ],
+    "client/**/*.{js,jsx,ts,tsx}": [
+      "npm --prefix client run lint -- --fix --no-warn-ignored",
+      "npm --prefix client run format -- --write"
+    ],
+    "client/*.{json,md,html}": [
+      "npm --prefix client run format -- --write"
+    ]
   }
 }
