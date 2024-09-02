@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, useEffect, useState } from 'react';
+import { ChangeEvent, FC, MouseEvent, useEffect, useState } from 'react';
 import { Product } from '../../interfaces/Product';
 import {
   getProducts,
@@ -37,7 +37,7 @@ export const Marketplace: FC<Props> = (props: Props) => {
     });
   };
 
-  const onGetFile = (e: React.MouseEvent<HTMLElement>) => {
+  const onGetFile = (e: MouseEvent<HTMLElement>) => {
     e.preventDefault();
     getFile(`${path}${fileName}`).then((blob) => {
       const url = window.URL.createObjectURL(new Blob([blob]));

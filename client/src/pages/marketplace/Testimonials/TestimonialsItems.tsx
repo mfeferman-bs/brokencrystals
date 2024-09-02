@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import InnerHTML from 'dangerously-set-html-content';
 import { Testimonial } from '../../../interfaces/Testimonial';
 

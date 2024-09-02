@@ -1,10 +1,4 @@
-import React, {
-  Dispatch,
-  FC,
-  FormEvent,
-  SetStateAction,
-  useState
-} from 'react';
+import { Dispatch, FC, FormEvent, SetStateAction, useState } from 'react';
 import { postTestimonials } from '../../../api/httpClient';
 import { Testimonial } from '../../../interfaces/Testimonial';
 

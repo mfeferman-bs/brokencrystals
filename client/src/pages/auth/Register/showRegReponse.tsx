@@ -1,4 +1,3 @@
-import React from 'react';
 import InnerHTML from 'dangerously-set-html-content';
 import { RegistrationUser } from '../../../interfaces/User';
 

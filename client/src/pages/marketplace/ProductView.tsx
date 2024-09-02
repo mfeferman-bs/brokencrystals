@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import { Product } from '../../interfaces/Product';
 import { viewProduct } from '../../api/httpClient';
 

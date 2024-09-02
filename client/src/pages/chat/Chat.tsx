@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import Header from '../main/Header/Header';
 import ChatWidget from './ChatWidget';
 

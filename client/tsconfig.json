@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "typeRoots": ["./typings", "./node_modules/@types"],
-    "jsx": "react",
-    "target": "es5",
+    "jsx": "react-jsx",
+    "target": "es6",
     "module": "esnext",
     "baseUrl": ".",
     "strict": true,

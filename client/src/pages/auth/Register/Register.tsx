@@ -1,4 +1,4 @@
-import React, { FC, FormEvent, useState } from 'react';
+import { FC, FormEvent, useState } from 'react';
 import { postUser } from '../../../api/httpClient';
 import { RegistrationUser, LoginFormMode } from '../../../interfaces/User';
 import AuthLayout from '../AuthLayout';

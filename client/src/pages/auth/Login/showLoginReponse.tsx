@@ -1,4 +1,3 @@
-import React from 'react';
 import InnerHTML from 'dangerously-set-html-content';
 import { LoginResponse } from '../../../interfaces/User';
 

@@ -1,4 +1,3 @@
-import React from 'react';
 import { RegistrationUser } from '../../../interfaces/User';
 import showRegResponse from '../Register/showRegReponse';
 
