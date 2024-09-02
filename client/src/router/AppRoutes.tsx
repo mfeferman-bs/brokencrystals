@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import { RoutePath } from './RoutePath';
 import Main from '../pages/main/Main';

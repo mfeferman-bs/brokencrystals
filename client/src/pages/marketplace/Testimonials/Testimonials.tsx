@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { getTestimonials, getTestimonialsCount } from '../../../api/httpClient';
 import { Testimonial } from '../../../interfaces/Testimonial';
 import OwlCarousel from 'react-owl-carousel';

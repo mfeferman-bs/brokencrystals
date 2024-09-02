@@ -1,5 +1,5 @@
 import { AxiosRequestConfig } from 'axios';
-import React, { FC, FormEvent, useState } from 'react';
+import { FC, FormEvent, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { RoutePath } from '../../../router/RoutePath';
 import { getUserData } from '../../../api/httpClient';

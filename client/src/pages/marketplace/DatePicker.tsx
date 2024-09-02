@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { FC, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -6,7 +6,7 @@ interface DateRangePickerProps {
   onDatesChange: (dateFrom: Date, dateTo: Date) => void;
 }
 
-const DateRangePicker: React.FC<DateRangePickerProps> = ({ onDatesChange }) => {
+const DateRangePicker: FC<DateRangePickerProps> = ({ onDatesChange }) => {
   const [dates, setDates] = useState<{
     dateFrom: Date;
     dateTo: Date;
