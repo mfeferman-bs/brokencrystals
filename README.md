@@ -5,16 +5,16 @@ Broken Crystals is a benchmark application that uses modern technologies and imp
 The application contains:
 
 - React based web client
-  - FE - http://localhost:8090
+  - FE - http://localhost:3001
   - BE - http://localhost:3000
-- NodeJS server that serves the React client and provides both OpenAPI and GraphQL endpoints.
+- Node.js server that serves the React client and provides both OpenAPI and GraphQL endpoints.
   The full API documentation is available via swagger or GraphQL:
-  - Swagger UI - http://localhost:8090/swagger
-  - Swagger JSON file - http://localhost:8090/swagger-json
-  - GraphiQL UI - http://localhost:8090/graphiql
+  - Swagger UI - http://localhost:3000/swagger
+  - Swagger JSON file - http://localhost:3000/swagger-json
+  - GraphiQL UI - http://localhost:3000/graphiql
 
 > **Note**
-> The GraphQL API does not yet support all of the endpoints the REST API does.
+> The GraphQL API does not yet support all the endpoints the REST API does.
 
 ## Building and Running the Application
 
@@ -25,54 +25,12 @@ npm ci && npm run build
 # build client
 npm ci --prefix client && npm run build --prefix client
 
-#build and start dockers with Postgres DB, nginx and server
+# build and start local development environment with Postgres DB, MailCatcher and the app
 docker-compose --file=docker-compose.local.yml up -d
 
-#rebuild dockers
+# add build flag to ensure that the images are rebuilt before starting the services
 docker-compose --file=docker-compose.local.yml up -d --build
 ```
-
-## Running application with helm chart
-
-Helm command example:
-
-```bash
-$ helm upgrade --install --namespace distributor broken          \
-  --set snifferApiURL=https://hotel.playground.neuralegion.com \
-  --set snifferProjectID=ud8v8jwUaG14JiAihMQx1M                \
-  --set snifferApiKey=6g0daym.nexp.spkuhhishhttv               \
-  --set snifferNetworkInterface=lo0                            \
-  --set repeaterID=5r9Kci7AKLx4bkN58yYCDz                      \
-  --set token=nptbmxr.nexp.kkaux80olef2mew3n3r3rw08tww3c4f5    \
-  --set cluster=hotel.playground.neuralegion.com               \
-  --set timeout=40000                                          \
-  --set repeaterImageTag=v11.5.0-next.4                        \
-  --set ingress.url=broken.k3s.brokencrystals.nexploit.app     \
-  --set ingress.cert=distributorwildcard                       \
-  --set ingress.authlevel=- . --wait
-```
-
-Optionally, you can test your installation:
-
-```bash
-$ helm test broken --namespace=distributor --logs
-```
-
-### Arguments info
-
-**repeaterID, token and cluster** - These argument values are required if you want to use repeater. In case you don't set any of these fields, repeater container won't be run. In that case this will be regular bc deployment. (Required arguments if repeater container is to be used).
-
-**timeout** - this is optional argument for repeater deployment with default value 30000 if it is not set, it's only used in conjuction with main repeater options (optional argument).
-
-**repeaterImageTag** - this argument is optional with default value latest if field is not set. Notice these are docker tags and not repeater versions. They are similar but not the same. Dockerhub tags usually have "v" in front of repeater version. this argument is only used in conjuction with main repeater options (optional argument).
-
-**snifferApiURL, snifferProjectID and snifferApiKey** - These argument values are required if you want to use sniffer. In case you don't set any of these fields, sniffer container won't be run. In that case this will be regular bc deployment. (Required arguments if sniffer container is to be used).
-
-**snifferNetworkInterface** - this is optional argument for sniffer deployment with default value set to **"eth0"** if it is not set explicitly, it's only used in conjuction with main sniffer options (optional argument).
-
-**namespace** - kubernetes namespace where app will be spawned.
-
-**ingress.url** - Domain name that will be used to access app from Internet.
 
 ## Running tests by [SecTester](https://github.com/NeuraLegion/sectester-js/)
 
@@ -87,7 +45,7 @@ BRIGHT_TOKEN = <your_API_key_here>
 Then, you can modify a URL to your instance of the application by setting the `SEC_TESTER_TARGET` environment variable in your [`.env`](.env) file:
 
 ```text
-SEC_TESTER_TARGET = http://localhost:8090
+SEC_TESTER_TARGET = http://localhost:3000
 ```
 
 Finally, you can start tests with SecTester against these endpoints as follows:
@@ -110,11 +68,11 @@ Full configuration & usage examples can be found in our [demo project](https://g
   - **X5U Rogue Key** - Uses the uploaded certificate to sign the JWT and sets the X5U Header in JWT to point to the uploaded certificate (implemented in designated endpoint as described in Swagger).
   - **X5C Rogue Key** - The application doesn’t properly check which X5C key is used for signing. When we set the X5C headers to our values and sign with our private key, authentication is bypassed (implemented in designated endpoint as described in Swagger).
   - **JKU Rogue Key** - Uses our publicly available JSON to check if JWT is properly signed after we set the Header in JWT to point to our JSON and sign the JWT with our private key (implemented in designated endpoint as described in Swagger).
-  - **JWK Rogue Key** - We make a new JSON with empty values, hash it, and set it directly in the Header and we then use our private key to sign the JWT (implemented in designated endpoint as described in Swagger).
+  - **JWK Rogue Key** - We make a new JSON with empty values, hash it, and set it directly in the Header, and we then use our private key to sign the JWT (implemented in designated endpoint as described in Swagger).
 
 - **Brute Force Login** - Checks if the application user is using a weak password. The default setup contains user = _admin_ with password = _admin_
 
-- **Common Files** - Tries to find common files that shouldn’t be publicly exposed (such as “phpinfo”, “.htaccess”, “ssh-key.priv”, etc…). The application contains .htacess and Nginx.conf files under the client's root directory and additional files can be added by placing them under the public/public directory and running a build of the client.
+- **Common Files** - Tries to find common files that shouldn’t be publicly exposed (such as “phpinfo”, “.htaccess”, “ssh-key.priv”, etc…). The application contains .htaccess and nginx.conf files under the client's root directory and additional files can be added by placing them under the public/public directory and running a build of the client.
 
 - **Cookie Security** - Checks if the cookie has the “secure” and HTTP only flags. The application returns two cookies (session and bc-calls-counter cookie), both without secure and HttpOnly flags.
 
@@ -143,7 +101,7 @@ Full configuration & usage examples can be found in our [demo project](https://g
 
 - **HTML Injection** - Both forms testimonial and mailing list subscription forms allow HTML injection.
 
-- **CSS Injection** - The login page is vulnerable to CSS Injections through a url parameter: https://brokencrystals.com/userlogin?logobgcolor=transparent.
+- **CSS Injection** - The login page is vulnerable to CSS Injections through a URL parameter: https://brokencrystals.com/userlogin?logobgcolor=transparent.
 
 - **HTTP Method fuzzer** - The server supports uploading, deletion, and getting the content of a file via /put.raw addition to the URL. The actual implementation using a regular upload endpoint of the server and the /put.raw endpoint is mapped in Nginx.
 
@@ -151,7 +109,7 @@ Full configuration & usage examples can be found in our [demo project](https://g
 
 - **Local File Inclusion (LFI)** - The /api/files endpoint returns any file on the server from the path that is provided in the _path_ param. The UI uses this endpoint to load crystal images on the landing page.
 
-- **Mass Assignment** - You can add to user admin privilegies upon creating user or updating userdata. When you creating a new user /api/users/basic you can use additional hidden field in body request { ... "isAdmin" : true }. If you are trying to edit userdata with PUT request /api/users/one/{email}/info you can add this additional field mentioned above. For checking admin permissions there is one more endpoint: /api/users/one/{email}/adminpermission.
+- **Mass Assignment** - You can add to user admin privileges upon creating user or updating userdata. When you are creating a new user /api/users/basic you can use additional hidden field in body request { ... "isAdmin" : true }. If you are trying to edit userdata with PUT request /api/users/one/{email}/info you can add this additional field mentioned above. For checking admin permissions there is one more endpoint: /api/users/one/{email}/adminpermission.
 
 - **Open Database** - The index.html file includes a link to manifest URL, which returns the server's configuration, including a DB connection string.
 
@@ -168,11 +126,11 @@ Full configuration & usage examples can be found in our [demo project](https://g
 
 - **SQL injection (SQLi)** - The `/api/testimonials/count` endpoint receives and executes SQL query in the query parameter. Similarly, the `/api/products/views` endpoint utilizes the `x-product-name` header to update the number of views for a product. However, both of these parameters can be exploited to inject SQL code, making these endpoints vulnerable to SQL injection attacks.
 
-- **Unvalidated Redirect** - The endpoint /api/goto redirects the client to the URL provided in the _url_ query parameter. The UI references the endpoint in the header (while clicking on the site's logo) and as an href source for the Terms and Services link in the footer.
+- **Unvalidated Redirect** - The endpoint /api/goto redirects the client to the URL provided in the _url_ query parameter. The UI references the endpoint in the header (while clicking on the site's logo) and as a href source for the Terms and Services link in the footer.
 
-- **Version Control System** - The client_s build process copies SVN, GIT, and Mercurial source control directories to the client application root and they are accessible under Nginx root.
+- **Version Control System** - The client_s build process copies SVN, GIT, and Mercurial source control directories to the client application root, and they are accessible under Nginx root.
 
-- **XML External Entity (XXE)** - The endpoint, POST /api/metadata, receives URL-encoded XML data in the _xml_ query parameter, processes it with enabled external entities (using libxmnl library) and returns the serialized DOM. Additionally, for a request that tries to load file:///etc/passwd as an entity, the endpoint returns a mocked up content of the file.
+- **XML External Entity (XXE)** - The endpoint, POST /api/metadata, receives URL-encoded XML data in the _xml_ query parameter, processes it with enabled external entities (using `libxmljs` library) and returns the serialized DOM. Additionally, for a request that tries to load file:///etc/passwd as an entity, the endpoint returns a mocked up content of the file.
   Additionally, the endpoint PUT /api/users/one/{email}/photo accepts SVG images, which are proccessed with libxml library and stored on the server, as well as sent back to the client.
 
 - **JavaScript Vulnerabilities Scanning** - Index.html includes an older version of the jQuery library with known vulnerabilities.
@@ -185,7 +143,7 @@ Full configuration & usage examples can be found in our [demo project](https://g
 
 - **Excessive Data Exposure** - The `/api/users/one/:email` is supposed to expose only basic user information required to be displayed on the UI, but it also returns the user's phone number which is unnecessary information.
 
-- **Business Constraint Bypass** - The `/api/products/latest` endpoint supports a `limit` parameter, which by default is set to 3. The `/api/products` endpoint is a password protected endpoint which returns all of the products, yet if you change the `limit` param of `/api/products/latest` to be high enough you could get the same results without the need to be authenticated.
+- **Business Constraint Bypass** - The `/api/products/latest` endpoint supports a `limit` parameter, which by default is set to 3. The `/api/products` endpoint is a password protected endpoint which returns all the products, yet if you change the `limit` param of `/api/products/latest` to be high enough you could get the same results without the need to be authenticated.
 
 - **ID Enumeration** - There are a few ID Enumeration vulnerabilities:
 
@@ -201,12 +159,12 @@ Full configuration & usage examples can be found in our [demo project](https://g
 
 - **Prototype Pollution** - The `/marketplace` endpoint is vulnerable to prototype pollution using the following methods:
 
-  1. The EP GET `/marketplace?__proto__[Test]=Test` represents the client side vulnerabillity, by parsing the URI (for portfolio filtering) and converting
-     it's parmeters into an object. This means that a requests like `/marketplace?__proto__[TestKey]=TestValue` will lead to a creation of `Object.TestKey`.
+  1. The EP GET `/marketplace?__proto__[Test]=Test` represents the client side vulnerability, by parsing the URI (for portfolio filtering) and converting
+     its parameters into an object. This means that a requests like `/marketplace?__proto__[TestKey]=TestValue` will lead to a creation of `Object.TestKey`.
      One can test if an attack was successful by viewing the new property created in the console.
-     This EP also supports prototyp pollution based DOM XSS using a payload such as `__proto__[prototypePollutionDomXss]=data:,alert(1);`.
+     This EP also supports prototype pollution based DOM XSS using a payload such as `__proto__[prototypePollutionDomXss]=data:,alert(1);`.
      The "legitimate" code tries to use the `prototypePollutionDomXss` parameter as a source for a script tag, so if the exploit is not used via this key it won't work.
-  2. The EP GET `/api/email/sendSupportEmail` represents the server side vulnerabillity, by having a rookie URI parsing mistake (similiar to the client side).
+  2. The EP GET `/api/email/sendSupportEmail` represents the server side vulnerability, by having a rookie URI parsing mistake (similar to the client side).
      This means that a request such as `/api/email/sendSupportEmail?name=Bob%20Dylan&__proto__[status]=222&to=username%40email.com&subject=Help%20Request&content=Help%20me..`
      will lead to a creation of `uriParams.status`, which is a parameter used in the final JSON response.
 
