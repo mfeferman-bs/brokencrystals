@@ -1,4 +1,4 @@
-import InnerHTML from 'dangerously-set-html-content';
+import { InnerHtml } from '../../../components';
 import type { RegistrationUser } from '../../../interfaces/User';
 
 export function showRegResponse({
@@ -18,7 +18,7 @@ export function showRegResponse({
         ({ title, value }) =>
           value && (
             <div className="dangerous-html" key={title}>
-              <InnerHTML html={`${title}: ${value}`} />
+              <InnerHtml html={`${title}: ${value}`} />
             </div>
           )
       )}
