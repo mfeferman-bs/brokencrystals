@@ -3,19 +3,6 @@
   "version": "0.1.0",
   "type": "module",
   "private": true,
-  "dependencies": {
-    "axios": "^1.7.7",
-    "buffer": "^6.0.3",
-    "dangerously-set-html-content": "1.1.0",
-    "file-type": "^19.4.1",
-    "get-browser-fingerprint": "^3.2.0",
-    "react": "^18.3.1",
-    "react-datepicker": "^7.3.0",
-    "react-dom": "^18.3.1",
-    "react-owl-carousel": "^2.3.3",
-    "react-router-dom": "^6.26.1",
-    "xmldom": "^0.6.0"
-  },
   "scripts": {
     "cypress:open": "cypress open --e2e --browser chrome",
     "cypress:run": "cypress run --e2e --browser chrome",
@@ -28,17 +15,18 @@
     "format": "prettier  --check .",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "dependencies": {
+    "axios": "^1.7.7",
+    "buffer": "^6.0.3",
+    "dangerously-set-html-content": "1.1.0",
+    "file-type": "^19.4.1",
+    "get-browser-fingerprint": "^3.2.0",
+    "react": "^18.3.1",
+    "react-datepicker": "^7.3.0",
+    "react-dom": "^18.3.1",
+    "react-owl-carousel": "^2.3.3",
+    "react-router-dom": "^6.26.1",
+    "xmldom": "^0.6.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",
@@ -60,5 +48,17 @@
     "dangerously-set-html-content": {
       "react": "^18.3.1"
     }
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

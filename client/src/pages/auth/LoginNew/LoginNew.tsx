@@ -60,7 +60,7 @@ export const LoginNew: FC = () => {
             />
           </div>
           <button
-            className="au-btn au-btn--block au-btn--green m-b-20"
+            className="au-btn au-btn--block au-btn--green mb-4"
             type="submit"
             aria-label="Proceed to password entry"
           >

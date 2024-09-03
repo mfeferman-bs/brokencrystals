@@ -95,7 +95,7 @@ export const Userprofile = () => {
                 />
               </div>
               <button
-                className="au-btn au-btn--block au-btn--green m-b-20"
+                className="au-btn au-btn--block au-btn--green mb-4"
                 type="submit"
               >
                 Save changes
@@ -103,7 +103,7 @@ export const Userprofile = () => {
             </form>
             <div>
               <button
-                className="au-btn au-btn--block au-btn--blue m-b-20"
+                className="au-btn au-btn--block au-btn--blue mb-4"
                 onClick={() => removeUserPhotoById(user.id, isAdmin)}
               >
                 Remove user profile photo
