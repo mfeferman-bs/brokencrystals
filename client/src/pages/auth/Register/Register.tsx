@@ -173,7 +173,7 @@ export const Register: FC = () => {
           {regResponse && showRegResponse(regResponse)}
 
           <button
-            className="au-btn au-btn--block au-btn--green m-b-20"
+            className="au-btn au-btn--block au-btn--green mb-4"
             type="submit"
             disabled={submitBtnDisabled}
           >

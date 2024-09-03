@@ -117,7 +117,7 @@ export const PasswordCheck: FC = () => {
             </label>
           </div>
           <button
-            className="au-btn au-btn--block au-btn--green m-b-20"
+            className="au-btn au-btn--block au-btn--green mb-4"
             type="submit"
             aria-label="Sign in"
           >
