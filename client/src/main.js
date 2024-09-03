@@ -190,22 +190,6 @@ export const initDependencies = () => {
     }
   });
 
-  // Porfolio isotope and filter
-  $('#portfolio-flters li').on('click', function () {
-    $('#portfolio-flters li').removeClass('filter-active');
-    $(this).addClass('filter-active');
-
-    var portfolioIsotope = $('.portfolio-container').isotope({
-      itemSelector: '.portfolio-item'
-    });
-
-    portfolioIsotope.isotope({
-      filter: $(this).data('filter')
-    });
-
-    aos_init();
-  });
-
   // Init AOS
   function aos_init() {
     // eslint-disable-next-line no-undef
