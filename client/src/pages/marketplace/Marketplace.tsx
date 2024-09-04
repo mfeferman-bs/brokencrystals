@@ -174,10 +174,10 @@ export const Marketplace: FC<Props> = (props: Props) => {
 
       <section id="marketplace" className="portfolio">
         <div className="container" data-aos="fade-up">
-          <div className="section-title marketplaceTitle">
+          <div className="section-title">
             <h2>Marketplace</h2>
           </div>
-          <div className="section-title qmarketplaceTitle">
+          <div className="section-title marketplace-gem-filter-container">
             <h3>Gem Filter</h3>
             <input
               className="form-control marketplace-gem-filter-input"
