@@ -32,6 +32,21 @@ docker-compose --file=docker-compose.local.yml up -d
 docker-compose --file=docker-compose.local.yml up -d --build
 ```
 
+## Running application with helm
+Helm command example:
+```bash
+$ helm repo add brokencrystals https://neuralegion.github.io/brokencrystals/
+$ helm upgrade --install --namespace distributor broken     \
+  --set repeaterID=5r....Dz                                 \
+  --set token=n..r.nexp.k..5                                \
+  --set cluster=hotel.playground.neuralegion.com            \
+  --set timeout=40000                                       \
+  --set repeaterImageTag=v11.5.0-next.4                     \
+  --set ingress.url=broken.k3s.brokencrystals.nexploit.app  \
+  --set ingress.cert=distributorwildcard                    \
+  --set ingress.authlevel=- brokencrystals/brokencrystals --wait
+```
+
 ## Running tests by [SecTester](https://github.com/NeuraLegion/sectester-js/)
 
 In the path [`./test`](./test) you can find tests to run with Jest.

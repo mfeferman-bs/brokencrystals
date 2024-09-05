@@ -5,6 +5,7 @@ description: |
   common security vulnerabilities
 type: application
 version: 0.0.82
+icon: https://raw.githubusercontent.com/NeuraLegion/brokencrystals/stable/public/public/assets/img/logo.png
 keywords:
   - brokencrystals
   - brkn
