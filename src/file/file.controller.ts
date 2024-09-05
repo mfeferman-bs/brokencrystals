@@ -4,12 +4,11 @@ import {
   Controller,
   Delete,
   Get,
-  Headers,
   HttpStatus,
   Logger,
   Put,
   Query,
-  Res,
+  Res
 } from '@nestjs/common';
 import {
   ApiHeader,
@@ -18,7 +17,7 @@ import {
   ApiOkResponse,
   ApiOperation,
   ApiQuery,
-  ApiTags,
+  ApiTags
 } from '@nestjs/swagger';
 import { W_OK } from 'constants';
 import * as fs from 'fs';
@@ -30,7 +29,7 @@ import {
   SWAGGER_DESC_DELETE_FILE,
   SWAGGER_DESC_READ_FILE,
   SWAGGER_DESC_READ_FILE_ON_SERVER,
-  SWAGGER_DESC_SAVE_RAW_CONTENT,
+  SWAGGER_DESC_SAVE_RAW_CONTENT
 } from './file.controller.swagger.desc';
 import { CloudProvidersMetaData } from './cloud.providers.metadata';
 
@@ -41,11 +40,9 @@ export class FileController {
 
   constructor(private fileService: FileService) {}
 
-  private getContentType(contentType: string, acceptHeader: string) {
+  private getContentType(contentType: string) {
     if (contentType) {
       return contentType;
-    } else if (acceptHeader) {
-      return acceptHeader;
     } else {
       return 'application/octet-stream';
     }
@@ -65,33 +62,32 @@ export class FileController {
   @ApiQuery({
     name: 'path',
     example: 'config/products/crystals/amethyst.jpg',
-    required: true,
+    required: true
   })
   @ApiQuery({ name: 'type', example: 'image/jpg', required: true })
   @ApiHeader({ name: 'accept', example: 'image/jpg', required: true })
   @ApiOkResponse({
-    description: 'File read successfully',
+    description: 'File read successfully'
   })
   @ApiInternalServerErrorResponse({
     schema: {
       type: 'object',
       properties: {
         error: { type: 'string' },
-        location: { type: 'string' },
-      },
-    },
+        location: { type: 'string' }
+      }
+    }
   })
   @ApiOperation({
-    description: SWAGGER_DESC_READ_FILE,
+    description: SWAGGER_DESC_READ_FILE
   })
   async loadFile(
     @Query('path') path: string,
     @Query('type') contentType: string,
-    @Res({ passthrough: true }) res: FastifyReply,
-    @Headers('accept') acceptHeader: string,
+    @Res({ passthrough: true }) res: FastifyReply
   ) {
     const file: Stream = await this.fileService.getFile(path);
-    const type = this.getContentType(contentType, acceptHeader);
+    const type = this.getContentType(contentType);
     res.type(type);
 
     return file;
@@ -101,36 +97,35 @@ export class FileController {
   @ApiQuery({
     name: 'path',
     example: 'config/products/crystals/amethyst.jpg',
-    required: true,
+    required: true
   })
   @ApiQuery({ name: 'type', example: 'image/jpg', required: true })
   @ApiHeader({ name: 'accept', example: 'image/jpg', required: true })
   @ApiOkResponse({
-    description: 'File read successfully',
+    description: 'File read successfully'
   })
   @ApiInternalServerErrorResponse({
     schema: {
       type: 'object',
       properties: {
         error: { type: 'string' },
-        location: { type: 'string' },
-      },
-    },
+        location: { type: 'string' }
+      }
+    }
   })
   @ApiOperation({
-    description: SWAGGER_DESC_READ_FILE,
+    description: SWAGGER_DESC_READ_FILE
   })
   async loadGoogleFile(
     @Query('path') path: string,
     @Query('type') contentType: string,
-    @Res({ passthrough: true }) res: FastifyReply,
-    @Headers('accept') acceptHeader: string,
+    @Res({ passthrough: true }) res: FastifyReply
   ) {
     const file: Stream = await this.loadCPFile(
       CloudProvidersMetaData.GOOGLE,
-      path,
+      path
     );
-    const type = this.getContentType(contentType, acceptHeader);
+    const type = this.getContentType(contentType);
     res.type(type);
 
     return file;
@@ -140,36 +135,35 @@ export class FileController {
   @ApiQuery({
     name: 'path',
     example: 'config/products/crystals/amethyst.jpg',
-    required: true,
+    required: true
   })
   @ApiQuery({ name: 'type', example: 'image/jpg', required: true })
   @ApiHeader({ name: 'accept', example: 'image/jpg', required: true })
   @ApiOkResponse({
-    description: 'File read successfully',
+    description: 'File read successfully'
   })
   @ApiInternalServerErrorResponse({
     schema: {
       type: 'object',
       properties: {
         error: { type: 'string' },
-        location: { type: 'string' },
-      },
-    },
+        location: { type: 'string' }
+      }
+    }
   })
   @ApiOperation({
-    description: SWAGGER_DESC_READ_FILE,
+    description: SWAGGER_DESC_READ_FILE
   })
   async loadAwsFile(
     @Query('path') path: string,
     @Query('type') contentType: string,
-    @Res({ passthrough: true }) res: FastifyReply,
-    @Headers('accept') acceptHeader: string,
+    @Res({ passthrough: true }) res: FastifyReply
   ) {
     const file: Stream = await this.loadCPFile(
       CloudProvidersMetaData.AWS,
-      path,
+      path
     );
-    const type = this.getContentType(contentType, acceptHeader);
+    const type = this.getContentType(contentType);
     res.type(type);
 
     return file;
@@ -179,36 +173,35 @@ export class FileController {
   @ApiQuery({
     name: 'path',
     example: 'config/products/crystals/amethyst.jpg',
-    required: true,
+    required: true
   })
   @ApiQuery({ name: 'type', example: 'image/jpg', required: true })
   @ApiHeader({ name: 'accept', example: 'image/jpg', required: true })
   @ApiOkResponse({
-    description: 'File read successfully',
+    description: 'File read successfully'
   })
   @ApiInternalServerErrorResponse({
     schema: {
       type: 'object',
       properties: {
         error: { type: 'string' },
-        location: { type: 'string' },
-      },
-    },
+        location: { type: 'string' }
+      }
+    }
   })
   @ApiOperation({
-    description: SWAGGER_DESC_READ_FILE,
+    description: SWAGGER_DESC_READ_FILE
   })
   async loadAzureFile(
     @Query('path') path: string,
     @Query('type') contentType: string,
-    @Res({ passthrough: true }) res: FastifyReply,
-    @Headers('accept') acceptHeader: string,
+    @Res({ passthrough: true }) res: FastifyReply
   ) {
     const file: Stream = await this.loadCPFile(
       CloudProvidersMetaData.AZURE,
-      path,
+      path
     );
-    const type = this.getContentType(contentType, acceptHeader);
+    const type = this.getContentType(contentType);
     res.type(type);
 
     return file;
@@ -218,36 +211,35 @@ export class FileController {
   @ApiQuery({
     name: 'path',
     example: 'config/products/crystals/amethyst.jpg',
-    required: true,
+    required: true
   })
   @ApiQuery({ name: 'type', example: 'image/jpg', required: true })
   @ApiHeader({ name: 'accept', example: 'image/jpg', required: true })
   @ApiOkResponse({
-    description: 'File read successfully',
+    description: 'File read successfully'
   })
   @ApiInternalServerErrorResponse({
     schema: {
       type: 'object',
       properties: {
         error: { type: 'string' },
-        location: { type: 'string' },
-      },
-    },
+        location: { type: 'string' }
+      }
+    }
   })
   @ApiOperation({
-    description: SWAGGER_DESC_READ_FILE,
+    description: SWAGGER_DESC_READ_FILE
   })
   async loadDigitalOceanFile(
     @Query('path') path: string,
     @Query('type') contentType: string,
-    @Res({ passthrough: true }) res: FastifyReply,
-    @Headers('accept') acceptHeader: string,
+    @Res({ passthrough: true }) res: FastifyReply
   ) {
     const file: Stream = await this.loadCPFile(
       CloudProvidersMetaData.DIGITAL_OCEAN,
-      path,
+      path
     );
-    const type = this.getContentType(contentType, acceptHeader);
+    const type = this.getContentType(contentType);
     res.type(type);
 
     return file;
@@ -257,22 +249,22 @@ export class FileController {
   @ApiQuery({
     name: 'path',
     example: 'config/products/crystals/some_file.jpg',
-    required: true,
+    required: true
   })
   @ApiOperation({
-    description: SWAGGER_DESC_DELETE_FILE,
+    description: SWAGGER_DESC_DELETE_FILE
   })
   @ApiInternalServerErrorResponse({
     schema: {
       type: 'object',
       properties: {
         error: { type: 'string' },
-        location: { type: 'string' },
-      },
-    },
+        location: { type: 'string' }
+      }
+    }
   })
   @ApiOkResponse({
-    description: 'File deleted successfully',
+    description: 'File deleted successfully'
   })
   async deleteFile(@Query('path') path: string): Promise<void> {
     await this.fileService.deleteFile(path);
@@ -282,15 +274,15 @@ export class FileController {
   @ApiQuery({
     name: 'path',
     example: 'some/path/to/file.png',
-    required: true,
+    required: true
   })
   @ApiOperation({
-    description: SWAGGER_DESC_SAVE_RAW_CONTENT,
+    description: SWAGGER_DESC_SAVE_RAW_CONTENT
   })
   @ApiOkResponse()
   async uploadFile(
     @Query('path') file: string,
-    @Body() raw: string,
+    @Body() raw: string
   ): Promise<string> {
     try {
       if (typeof raw === 'string' || Buffer.isBuffer(raw)) {
@@ -308,20 +300,20 @@ export class FileController {
   @ApiQuery({
     name: 'path',
     example: 'config/products/crystals/amethyst.jpg',
-    required: true,
+    required: true
   })
   @ApiOperation({
-    description: SWAGGER_DESC_READ_FILE_ON_SERVER,
+    description: SWAGGER_DESC_READ_FILE_ON_SERVER
   })
   @ApiNotFoundResponse({
-    description: 'File not found',
+    description: 'File not found'
   })
   @ApiOkResponse({
-    description: 'Returns requested file',
+    description: 'Returns requested file'
   })
   async readFile(
     @Query('path') file: string,
-    @Res({ passthrough: true }) res: FastifyReply,
+    @Res({ passthrough: true }) res: FastifyReply
   ) {
     try {
       const stream = await this.fileService.getFile(file);

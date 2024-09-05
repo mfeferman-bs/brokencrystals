@@ -10,7 +10,7 @@ export class ProductDto {
   @ApiProperty({
     default:
       '/api/file?path=config/products/crystals/amethyst.jpg&type=image/jpg',
-    required: true,
+    required: true
   })
   photoUrl: string;
 

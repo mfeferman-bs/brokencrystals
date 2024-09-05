@@ -7,9 +7,9 @@ export class JwtTokenWithX5CKeyProcessor extends JwtTokenProcessor {
     super(new Logger(JwtTokenWithX5CKeyProcessor.name));
   }
 
-  async validateToken(token: string): Promise<any> {
+  async validateToken(token: string): Promise<unknown> {
     this.log.debug('Call validateToken');
-    const [header, payload] = this.parse(token);
+    const [header] = this.parse(token);
 
     const keys = header.x5c;
     const keyLike = await jose.importPKCS8(keys[0], 'RS256');
@@ -24,7 +24,7 @@ export class JwtTokenWithX5CKeyProcessor extends JwtTokenProcessor {
       .setProtectedHeader({
         typ: 'JWT',
         alg: 'RS256',
-        x5c: [this.key],
+        x5c: [this.key]
       })
       .sign(pkcs8);
   }

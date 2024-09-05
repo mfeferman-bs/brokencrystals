@@ -3,11 +3,14 @@ import * as jose from 'jose';
 import { JwtTokenProcessor as JwtTokenProcessor } from './jwt.token.processor';
 
 export class JwtTokenWithJWKProcessor extends JwtTokenProcessor {
-  constructor(private key: string, private jwk: jose.JWK) {
+  constructor(
+    private key: string,
+    private jwk: jose.JWK
+  ) {
     super(new Logger(JwtTokenWithJWKProcessor.name));
   }
 
-  async validateToken(token: string): Promise<any> {
+  async validateToken(token: string): Promise<unknown> {
     this.log.debug('Call validateToken');
     const [header, payload] = this.parse(token);
 
@@ -35,7 +38,7 @@ export class JwtTokenWithJWKProcessor extends JwtTokenProcessor {
       .setProtectedHeader({
         typ: 'JWT',
         alg: 'RS256',
-        jwk: this.jwk,
+        jwk: this.jwk
       })
       .sign(pkcs8);
   }

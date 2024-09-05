@@ -2,9 +2,8 @@ import {
   CallHandler,
   ExecutionContext,
   Injectable,
-  InternalServerErrorException,
   Logger,
-  NestInterceptor,
+  NestInterceptor
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -26,7 +25,7 @@ export class HeadersConfiguratorInterceptor implements NestInterceptor {
   public static readonly COUNTER_COOKIE_NAME = 'bc-calls-counter';
   private readonly logger = new Logger(HeadersConfiguratorInterceptor.name);
 
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
     const req = this.getRequest(context);
 
     const cookies: string[] = req.headers.cookie
@@ -37,7 +36,7 @@ export class HeadersConfiguratorInterceptor implements NestInterceptor {
       const cookie = cookies
         .reverse()
         .find((str) =>
-          str.startsWith(HeadersConfiguratorInterceptor.COUNTER_COOKIE_NAME),
+          str.startsWith(HeadersConfiguratorInterceptor.COUNTER_COOKIE_NAME)
         );
 
       this.logger.log(`Cookie header: ${cookie}`);
@@ -55,7 +54,7 @@ export class HeadersConfiguratorInterceptor implements NestInterceptor {
       tap(() => {
         const res = this.getResponse(context);
         res.setCookie('bc-calls-counter', Date.now().toString(), {
-          secure: false,
+          secure: false
         });
         if (
           !req.query[HeadersConfiguratorInterceptor.NO_SEC_HEADERS_QUERY_PARAM]
@@ -63,15 +62,15 @@ export class HeadersConfiguratorInterceptor implements NestInterceptor {
           res.header(HeadersConfiguratorInterceptor.XSS_PROTECTION_HEADER, '0');
           res.header(
             HeadersConfiguratorInterceptor.STRICT_TRANSPORT_SECURITY_HEADER,
-            'max-age=0',
+            'max-age=0'
           );
           res.header(HeadersConfiguratorInterceptor.CONTENT_TYPE_OPTIONS, '1');
           res.header(
             HeadersConfiguratorInterceptor.CONTENT_SECURITY_POLICY,
-            `default-src  * 'unsafe-inline' 'unsafe-eval'`,
+            `default-src  * 'unsafe-inline' 'unsafe-eval'`
           );
         }
-      }),
+      })
     );
   }
 

@@ -17,6 +17,8 @@ import { AppService } from './app.service';
 import { UsersService } from './users/users.service';
 import { AppResolver } from './app.resolver';
 import { PartnersModule } from './partners/partners.module';
+import { EmailModule } from './email/email.module';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -28,15 +30,17 @@ import { PartnersModule } from './partners/partners.module';
     TestimonialsModule,
     ProductsModule,
     ConfigModule.forRoot({
-      isGlobal: true,
+      isGlobal: true
     }),
     HttpClientModule,
     GraphQLModule.forRoot<MercuriusDriverConfig>({
       driver: MercuriusDriver,
       graphiql: true,
-      autoSchemaFile: true,
+      autoSchemaFile: true
     }),
     PartnersModule,
+    EmailModule,
+    ChatModule
   ],
   controllers: [AppController],
   providers: [
@@ -44,8 +48,8 @@ import { PartnersModule } from './partners/partners.module';
     AppService,
     UsersService,
     ConfigService,
-    AppResolver,
-  ],
+    AppResolver
+  ]
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {

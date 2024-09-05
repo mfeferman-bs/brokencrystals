@@ -10,7 +10,7 @@ export abstract class JwtTokenProcessor {
     this.log = log;
   }
 
-  protected parse(token: string): [header: JwtHeader, payload: any] {
+  protected parse(token: string): [header: JwtHeader, payload: unknown] {
     this.log.debug('Call parse');
 
     const parts = token.split('.');
@@ -23,7 +23,7 @@ export abstract class JwtTokenProcessor {
 
     const payloadStr = Buffer.from(parts[1], 'base64').toString('ascii');
     this.log.debug(`Jwt token (None alg) payload is ${payloadStr}`);
-    const payload: any = JSON.parse(payloadStr);
+    const payload = JSON.parse(payloadStr);
 
     return [header, payload];
   }
@@ -36,7 +36,7 @@ export abstract class JwtTokenProcessor {
       !chainText ||
       (idx = Math.max(
         chainText.indexOf(JwtTokenProcessor.END_CERTIFICATE_MARK),
-        chainText.indexOf(JwtTokenProcessor.END_PUBLIC_KEY_MARK),
+        chainText.indexOf(JwtTokenProcessor.END_PUBLIC_KEY_MARK)
       )) === -1
     ) {
       throw new Error('Invalid certificate');
@@ -44,13 +44,13 @@ export abstract class JwtTokenProcessor {
 
     const key = chainText.slice(
       0,
-      idx + JwtTokenProcessor.END_CERTIFICATE_MARK.length,
+      idx + JwtTokenProcessor.END_CERTIFICATE_MARK.length
     );
     this.log.debug(`Extracted key\n${key}`);
     return key;
   }
 
-  abstract validateToken(token: string): Promise<any>;
+  abstract validateToken(token: string): Promise<unknown>;
 
   abstract createToken(payload: unknown): Promise<string>;
 }

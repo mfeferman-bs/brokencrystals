@@ -11,10 +11,10 @@ import { KeyCloakModule } from '../keycloak/keycloak.module';
     forwardRef(() => UsersModule),
     OrmModule,
     KeyCloakModule,
-    HttpClientModule,
+    HttpClientModule
   ],
   providers: [AuthService],
   controllers: [AuthController],
-  exports: [AuthService],
+  exports: [AuthService]
 })
 export class AuthModule {}

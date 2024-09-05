@@ -17,7 +17,7 @@ import {
   UseInterceptors,
   ParseIntPipe,
   DefaultValuePipe,
-  HttpStatus,
+  HttpStatus
 } from '@nestjs/common';
 import {
   ApiBody,
@@ -29,7 +29,7 @@ import {
   ApiOperation,
   ApiProduces,
   ApiQuery,
-  ApiTags,
+  ApiTags
 } from '@nestjs/swagger';
 import * as dotT from 'dot';
 import { parseXml } from 'libxmljs';
@@ -42,7 +42,7 @@ import {
   API_DESC_RENDER_REQUEST,
   API_DESC_XML_METADATA,
   SWAGGER_DESC_SECRETS,
-  SWAGGER_DESC_NESTED_JSON,
+  SWAGGER_DESC_NESTED_JSON
 } from './app.controller.swagger.desc';
 import { AuthGuard } from './auth/auth.guard';
 import { JwtType } from './auth/jwt/jwt.type.decorator';
@@ -56,17 +56,17 @@ import { SWAGGER_DESC_FIND_USER } from './users/users.controller.swagger.desc';
 export class AppController {
   private readonly logger = new Logger(AppController.name);
 
-  constructor(private readonly appService: AppService) { }
+  constructor(private readonly appService: AppService) {}
 
   @Post('render')
   @ApiProduces('text/plain')
   @ApiConsumes('text/plain')
   @ApiOperation({
-    description: API_DESC_RENDER_REQUEST,
+    description: API_DESC_RENDER_REQUEST
   })
   @ApiBody({ description: 'Write your text here' })
   @ApiCreatedResponse({
-    description: 'Rendered result',
+    description: 'Rendered result'
   })
   async renderTemplate(@Body() raw): Promise<string> {
     if (typeof raw === 'string' || Buffer.isBuffer(raw)) {
@@ -80,10 +80,10 @@ export class AppController {
   @Get('goto')
   @ApiQuery({ name: 'url', example: 'https://google.com', required: true })
   @ApiOperation({
-    description: API_DESC_REDIRECT_REQUEST,
+    description: API_DESC_REDIRECT_REQUEST
   })
   @ApiOkResponse({
-    description: 'Redirected',
+    description: 'Redirected'
   })
   @Redirect()
   async redirect(@Query('url') url: string) {
@@ -98,28 +98,25 @@ export class AppController {
     examples: {
       xml_doc: {
         summary: 'XML doc',
-        value: `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 915 585"><g stroke-width="3.45" fill="none"><path stroke="#000" d="M11.8 11.8h411v411l-411 .01v-411z"/><path stroke="#448" d="M489 11.7h415v411H489v-411z"/></g></svg>`,
-      },
-    },
+        value: `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 915 585"><g stroke-width="3.45" fill="none"><path stroke="#000" d="M11.8 11.8h411v411l-411 .01v-411z"/><path stroke="#448" d="M489 11.7h415v411H489v-411z"/></g></svg>`
+      }
+    }
   })
   @ApiOperation({
-    description: API_DESC_XML_METADATA,
+    description: API_DESC_XML_METADATA
   })
   @ApiInternalServerErrorResponse({
-    description: 'Invalid data',
+    description: 'Invalid data'
   })
   @ApiCreatedResponse({
-    description: 'XML passed successfully',
+    description: 'XML passed successfully'
   })
   @Header('content-type', 'text/xml')
   async xml(@Body() xml: string): Promise<string> {
     const xmlDoc = parseXml(decodeURIComponent(xml), {
-      dtdload: true,
       noent: true,
-      doctype: true,
       dtdvalid: true,
-      errors: true,
-      recover: true,
+      recover: true
     });
     this.logger.debug(xmlDoc);
     this.logger.debug(xmlDoc.getDtd());
@@ -129,7 +126,7 @@ export class AppController {
 
   @Options()
   @ApiOperation({
-    description: API_DESC_OPTIONS_REQUEST,
+    description: API_DESC_OPTIONS_REQUEST
   })
   @Header('allow', 'OPTIONS, GET, HEAD, POST')
   async getTestOptions(): Promise<void> {
@@ -139,16 +136,16 @@ export class AppController {
   @Get('spawn')
   @ApiQuery({ name: 'command', example: 'ls -la', required: true })
   @ApiOperation({
-    description: API_DESC_LAUNCH_COMMAND,
+    description: API_DESC_LAUNCH_COMMAND
   })
   @ApiOkResponse({
-    type: String,
+    type: String
   })
   @ApiInternalServerErrorResponse({
     schema: {
       type: 'object',
-      properties: { location: { type: 'string' } },
-    },
+      properties: { location: { type: 'string' } }
+    }
   })
   async getCommandResult(@Query('command') command: string): Promise<string> {
     this.logger.debug(`launch ${command} command`);
@@ -157,18 +154,18 @@ export class AppController {
     } catch (err) {
       throw new InternalServerErrorException({
         error: err.message || err,
-        location: __filename,
+        location: __filename
       });
     }
   }
 
   @Get('/config')
   @ApiOperation({
-    description: API_DESC_CONFIG_SERVER,
+    description: API_DESC_CONFIG_SERVER
   })
   @ApiOkResponse({
     type: AppConfig,
-    status: 200,
+    status: 200
   })
   getConfig(): AppConfig {
     this.logger.debug('Called getConfig');
@@ -178,13 +175,13 @@ export class AppController {
 
   @Get('/secrets')
   @ApiOperation({
-    description: SWAGGER_DESC_SECRETS,
+    description: SWAGGER_DESC_SECRETS
   })
   @ApiOkResponse({
     type: Object,
-    status: 200,
+    status: 200
   })
-  getSecrets(): Object {
+  getSecrets(): Record<string, string> {
     const secrets = {
       codeclimate:
         'CODECLIMATE_REPO_TOKEN=62864c476ade6ab9d10d0ce0901ae2c211924852a28c5f960ae5165c1fdfec73',
@@ -203,7 +200,7 @@ export class AppController {
       paypal:
         'access_token$production$x0lb4r69dvmmnufd$3ea7cb281754b7da7dac131ef5783321',
       slack:
-        'xoxo-175588824543-175748345725-176608801663-826315f84e553d482bb7e73e8322sdf3',
+        'xoxo-175588824543-175748345725-176608801663-826315f84e553d482bb7e73e8322sdf3'
     };
     return secrets;
   }
@@ -213,11 +210,11 @@ export class AppController {
   @UseInterceptors(ClassSerializerInterceptor)
   @SerializeOptions({ groups: [BASIC_USER_INFO] })
   @ApiOperation({
-    description: SWAGGER_DESC_FIND_USER,
+    description: SWAGGER_DESC_FIND_USER
   })
   @ApiOkResponse({
     type: UserDto,
-    description: 'Returns basic user info if it exists',
+    description: 'Returns basic user info if it exists'
   })
   @ApiNotFoundResponse({
     description: 'User not found',
@@ -225,9 +222,9 @@ export class AppController {
       type: 'object',
       properties: {
         statusCode: { type: 'number' },
-        message: { type: 'string' },
-      },
-    },
+        message: { type: 'string' }
+      }
+    }
   })
   async getUserInfo(@Param('email') email: string): Promise<UserDto> {
     try {
@@ -244,11 +241,11 @@ export class AppController {
   @UseInterceptors(ClassSerializerInterceptor)
   @SerializeOptions({ groups: [BASIC_USER_INFO] })
   @ApiOperation({
-    description: SWAGGER_DESC_FIND_USER,
+    description: SWAGGER_DESC_FIND_USER
   })
   @ApiOkResponse({
     type: UserDto,
-    description: 'Returns basic user info if it exists',
+    description: 'Returns basic user info if it exists'
   })
   @ApiNotFoundResponse({
     description: 'User not found',
@@ -256,9 +253,9 @@ export class AppController {
       type: 'object',
       properties: {
         statusCode: { type: 'number' },
-        message: { type: 'string' },
-      },
-    },
+        message: { type: 'string' }
+      }
+    }
   })
   async getUserInfoV2(@Param('email') email: string): Promise<UserDto> {
     try {
@@ -270,18 +267,28 @@ export class AppController {
 
   @Get('nestedJson')
   @ApiOperation({
-    description: SWAGGER_DESC_NESTED_JSON,
+    description: SWAGGER_DESC_NESTED_JSON
   })
   @Header('content-type', 'application/json')
-  async getNestedJson(@Query('depth', new DefaultValuePipe(1), new ParseIntPipe({ errorHttpStatusCode: HttpStatus.BAD_REQUEST })) depth: number): Promise<string> {
+  async getNestedJson(
+    @Query(
+      'depth',
+      new DefaultValuePipe(1),
+      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.BAD_REQUEST })
+    )
+    depth: number
+  ): Promise<string> {
     if (depth < 1) {
-      throw new HttpException("JSON nesting depth is invalid", HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'JSON nesting depth is invalid',
+        HttpStatus.BAD_REQUEST
+      );
     }
 
     this.logger.debug(`Creating a JSON with a nesting depth of ${depth}`);
 
-    var tmpObj: object = {};
-    var jsonObj: object = { "0": "Leaf" };
+    let tmpObj = {};
+    let jsonObj: Record<string, string> = { '0': 'Leaf' };
     for (let i = 1; i < depth; i++) {
       tmpObj = {};
       tmpObj[i.toString()] = Object.assign({}, jsonObj);

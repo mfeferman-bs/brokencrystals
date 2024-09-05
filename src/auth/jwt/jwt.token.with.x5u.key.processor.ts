@@ -6,14 +6,14 @@ export class JwtTokenWithX5UKeyProcessor extends JwtTokenProcessor {
   constructor(
     private key: string,
     private httpClient: HttpClientService,
-    private x5uUrl: string,
+    private x5uUrl: string
   ) {
     super(new Logger(JwtTokenWithX5UKeyProcessor.name));
   }
 
-  async validateToken(token: string): Promise<any> {
+  async validateToken(token: string): Promise<unknown> {
     this.log.debug('Call validateToken');
-    const [header, payload] = this.parse(token);
+    const [header] = this.parse(token);
 
     const url = header.x5u;
     this.log.debug(`Loading key from url ${url}`);
@@ -31,7 +31,7 @@ export class JwtTokenWithX5UKeyProcessor extends JwtTokenProcessor {
       .setProtectedHeader({
         typ: 'JWT',
         alg: 'RS256',
-        x5u: this.x5uUrl,
+        x5u: this.x5uUrl
       })
       .sign(pkcs8);
   }

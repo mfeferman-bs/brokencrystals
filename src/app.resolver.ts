@@ -11,7 +11,7 @@ export class AppResolver {
   constructor(private readonly appService: AppService) {}
 
   @Query(() => String, {
-    description: API_DESC_LAUNCH_COMMAND,
+    description: API_DESC_LAUNCH_COMMAND
   })
   async getCommandResult(@Args('command') command: string): Promise<string> {
     this.logger.debug(`launch ${command} command`);

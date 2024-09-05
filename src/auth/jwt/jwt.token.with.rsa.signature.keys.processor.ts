@@ -3,11 +3,14 @@ import { decode, encode } from 'jwt-simple';
 import { JwtTokenProcessor as JwtTokenProcessor } from './jwt.token.processor';
 
 export class JwtTokenWithRSASignatureKeysProcessor extends JwtTokenProcessor {
-  constructor(private publicKey: string, private privateKey: string) {
+  constructor(
+    private publicKey: string,
+    private privateKey: string
+  ) {
     super(new Logger(JwtTokenWithRSASignatureKeysProcessor.name));
   }
 
-  async validateToken(token: string): Promise<any> {
+  async validateToken(token: string): Promise<unknown> {
     this.log.debug('Call validateToken');
 
     return decode(token, this.publicKey, true, 'RS256');

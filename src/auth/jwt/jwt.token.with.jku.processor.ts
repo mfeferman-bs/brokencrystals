@@ -7,12 +7,12 @@ export class JwtTokenWithJKUProcessor extends JwtTokenProcessor {
   constructor(
     private key: string,
     private httpClient: HttpClientService,
-    private jkuUrl: string,
+    private jkuUrl: string
   ) {
     super(new Logger(JwtTokenWithJKUProcessor.name));
   }
 
-  async validateToken(token: string): Promise<any> {
+  async validateToken(token: string): Promise<unknown> {
     this.log.debug('Call validateToken');
     const [header, payload] = this.parse(token);
 
@@ -34,7 +34,7 @@ export class JwtTokenWithJKUProcessor extends JwtTokenProcessor {
       .setProtectedHeader({
         typ: 'JWT',
         alg: 'RS256',
-        jku: this.jkuUrl,
+        jku: this.jkuUrl
       })
       .sign(pkcs8);
   }
