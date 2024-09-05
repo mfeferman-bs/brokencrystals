@@ -33,7 +33,9 @@ docker-compose --file=docker-compose.local.yml up -d --build
 ```
 
 ## Running application with helm
+
 Helm command example:
+
 ```bash
 $ helm repo add brokencrystals https://neuralegion.github.io/brokencrystals/
 $ helm upgrade --install --namespace distributor broken     \
