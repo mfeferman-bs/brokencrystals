@@ -1,4 +1,9 @@
-import { EntityRepository, NotFoundError, wrap } from '@mikro-orm/core';
+import {
+  EntityManager,
+  EntityRepository,
+  NotFoundError,
+  wrap
+} from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { PermissionDto } from './api/PermissionDto';
@@ -21,9 +26,10 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly usersRepository: EntityRepository<User>,
+    private readonly em: EntityManager
   ) {}
 
-  async createUser(user: UserDto, isBasicUser: boolean = true): Promise<User> {
+  async createUser(user: UserDto, isBasicUser = true): Promise<User> {
     this.log.debug(`Called createUser`);
 
     const u = new User();
@@ -37,7 +43,7 @@ export class UsersService {
     u.password = await hashPassword(user.password);
     u.isBasic = isBasicUser;
 
-    await this.usersRepository.persistAndFlush(u);
+    await this.em.persistAndFlush(u);
     this.log.debug(`Saved new user`);
     return u;
   }
@@ -49,10 +55,10 @@ export class UsersService {
       throw new NotFoundError('Could not find user');
     }
     wrap(user).assign({
-      photo,
+      photo
     });
 
-    await this.usersRepository.persistAndFlush(user);
+    await this.em.persistAndFlush(user);
     return user;
   }
 
@@ -64,7 +70,7 @@ export class UsersService {
     }
     delete user.photo;
 
-    await this.usersRepository.persistAndFlush(user);
+    await this.em.persistAndFlush(user);
     return user;
   }
 
@@ -72,9 +78,9 @@ export class UsersService {
     this.log.debug(`updateUserInfo ${oldUser.email}`);
     const newUser = oldUser;
     wrap(newUser).assign({
-      ...newData,
+      ...newData
     });
-    await this.usersRepository.persistAndFlush(newUser);
+    await this.em.persistAndFlush(newUser);
     const poisonedUser = Object.create(newUser);
     Object.assign(poisonedUser, newData);
     const { email, firstName, lastName } = newUser;
@@ -82,7 +88,7 @@ export class UsersService {
       email: email,
       firstName: firstName,
       lastName: lastName,
-      ...poisonedUser.__proto__,
+      ...poisonedUser.__proto__
     };
   }
 
@@ -108,9 +114,9 @@ export class UsersService {
     this.log.debug(`Called searchUsersByName`);
     return this.usersRepository.find(
       {
-        firstName: { $like: query + '%' },
+        firstName: { $like: query + '%' }
       },
-      limit ? { limit } : {},
+      limit ? { limit } : {}
     );
   }
 
@@ -118,7 +124,7 @@ export class UsersService {
     const user = await this.usersRepository.findOne({ email });
 
     return new PermissionDto({
-      isAdmin: user.isAdmin,
+      isAdmin: user.isAdmin
     });
   }
 

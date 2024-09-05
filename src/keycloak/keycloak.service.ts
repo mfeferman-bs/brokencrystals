@@ -3,13 +3,13 @@ import {
   InternalServerErrorException,
   Logger,
   OnModuleInit,
-  UnauthorizedException,
+  UnauthorizedException
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ok } from 'assert';
 import { HttpClientService } from '../httpclient/httpclient.service';
 import { KeyCloakConfigProperties } from './keycloak.config.properties';
-import * as jwkToPem from 'jwk-to-pem';
+import jwkToPem from 'jwk-to-pem';
 import { JWK } from 'jwk-to-pem';
 import { stringify } from 'querystring';
 import { verify } from 'jsonwebtoken';
@@ -49,7 +49,7 @@ export interface Token {
 
 export enum ClientType {
   ADMIN = 'admin',
-  PUBLIC = 'public',
+  PUBLIC = 'public'
 }
 
 interface ClientCredentials {
@@ -69,13 +69,13 @@ export class KeyCloakService implements OnModuleInit {
 
   constructor(
     private readonly configService: ConfigService,
-    private readonly httpClient: HttpClientService,
+    private readonly httpClient: HttpClientService
   ) {
     this.server_uri = this.configService.get(
-      KeyCloakConfigProperties.ENV_KEYCLOAK_SERVER_URI,
+      KeyCloakConfigProperties.ENV_KEYCLOAK_SERVER_URI
     );
     this.realm = this.configService.get(
-      KeyCloakConfigProperties.ENV_KEYCLOAK_REALM,
+      KeyCloakConfigProperties.ENV_KEYCLOAK_REALM
     );
 
     const metadata_url = `${this.server_uri}/realms/${this.realm}/.well-known/openid-configuration`;
@@ -83,21 +83,21 @@ export class KeyCloakService implements OnModuleInit {
     this.clientPublic = {
       metadata_url,
       client_id: this.configService.get(
-        KeyCloakConfigProperties.ENV_KEYCLOAK_PUBLIC_CLIENT_ID,
+        KeyCloakConfigProperties.ENV_KEYCLOAK_PUBLIC_CLIENT_ID
       ),
       client_secret: this.configService.get(
-        KeyCloakConfigProperties.ENV_KEYCLOAK_PUBLIC_CLIENT_SECRET,
-      ),
+        KeyCloakConfigProperties.ENV_KEYCLOAK_PUBLIC_CLIENT_SECRET
+      )
     };
 
     this.clientAdmin = {
       metadata_url,
       client_id: this.configService.get(
-        KeyCloakConfigProperties.ENV_KEYCLOAK_ADMIN_CLIENT_ID,
+        KeyCloakConfigProperties.ENV_KEYCLOAK_ADMIN_CLIENT_ID
       ),
       client_secret: this.configService.get(
-        KeyCloakConfigProperties.ENV_KEYCLOAK_ADMIN_CLIENT_SECRET,
-      ),
+        KeyCloakConfigProperties.ENV_KEYCLOAK_ADMIN_CLIENT_SECRET
+      )
     };
   }
 
@@ -117,19 +117,19 @@ export class KeyCloakService implements OnModuleInit {
 
     if (!pems.has(kid)) {
       throw new UnauthorizedException(
-        'Authorization header contains an invalid JWT token.',
+        'Authorization header contains an invalid JWT token.'
       );
     }
 
     return verify(token, pems.get(kid), {
-      issuer: this.config.issuer,
+      issuer: this.config.issuer
     });
   }
 
   public async introspectToken(token: string): Promise<Record<string, string>> {
     ok(
       (this.config as OIDCIdentityConfig).introspection_endpoint,
-      'Missing "introspection_endpoint"',
+      'Missing "introspection_endpoint"'
     );
 
     const { access_token, token_type } = await this.generateToken();
@@ -138,8 +138,8 @@ export class KeyCloakService implements OnModuleInit {
     return this.httpClient.post(this.config.introspection_endpoint, data, {
       headers: {
         Authorization: `${token_type} ${access_token}`,
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
     });
   }
 
@@ -147,7 +147,7 @@ export class KeyCloakService implements OnModuleInit {
     firstName,
     lastName,
     email,
-    password,
+    password
   }: RegisterUserData): Promise<User> {
     this.log.debug(`Called registerUser`);
 
@@ -165,33 +165,33 @@ export class KeyCloakService implements OnModuleInit {
           {
             type: 'password',
             value: password,
-            temporary: false,
-          },
-        ],
+            temporary: false
+          }
+        ]
       },
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `${token_type} ${access_token}`,
+          Authorization: `${token_type} ${access_token}`
         },
-        responseType: 'json',
-      },
+        responseType: 'json'
+      }
     );
   }
 
   public async generateToken(tokenData?: GenerateTokenData): Promise<Token> {
     const tokenPayload = {
-      ...this.clientAdmin,
+      ...this.clientAdmin
     };
 
     if (tokenData) {
       Object.assign(tokenPayload, {
         ...tokenData,
-        grant_type: 'password',
+        grant_type: 'password'
       });
     } else {
       Object.assign(tokenPayload, {
-        grant_type: 'client_credentials',
+        grant_type: 'client_credentials'
       });
     }
 
@@ -200,10 +200,10 @@ export class KeyCloakService implements OnModuleInit {
       stringify(tokenPayload),
       {
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Type': 'application/x-www-form-urlencoded'
         },
-        responseType: 'json',
-      },
+        responseType: 'json'
+      }
     );
   }
 
@@ -219,7 +219,7 @@ export class KeyCloakService implements OnModuleInit {
     for (;;) {
       try {
         this.config = (await this.httpClient.loadJSON(
-          this.clientAdmin.metadata_url,
+          this.clientAdmin.metadata_url
         )) as OIDCIdentityConfig;
 
         return;
@@ -228,7 +228,7 @@ export class KeyCloakService implements OnModuleInit {
 
         if (count >= 10) {
           throw new Error(
-            `Cannot discover medata from ${this.clientAdmin.metadata_url}`,
+            `Cannot discover medata from ${this.clientAdmin.metadata_url}. Got error: ${err}`
           );
         }
 
@@ -246,12 +246,12 @@ export class KeyCloakService implements OnModuleInit {
 
     if (!data.keys) {
       throw new InternalServerErrorException(
-        'Internal error occurred downloading JWKS data.',
+        'Internal error occurred downloading JWKS data.'
       );
     }
 
     const jwks = new Map<string, string>(
-      data.keys.map((key: JWK & { kid: string }) => [key.kid, jwkToPem(key)]),
+      data.keys.map((key: JWK & { kid: string }) => [key.kid, jwkToPem(key)])
     );
     return jwks;
   }

@@ -3,7 +3,7 @@ import { UserDto } from './UserDto';
 
 export enum SignupMode {
   BASIC = 'basic',
-  OIDC = 'oidc',
+  OIDC = 'oidc'
 }
 
 export class CreateUserRequest extends UserDto {

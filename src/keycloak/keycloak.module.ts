@@ -5,6 +5,6 @@ import { KeyCloakService } from './keycloak.service';
 @Module({
   imports: [],
   providers: [KeyCloakService, HttpClientService],
-  exports: [KeyCloakService, HttpClientService],
+  exports: [KeyCloakService, HttpClientService]
 })
 export class KeyCloakModule {}

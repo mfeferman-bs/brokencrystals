@@ -13,7 +13,7 @@ export class AppService {
 
   constructor(
     private readonly configService: ConfigService,
-    private readonly userService: UsersService,
+    private readonly userService: UsersService
   ) {}
 
   async launchCommand(command: string): Promise<string> {
@@ -37,7 +37,7 @@ export class AppService {
         ps.on('error', (err) => rej(err.message));
 
         ps.on('close', (code) =>
-          this.logger.debug(`child process exited with code ${code}`),
+          this.logger.debug(`child process exited with code ${code}`)
         );
       } catch (err) {
         rej(err.message);
@@ -48,29 +48,29 @@ export class AppService {
   getConfig(): AppConfig {
     this.logger.debug('Called getConfig');
     const dbSchema = this.configService.get<string>(
-        OrmModuleConfigProperties.ENV_DATABASE_SCHEMA,
+        OrmModuleConfigProperties.ENV_DATABASE_SCHEMA
       ),
       dbHost = this.configService.get<string>(
-        OrmModuleConfigProperties.ENV_DATABASE_HOST,
+        OrmModuleConfigProperties.ENV_DATABASE_HOST
       ),
       dbPort = this.configService.get<string>(
-        OrmModuleConfigProperties.ENV_DATABASE_PORT,
+        OrmModuleConfigProperties.ENV_DATABASE_PORT
       ),
       dbUser = this.configService.get<string>(
-        OrmModuleConfigProperties.ENV_DATABASE_USER,
+        OrmModuleConfigProperties.ENV_DATABASE_USER
       ),
       dbPwd = this.configService.get<string>(
-        OrmModuleConfigProperties.ENV_DATABASE_PASSWORD,
+        OrmModuleConfigProperties.ENV_DATABASE_PASSWORD
       );
 
     return {
       awsBucket: this.configService.get<string>(
-        AppModuleConfigProperties.ENV_AWS_BUCKET,
+        AppModuleConfigProperties.ENV_AWS_BUCKET
       ),
       sql: `postgres://${dbUser}:${dbPwd}@${dbHost}:${dbPort}/${dbSchema} `,
       googlemaps: this.configService.get<string>(
-        AppModuleConfigProperties.ENV_GOOGLE_MAPS,
-      ),
+        AppModuleConfigProperties.ENV_GOOGLE_MAPS
+      )
     };
   }
 

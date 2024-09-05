@@ -3,6 +3,6 @@ import { HttpClientService } from './httpclient.service';
 
 @Module({
   providers: [HttpClientService],
-  exports: [HttpClientService],
+  exports: [HttpClientService]
 })
 export class HttpClientModule {}

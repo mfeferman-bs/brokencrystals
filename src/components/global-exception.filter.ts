@@ -2,7 +2,7 @@ import {
   ArgumentsHost,
   Catch,
   HttpException,
-  InternalServerErrorException,
+  InternalServerErrorException
 } from '@nestjs/common';
 import { BaseExceptionFilter } from '@nestjs/core';
 import { GqlContextType } from '@nestjs/graphql';
@@ -22,7 +22,7 @@ export class GlobalExceptionFilter extends BaseExceptionFilter {
 
     const unprocessableException = new InternalServerErrorException(
       { error: (exception as Error).message, location: __filename },
-      'An internal error has occurred, and the API was unable to service your request.',
+      'An internal error has occurred, and the API was unable to service your request.'
     );
 
     if (gql) {
@@ -36,7 +36,7 @@ export class GlobalExceptionFilter extends BaseExceptionFilter {
     return applicationRef.reply(
       host.getArgByIndex(1),
       unprocessableException.getResponse(),
-      unprocessableException.getStatus(),
+      unprocessableException.getStatus()
     );
   }
 }

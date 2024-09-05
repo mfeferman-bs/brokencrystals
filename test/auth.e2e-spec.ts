@@ -1,4 +1,4 @@
-import { SecRunner, SecScan } from '@sectester/runner';
+import { SecRunner } from '@sectester/runner';
 import { TestType } from '@sectester/scan';
 import axios from 'axios';
 
@@ -8,15 +8,17 @@ const generateToken = async (jwtType) => {
     {
       user: 'admin',
       password: 'admin',
-      op: 'basic',
-    },
+      op: 'basic'
+    }
   );
   return headers.authorization;
 };
 
 describe('/api', () => {
+  const timeout = 600000;
+  jest.setTimeout(timeout);
+
   let runner: SecRunner;
-  let scan: SecScan;
 
   beforeEach(async () => {
     runner = new SecRunner({ hostname: process.env.BRIGHT_CLUSTER });
@@ -31,11 +33,11 @@ describe('/api', () => {
       const token = await generateToken(jwtType);
       await runner
         .createScan({ tests: [TestType.JWT], name: `JWT ${jwtType}` })
-        .timeout(3000000)
+        .timeout(timeout)
         .run({
           method: 'GET',
           headers: { authorization: token },
-          url: `${process.env.SEC_TESTER_TARGET}/api/auth/jwt/${jwtType}/validate`,
+          url: `${process.env.SEC_TESTER_TARGET}/api/auth/jwt/${jwtType}/validate`
         });
     });
 
@@ -44,11 +46,11 @@ describe('/api', () => {
       const token = await generateToken(jwtType);
       await runner
         .createScan({ tests: [TestType.JWT], name: `JWT ${jwtType}` })
-        .timeout(3000000)
+        .timeout(timeout)
         .run({
           method: 'GET',
           headers: { authorization: token },
-          url: `${process.env.SEC_TESTER_TARGET}/api/auth/jwt/${jwtType}/validate`,
+          url: `${process.env.SEC_TESTER_TARGET}/api/auth/jwt/${jwtType}/validate`
         });
     });
 
@@ -57,11 +59,11 @@ describe('/api', () => {
       const token = await generateToken(jwtType);
       await runner
         .createScan({ tests: [TestType.JWT], name: `JWT ${jwtType}` })
-        .timeout(3000000)
+        .timeout(timeout)
         .run({
           method: 'GET',
           headers: { authorization: token },
-          url: `${process.env.SEC_TESTER_TARGET}/api/auth/jwt/${jwtType}/validate`,
+          url: `${process.env.SEC_TESTER_TARGET}/api/auth/jwt/${jwtType}/validate`
         });
     });
 
@@ -70,11 +72,11 @@ describe('/api', () => {
       const token = await generateToken(jwtType);
       await runner
         .createScan({ tests: [TestType.JWT], name: `JWT ${jwtType}` })
-        .timeout(3000000)
+        .timeout(timeout)
         .run({
           method: 'GET',
           headers: { authorization: token },
-          url: `${process.env.SEC_TESTER_TARGET}/api/auth/jwt/${jwtType}/validate`,
+          url: `${process.env.SEC_TESTER_TARGET}/api/auth/jwt/${jwtType}/validate`
         });
     });
 
@@ -83,11 +85,11 @@ describe('/api', () => {
       const token = await generateToken(jwtType);
       await runner
         .createScan({ tests: [TestType.JWT], name: `JWT ${jwtType}` })
-        .timeout(3000000)
+        .timeout(timeout)
         .run({
           method: 'GET',
           headers: { authorization: token },
-          url: `${process.env.SEC_TESTER_TARGET}/api/auth/jwt/${jwtType}/validate`,
+          url: `${process.env.SEC_TESTER_TARGET}/api/auth/jwt/${jwtType}/validate`
         });
     });
 
@@ -96,11 +98,11 @@ describe('/api', () => {
       const token = await generateToken(jwtType);
       await runner
         .createScan({ tests: [TestType.JWT], name: `JWT ${jwtType}` })
-        .timeout(3000000)
+        .timeout(timeout)
         .run({
           method: 'GET',
           headers: { authorization: token },
-          url: `${process.env.SEC_TESTER_TARGET}/api/auth/jwt/${jwtType}/validate`,
+          url: `${process.env.SEC_TESTER_TARGET}/api/auth/jwt/${jwtType}/validate`
         });
     });
   });

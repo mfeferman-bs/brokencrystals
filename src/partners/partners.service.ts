@@ -1,8 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
-
-const xpath = require('xpath');
-const dom = require('xmldom').DOMParser;
-
+import { DOMParser } from 'xmldom';
+import xpath, { SelectReturnType } from 'xpath';
 
 @Injectable()
 export class PartnersService {
@@ -54,13 +52,18 @@ export class PartnersService {
     </partners>
   `;
 
-  private getPartnersXMLObj(): object {
-    let partnersXMLObj = new dom().parseFromString(this.XML_AUTHORS_STR, 'text/xml');
+  private getPartnersXMLObj(): Node {
+    const partnersXMLObj = new DOMParser().parseFromString(
+      this.XML_AUTHORS_STR,
+      'text/xml'
+    );
     return partnersXMLObj;
   }
 
-  private selectPartnerPropertiesByXPATH(xpathExpression: string): Array<string> {
-    let partnersXMLObj = this.getPartnersXMLObj();
+  private selectPartnerPropertiesByXPATH(
+    xpathExpression: string
+  ): SelectReturnType {
+    const partnersXMLObj = this.getPartnersXMLObj();
     return xpath.select(xpathExpression, partnersXMLObj);
   }
 
@@ -72,8 +75,10 @@ export class PartnersService {
     let xmlNodes = this.selectPartnerPropertiesByXPATH(xpathExpression);
 
     if (!Array.isArray(xmlNodes)) {
-      this.logger.debug(`xmlNodes's type wasn't 'Array', and it's value was: ${xmlNodes}`)
-      xmlNodes = Array();
+      this.logger.debug(
+        `xmlNodes's type wasn't 'Array', and it's value was: ${xmlNodes}`
+      );
+      xmlNodes = [];
     } else {
       this.logger.debug(`Raw xpath xmlNodes value is: ${xmlNodes}`);
     }

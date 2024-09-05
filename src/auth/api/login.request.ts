@@ -5,7 +5,7 @@ export enum FormMode {
   HTML = 'html',
   CSRF = 'csrf',
   DOM_BASED_CSRF = 'csrf_dom',
-  OIDC = 'oidc',
+  OIDC = 'oidc'
 }
 
 export class LoginRequest {
@@ -17,7 +17,7 @@ export class LoginRequest {
 
   @ApiProperty({
     enum: FormMode,
-    required: true,
+    required: true
   })
   op?: string;
 

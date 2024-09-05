@@ -7,7 +7,7 @@ export class HttpClientService {
 
   async loadJSON<T = unknown>(url: string): Promise<T> {
     const resp = await axios.get<T>(url, {
-      responseType: 'json',
+      responseType: 'json'
     });
     if (resp.status != 200) {
       throw new Error(`Failed to load url: ${url}. Status ${resp.status}`);
@@ -15,15 +15,15 @@ export class HttpClientService {
     this.log.debug(
       `Loaded: ${
         typeof resp.data === 'string' ? resp.data : JSON.stringify(resp.data)
-      }`,
+      }`
     );
     return resp.data;
   }
 
   async post<T = unknown>(
     url: string,
-    data: any,
-    config?: AxiosRequestConfig,
+    data: unknown,
+    config?: AxiosRequestConfig
   ): Promise<T> {
     const resp = await axios.post<T>(url, data, config);
     if (![200, 201].includes(+resp.status)) {
@@ -44,7 +44,7 @@ export class HttpClientService {
 
   async loadPlain(url: string): Promise<string> {
     const resp = await axios.get<ArrayBuffer>(url, {
-      responseType: 'arraybuffer',
+      responseType: 'arraybuffer'
     });
 
     if (resp.status != 200) {
@@ -57,14 +57,12 @@ export class HttpClientService {
     return text;
   }
 
-  async loadAny(
-    url: string,
-  ): Promise<{
+  async loadAny(url: string): Promise<{
     content: Buffer;
     contentType: string;
   }> {
     const resp = await axios.get<ArrayBuffer>(url, {
-      responseType: 'arraybuffer',
+      responseType: 'arraybuffer'
     });
 
     if (resp.status != 200) {
@@ -75,7 +73,7 @@ export class HttpClientService {
 
     return {
       content: buffer,
-      contentType: resp.headers['content-type'],
+      contentType: resp.headers['content-type']
     };
   }
 }
