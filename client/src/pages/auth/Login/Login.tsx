@@ -106,7 +106,7 @@ export const Login: FC = () => {
         return { ...data, csrf };
       case LoginFormMode.DOM_BASED_CSRF: {
         const fingerprint = getBrowserFingerprint();
-        return { ...data, csrf, fingerprint };
+        return { ...data, csrf, fingerprint: fingerprint.toString() };
       }
       default:
         return data;
@@ -135,7 +135,7 @@ export const Login: FC = () => {
       case LoginFormMode.CSRF:
         return loadCsrf();
       case LoginFormMode.DOM_BASED_CSRF:
-        return loadDomCsrf(getBrowserFingerprint());
+        return loadDomCsrf(getBrowserFingerprint().toString());
       case LoginFormMode.OIDC:
         return loadOidcClient();
     }
