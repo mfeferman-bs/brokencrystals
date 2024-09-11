@@ -1,11 +1,9 @@
-import { hash, compare } from 'bcrypt';
-
-const SALT_ROUNDS = 10;
+import { hash, verify } from 'argon2';
 
 export const hashPassword = (password: string): Promise<string> =>
-  hash(password, SALT_ROUNDS);
+  hash(password);
 
 export const passwordMatches = (
   password: string,
   hash: string
-): Promise<boolean> => compare(password, hash);
+): Promise<boolean> => verify(hash, password);
