@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { DOMParser } from 'xmldom';
+import { DOMParser } from '@xmldom/xmldom';
 import xpath, { SelectReturnType } from 'xpath';
 
 @Injectable()
@@ -7,8 +7,7 @@ export class PartnersService {
   private readonly logger = new Logger(PartnersService.name);
 
   private readonly XML_HEADER = '<?xml version="1.0" encoding="UTF-8"?>';
-  private readonly XML_AUTHORS_STR: string = `
-  ${this.XML_HEADER}
+  private readonly XML_AUTHORS_STR: string = `${this.XML_HEADER}
     <partners>
       <partner>
         <name>Walter White</name>
@@ -57,7 +56,7 @@ export class PartnersService {
       this.XML_AUTHORS_STR,
       'text/xml'
     );
-    return partnersXMLObj;
+    return partnersXMLObj as unknown as Node;
   }
 
   private selectPartnerPropertiesByXPATH(

@@ -16,6 +16,7 @@
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {
+    "@xmldom/xmldom": "^0.9.2",
     "axios": "^1.7.7",
     "buffer": "^6.0.3",
     "file-type": "^19.5.0",
@@ -25,8 +26,7 @@
     "react-datepicker": "^7.3.0",
     "react-dom": "^18.3.1",
     "react-owl-carousel": "^2.3.3",
-    "react-router-dom": "^6.26.2",
-    "xmldom": "^0.6.0"
+    "react-router-dom": "^6.26.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.10.0",

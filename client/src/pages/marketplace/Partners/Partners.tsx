@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import { useEffect, useState } from 'react';
-import { DOMParser } from 'xmldom';
+import { DOMParser } from '@xmldom/xmldom';
 
 import OwlCarousel from 'react-owl-carousel';
 import 'owl.carousel/dist/assets/owl.carousel.css';
@@ -31,7 +31,8 @@ export const Partners: FC = () => {
       const partnerNameTags = xmlDoc.getElementsByTagName('name');
 
       for (const nameTag of Array.from(partnerNameTags)) {
-        const name = nameTag.textContent || 'Error in loading name';
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const name = (nameTag as any)?.textContent || 'Error in loading name';
         const photoUrl = `assets/img/partners/${name
           .toLowerCase()
           .replace(' ', '-')}.jpg`;
