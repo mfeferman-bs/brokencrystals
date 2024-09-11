@@ -32,23 +32,6 @@ docker-compose --file=docker-compose.local.yml up -d
 docker-compose --file=docker-compose.local.yml up -d --build
 ```
 
-## Running application with helm
-
-Helm command example:
-
-```bash
-$ helm repo add brokencrystals https://neuralegion.github.io/brokencrystals/
-$ helm upgrade --install --namespace distributor broken     \
-  --set repeaterID=5r....Dz                                 \
-  --set token=n..r.nexp.k..5                                \
-  --set cluster=hotel.playground.neuralegion.com            \
-  --set timeout=40000                                       \
-  --set repeaterImageTag=v11.5.0-next.4                     \
-  --set ingress.url=broken.k3s.brokencrystals.nexploit.app  \
-  --set ingress.cert=distributorwildcard                    \
-  --set ingress.authlevel=- brokencrystals/brokencrystals --wait
-```
-
 ## Running tests by [SecTester](https://github.com/NeuraLegion/sectester-js/)
 
 In the path [`./test`](./test) you can find tests to run with Jest.
@@ -56,13 +39,13 @@ In the path [`./test`](./test) you can find tests to run with Jest.
 First, you have to get a [Bright API key](https://docs.brightsec.com/docs/manage-your-personal-account#manage-your-personal-api-keys-authentication-tokens), navigate to your [`.env`](.env) file, and paste your Bright API key as the value of the `BRIGHT_TOKEN` variable:
 
 ```text
-BRIGHT_TOKEN = <your_API_key_here>
+BRIGHT_TOKEN=<your_API_key_here>
 ```
 
 Then, you can modify a URL to your instance of the application by setting the `SEC_TESTER_TARGET` environment variable in your [`.env`](.env) file:
 
 ```text
-SEC_TESTER_TARGET = http://localhost:3000
+SEC_TESTER_TARGET=http://localhost:3000
 ```
 
 Finally, you can start tests with SecTester against these endpoints as follows:
@@ -83,7 +66,7 @@ Full configuration & usage examples can be found in our [demo project](https://g
   - **KID Manipulation** - Changes the value of the KID field in the Header of JWT to use either: (1) a static file that the application uses or (2) OS Command that echoes the key that will be signed or (3) SQL code that will return a key that will be used to sign the JWT (implemented in designated endpoint as described in Swagger).
   - **Brute Forcing Weak Secret Key** - Checks if common secret keys are used (implemented in designated endpoint as described in Swagger). The secret token is configurable via .env file and, by default, is 123.
   - **X5U Rogue Key** - Uses the uploaded certificate to sign the JWT and sets the X5U Header in JWT to point to the uploaded certificate (implemented in designated endpoint as described in Swagger).
-  - **X5C Rogue Key** - The application doesn’t properly check which X5C key is used for signing. When we set the X5C headers to our values and sign with our private key, authentication is bypassed (implemented in designated endpoint as described in Swagger).
+  - **X5C Rogue Key** - The application doesn't properly check which X5C key is used for signing. When we set the X5C headers to our values and sign with our private key, authentication is bypassed (implemented in designated endpoint as described in Swagger).
   - **JKU Rogue Key** - Uses our publicly available JSON to check if JWT is properly signed after we set the Header in JWT to point to our JSON and sign the JWT with our private key (implemented in designated endpoint as described in Swagger).
   - **JWK Rogue Key** - We make a new JSON with empty values, hash it, and set it directly in the Header, and we then use our private key to sign the JWT (implemented in designated endpoint as described in Swagger).
 
@@ -148,7 +131,7 @@ Full configuration & usage examples can be found in our [demo project](https://g
 - **Version Control System** - The client_s build process copies SVN, GIT, and Mercurial source control directories to the client application root, and they are accessible under Nginx root.
 
 - **XML External Entity (XXE)** - The endpoint, POST /api/metadata, receives URL-encoded XML data in the _xml_ query parameter, processes it with enabled external entities (using `libxmljs` library) and returns the serialized DOM. Additionally, for a request that tries to load file:///etc/passwd as an entity, the endpoint returns a mocked up content of the file.
-  Additionally, the endpoint PUT /api/users/one/{email}/photo accepts SVG images, which are proccessed with libxml library and stored on the server, as well as sent back to the client.
+  Additionally, the endpoint PUT /api/users/one/{email}/photo accepts SVG images, which are processed with libxml library and stored on the server, as well as sent back to the client.
 
 - **JavaScript Vulnerabilities Scanning** - Index.html includes an older version of the jQuery library with known vulnerabilities.
 
@@ -169,7 +152,7 @@ Full configuration & usage examples can be found in our [demo project](https://g
 
 - **XPATH Injection** - The `/api/partners/*` endpoint contains the following XPATH injection vulnerabilities:
 
-  1. The endpoint GET `/api/partners/partnerLogin` is supposed to login with the user's credentials in order to obtain account info. It's vulnerable to an XPATH injection using boolean based payloads. When exploited it'll retrieve data about other users as well. You can use `' or '1'='1` in the password field to exploit the EP.
+  1. The endpoint GET `/api/partners/partnerLogin` is supposed to log in with the user's credentials in order to obtain account info. It's vulnerable to an XPATH injection using boolean based payloads. When exploited it'll retrieve data about other users as well. You can use `' or '1'='1` in the password field to exploit the EP.
   2. The endpoint GET `/api/partners/searchPartners` is supposed to search partners' names by a given keyword. It's vulnerable to an XPATH injection using string detection payloads. When exploited, it can grant access to sensitive information like passwords and even lead to full data leak. You can use `')] | //password%00//` or `')] | //* | a[('` to exploit the EP.
   3. The endpoint GET `/api/partners/query` is a raw XPATH injection endpoint. You can put whatever you like there. It is not referenced in the frontend, but it is an exposed API endpoint.
   4. Note: All endpoints are vulnerable to error based payloads.
@@ -187,7 +170,7 @@ Full configuration & usage examples can be found in our [demo project](https://g
 
 - **Date Manipulation** - The `/api/products?date_from={df}&date_to={dt}` endpoint fetches all products that were created between the selected dates. There is no limit on the range of dates and when a user tries to query a range larger than 2 years querying takes a significant amount of time. This EP is used by the frontend in the `/marketplace` page.
 
-- **Email Injection** - The `/api/email/sendSupportEmail` is vulnerable to email injection by supplying tempred recipients.
+- **Email Injection** - The `/api/email/sendSupportEmail` is vulnerable to email injection by supplying tempered recipients.
   To exploit the EP you can dispatch a request as such `/api/email/sendSupportEmail?name=Bob&to=username%40email.com%0aCc:%20bob@domain.com&subject=Help%20Request&content=I%20would%20like%20to%20request%20help%20regarding`.
   This will lead to the sending of a mail to both `username@email.com` and `bob@domain.com` (as the Cc).
   Note: This EP is also vulnerable to `Server side prototype pollution`, as mentioned in this README.
