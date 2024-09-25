@@ -1,0 +1,40 @@
+name: gh-scan
+
+on: workflow_dispatch
+
+jobs:
+  start_and_wait_scan:
+    runs-on: ubuntu-20.04
+    container: node:16
+    name: A job to run a BrightSec scan
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          apt update -qq --fix-missing
+          apt install -y --no-install-recommends nodejs npm make g++
+          npm install -g @brightsec/cli --unsafe-perm=true
+          apt-get install jq -y 
+          apt-get install curl -y
+      - name: Save environment variables
+        run: |
+          printf "BRIGHT_TOKEN=${{ secrets.BRIGHT_TOKEN }}\nPROJECT=${{ secrets.BRIGHT_PROJECT }}\nBC_LESSB_AUTH=${{ secrets.BRIGHT_AUTH }}" > .env
+          cat .env
+      - run: sleep 3s
+      - name: Start Brightsec Scan 🏁
+        id: start
+        run: |
+          SCAN_ID=$(bright-cli scan:run --token ${{ secrets.BRIGHT_TOKEN }} --name "💎 BrokenCrystals for a '${GITHUB_REF##*/}' branch #${GITHUB_RUN_NUMBER}" --smart true --param query fragment body --module dast --test jwt broken_saml_auth brute_force_login cookie_security improper_asset_management insecure_tls_configuration ldapi lfi nosql open_buckets open_database osi directory_listing email_injection file_upload full_path_disclosure header_security http_method_fuzzing rfi secret_tokens ssti ssrf sqli version_control_systems xpathi server_side_js_injection graphql_introspection amazon_s3_takeover iframe_injection xss default_login_location proto_pollution html_injection unvalidated_redirect css_injection wordpress xxe common_files csrf business_constraint_bypass date_manipulation id_enumeration mass_assignment excessive_data_exposure prompt_injection retire_js cve_test  --crawler https://brokencrystals.com/  --auth ${{ secrets.BRIGHT_AUTH }}  --project ${{ secrets.BRIGHT_PROJECT }}  --cluster app.brightsec.com)  
+          echo "SCAN_ID=$SCAN_ID" >> $GITHUB_ENV
+      - name: Get the output scan url 🔗
+        run: |
+          printf "Scan was started, check the details at https://app.brightsec.com/scans/$SCAN_ID"
+      - name: Wait for issues ⏳
+        run: |
+          POLLING_RESULT=$(bright-cli scan:polling  --interval 30s   --timeout 240m --token ${{ secrets.BRIGHT_TOKEN }} --breakpoint high_issue $SCAN_ID  --cluster app.brightsec.com)
+          echo "POLLING_RESULT=$POLLING_RESULT" >> $GITHUB_ENV
+      - name: Stop Scan 🛑
+        continue-on-error: true
+        if: ${{ failure() }}
+        run: |
+          printf "Polling result was $POLLING_RESULT"
+          bright-cli scan:stop --token ${{ secrets.BRIGHT_TOKEN }} $SCAN_ID --cluster app.brightsec.com
