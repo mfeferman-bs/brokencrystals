@@ -1,4 +1,4 @@
-name: gh-scan
+name: bright-scan
 
 on: workflow_dispatch
 
