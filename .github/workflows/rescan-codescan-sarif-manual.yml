@@ -26,7 +26,7 @@ jobs:
           wait_for: high
           code_scanning_alerts: true
           github_token: ${{ secrets.KEY_GITHUB }}
-          timeout: 600
+          timeout: 1200
       - name: Download SARIF file
         id: sarif
         env:
