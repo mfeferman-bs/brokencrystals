@@ -47,7 +47,9 @@ jobs:
           # Used to differentiate multiple results for one commit
           category: BrightSecurity
       - name: Save SARIF file
-        uses: actions/upload-artifact@v4
+        # uses: actions/upload-artifact@v4
+        uses: github/codeql-action/upload-sarif@v2
         with: 
-          name: BrightSecurity_sarif_report
-          path: bright.sarif    
+          sarif_file: bright.sarif
+          # name: BrightSecurity_sarif_report
+          # path: bright.sarif    
