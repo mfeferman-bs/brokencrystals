@@ -344,6 +344,7 @@ export class FileController {
     } catch (err) {
       this.logger.error('File not found');
       res.status(HttpStatus.NOT_FOUND);
+      res.send({ error: 'File not found' });
     }
   }
 }
