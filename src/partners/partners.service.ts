@@ -84,4 +84,23 @@ export class PartnersService {
 
     return this.getFormattedXMLOutput(xmlNodes);
   }
+
+  getPartnersPropertiesWithParams(xpathExpression: string, params: { [key: string]: string }): string {
+    const partnersXMLObj = this.getPartnersXMLObj();
+    const variables = Object.keys(params).reduce((acc, key) => {
+      acc[key] = params[key];
+      return acc;
+    }, {});
+    const xmlNodes = xpath.selectWithParams(xpathExpression, partnersXMLObj, variables);
+
+    if (!Array.isArray(xmlNodes)) {
+      this.logger.debug(
+        `xmlNodes's type wasn't 'Array', and it's value was: ${xmlNodes}`
+      );
+      return this.getFormattedXMLOutput([]);
+    }
+
+    this.logger.debug(`Raw xpath xmlNodes value is: ${xmlNodes}`);
+    return this.getFormattedXMLOutput(xmlNodes);
+  }
 }

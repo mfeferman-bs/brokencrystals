@@ -86,11 +86,22 @@ export class FileController {
     @Query('type') contentType: string,
     @Res({ passthrough: true }) res: FastifyReply
   ) {
+    // Validate the path to prevent SSRF
+    if (!this.isValidPath(path)) {
+      throw new BadRequestException('Invalid file path');
+    }
+
     const file: Stream = await this.fileService.getFile(path);
     const type = this.getContentType(contentType);
     res.type(type);
 
     return file;
+  }
+
+  private isValidPath(filePath: string): boolean {
+    // Implement a whitelist of allowed paths or patterns
+    const allowedPaths = ['config/products/crystals/'];
+    return allowedPaths.some(allowedPath => filePath.startsWith(allowedPath));
   }
 
   @Get('/google')
@@ -197,6 +208,11 @@ export class FileController {
     @Query('type') contentType: string,
     @Res({ passthrough: true }) res: FastifyReply
   ) {
+    // Validate the path to prevent SSRF
+    if (!this.isValidPath(path)) {
+      throw new BadRequestException('Invalid file path');
+    }
+
     const file: Stream = await this.loadCPFile(
       CloudProvidersMetaData.AZURE,
       path
@@ -288,11 +304,11 @@ export class FileController {
       if (typeof raw === 'string' || Buffer.isBuffer(raw)) {
         await fs.promises.access(path.dirname(file), W_OK);
         await fs.promises.writeFile(file, raw);
-        return `File uploaded successfully at ${file}`;
+        return 'File uploaded successfully';
       }
     } catch (err) {
-      this.logger.error(err.message);
-      throw err.message;
+      this.logger.error('An error occurred while uploading the file');
+      throw new Error('Internal Server Error');
     }
   }
 
@@ -321,7 +337,7 @@ export class FileController {
 
       return stream;
     } catch (err) {
-      this.logger.error(err.message);
+      this.logger.error('File not found');
       res.status(HttpStatus.NOT_FOUND);
     }
   }
