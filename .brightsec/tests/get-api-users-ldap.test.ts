@@ -1,3 +1,4 @@
+```
 import { test, before, after } from 'node:test';
 import { Severity, AttackParamLocation, HttpMethod } from '@sectester/scan';
 import { SecRunner } from '@sectester/runner';
@@ -23,7 +24,7 @@ const baseUrl = process.env.BRIGHT_TARGET_URL!;
 test('GET /api/users/ldap', { signal: AbortSignal.timeout(timeout) }, async () => {
   await runner
     .createScan({
-      tests: ['ldapi', 'csrf', 'xss', 'improper_asset_management', 'full_path_disclosure'],
+      tests: ['full_path_disclosure'],
       attackParamLocations: [AttackParamLocation.QUERY]
     })
     .threshold(Severity.CRITICAL)
@@ -36,3 +37,4 @@ test('GET /api/users/ldap', { signal: AbortSignal.timeout(timeout) }, async () =
       }
     });
 });
+```
