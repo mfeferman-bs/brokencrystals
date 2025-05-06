@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { DOMParser } from '@xmldom/xmldom';
-import xpath, { SelectReturnType } from 'xpath';
+import xpath, { SelectReturnType, XPathSelect } from 'xpath';
 
 @Injectable()
 export class PartnersService {
@@ -67,7 +67,10 @@ export class PartnersService {
   }
 
   private getFormattedXMLOutput(xmlNodes): string {
-    return `${this.XML_HEADER}\n<root>\n${xmlNodes.join('\n')}\n</root>`;
+    return `${this.XML_HEADER}
+<root>
+${xmlNodes.join('\n')}
+</root>`;
   }
 
   getPartnersProperties(xpathExpression: string): string {
@@ -82,6 +85,24 @@ export class PartnersService {
       this.logger.debug(`Raw xpath xmlNodes value is: ${xmlNodes}`);
     }
 
+    return this.getFormattedXMLOutput(xmlNodes);
+  }
+
+  getPartnersPropertiesWithParams(xpathExpression: string, params: { [key: string]: string }): string {
+    const partnersXMLObj = this.getPartnersXMLObj();
+    const selectWithParams: XPathSelect = xpath.useNamespaces({
+      '': 'http://www.w3.org/1999/xhtml'
+    });
+    const xmlNodes = selectWithParams(xpathExpression, partnersXMLObj, null, params);
+
+    if (!Array.isArray(xmlNodes)) {
+      this.logger.debug(
+        `xmlNodes's type wasn't 'Array', and it's value was: ${xmlNodes}`
+      );
+      return this.getFormattedXMLOutput([]);
+    }
+
+    this.logger.debug(`Raw xpath xmlNodes value is: ${xmlNodes}`);
     return this.getFormattedXMLOutput(xmlNodes);
   }
 }
