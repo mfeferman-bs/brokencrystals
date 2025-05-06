@@ -8,7 +8,8 @@ import {
   Logger,
   Put,
   Query,
-  Res
+  Res,
+  InternalServerErrorException
 } from '@nestjs/common';
 import {
   ApiHeader,
@@ -182,12 +183,14 @@ export class FileController {
     @Query('type') contentType: string,
     @Res({ passthrough: true }) res: FastifyReply
   ) {
-    if (!this.isValidPath(path)) {
+    // Resolve the path to prevent directory traversal
+    const resolvedPath = path.resolve('/config/products/crystals', path);
+    if (!resolvedPath.startsWith('/config/products/crystals')) {
       throw new BadRequestException('Invalid file path');
     }
 
     try {
-      const file: Stream = await this.fileService.getFile(path);
+      const file: Stream = await this.fileService.getFile(resolvedPath);
       const type = this.getContentType(contentType);
       res.type(type);
 
