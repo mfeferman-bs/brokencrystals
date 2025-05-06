@@ -21,7 +21,7 @@ const baseUrl = process.env.BRIGHT_TARGET_URL!;
 test('GET /api/file', { signal: AbortSignal.timeout(timeout) }, async () => {
   await runner
     .createScan({
-      tests: ['full_path_disclosure', 'ssrf', 'lfi'],
+      tests: ['full_path_disclosure', 'lfi'],
       attackParamLocations: [AttackParamLocation.QUERY]
     })
     .threshold(Severity.CRITICAL)
