@@ -91,7 +91,8 @@ export class FileController {
         throw new BadRequestException('Invalid file path');
       }
 
-      const file: Stream = await this.fileService.getFile(path);
+      const sanitizedPath = path.replace(/\.\./g, ''); // Remove any parent directory traversal
+      const file: Stream = await this.fileService.getFile(sanitizedPath);
       const type = this.getContentType(contentType);
       res.type(type);
 
@@ -168,6 +169,10 @@ export class FileController {
     @Query('type') contentType: string,
     @Res({ passthrough: true }) res: FastifyReply
   ) {
+    if (!this.isValidPath(path)) {
+      throw new BadRequestException('Invalid file path');
+    }
+
     const file: Stream = await this.loadCPFile(
       CloudProvidersMetaData.AWS,
       path

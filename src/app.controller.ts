@@ -84,7 +84,28 @@ export class AppController {
         throw new HttpException('Disallowed template variables detected', HttpStatus.BAD_REQUEST);
       }
 
-      const compiled = dotT.template(text);
+      // Escape user input to prevent injection
+      const escapeHtml = (unsafe: string) => {
+        return unsafe.replace(/[&<"'>]/g, function(match) {
+          switch (match) {
+            case '&':
+              return '&amp;';
+            case '<':
+              return '&lt;';
+            case '>':
+              return '&gt;';
+            case '"':
+              return '&quot;';
+            case "'":
+              return '&#039;';
+            default:
+              return match;
+          }
+        });
+      };
+
+      const escapedText = escapeHtml(text);
+      const compiled = dotT.template(escapedText);
       const res = compiled(templateData);
       this.logger.debug(`Rendered template: ${res}`);
       return res;
@@ -102,10 +123,15 @@ export class AppController {
   @Redirect()
   async redirect(@Query('url') url: string) {
     const allowedUrls = ['https://example.com', 'https://another-allowed-site.com'];
-    if (!allowedUrls.includes(url)) {
-      throw new HttpException('URL not allowed', HttpStatus.BAD_REQUEST);
+    try {
+      const parsedUrl = new URL(url);
+      if (!allowedUrls.includes(parsedUrl.origin)) {
+        throw new HttpException('URL not allowed', HttpStatus.BAD_REQUEST);
+      }
+      return { url: parsedUrl.toString() };
+    } catch (error) {
+      throw new HttpException('Invalid URL', HttpStatus.BAD_REQUEST);
     }
-    return { url };
   }
 
   @Post('metadata')
@@ -132,7 +158,7 @@ export class AppController {
   @Header('content-type', 'text/xml')
   async xml(@Body() xml: string): Promise<string> {
     const xmlDoc = parseXml(decodeURIComponent(xml), {
-      noent: false, // Disable external entity expansion
+      noent: true, // Disable external entity expansion
       dtdload: false, // Disable DTD loading
       dtdattr: false, // Disable default DTD attributes
       dtdvalid: false, // Disable DTD validation
@@ -190,6 +216,8 @@ export class AppController {
   getConfig(): AppConfig {
     this.logger.debug('Called getConfig');
     const config = this.appService.getConfig();
+    // Remove sensitive information before returning
+    config.sql = 'REDACTED';
     return config;
   }
 
