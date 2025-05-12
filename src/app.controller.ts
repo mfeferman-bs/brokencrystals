@@ -96,6 +96,13 @@ export class AppController {
       };
 
       const escapedText = escapeHtml(text);
+      
+      // Check for disallowed variables
+      const disallowedVariablePattern = new RegExp(`\b(?!${allowedVariables.join('|')})\w+\b`, 'g');
+      if (disallowedVariablePattern.test(escapedText)) {
+        throw new HttpException('Disallowed template variables detected', HttpStatus.BAD_REQUEST);
+      }
+
       const compiled = dotT.template(escapedText);
       const res = compiled(templateData);
       this.logger.debug(`Rendered template: ${res}`);
@@ -150,7 +157,7 @@ export class AppController {
   @Header('content-type', 'text/xml')
   async xml(@Body() xml: string): Promise<string> {
     const xmlDoc = parseXml(decodeURIComponent(xml), {
-      noent: false, // Disable external entity expansion
+      noent: true, // Disable external entity expansion
       dtdload: false, // Disable DTD loading
       dtdattr: false, // Disable default DTD attributes
       dtdvalid: false, // Disable DTD validation
