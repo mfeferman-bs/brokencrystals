@@ -75,15 +75,6 @@ export class AppController {
       const allowedVariables = ['name', 'age', 'location'];
       const templateData = { name: 'User', age: '30', location: 'Unknown' }; // Example data
 
-      // Check for disallowed variables
-      const disallowedVariables = Object.keys(templateData).filter(
-        key => !allowedVariables.includes(key)
-      );
-
-      if (disallowedVariables.length > 0) {
-        throw new HttpException('Disallowed template variables detected', HttpStatus.BAD_REQUEST);
-      }
-
       // Escape user input to prevent injection
       const escapeHtml = (unsafe: string) => {
         return unsafe.replace(/[&<"'>]/g, function(match) {
@@ -110,6 +101,7 @@ export class AppController {
       this.logger.debug(`Rendered template: ${res}`);
       return res;
     }
+    throw new HttpException('Invalid input type', HttpStatus.BAD_REQUEST);
   }
 
   @Get('goto')
@@ -158,7 +150,7 @@ export class AppController {
   @Header('content-type', 'text/xml')
   async xml(@Body() xml: string): Promise<string> {
     const xmlDoc = parseXml(decodeURIComponent(xml), {
-      noent: true, // Disable external entity expansion
+      noent: false, // Disable external entity expansion
       dtdload: false, // Disable DTD loading
       dtdattr: false, // Disable default DTD attributes
       dtdvalid: false, // Disable DTD validation
@@ -218,6 +210,7 @@ export class AppController {
     const config = this.appService.getConfig();
     // Remove sensitive information before returning
     config.sql = 'REDACTED';
+    config.googlemaps = 'REDACTED';
     return config;
   }
 
