@@ -118,6 +118,8 @@ export class UsersController {
   @Get('/id/:id')
   @ApiQuery({ name: 'id', example: 1, required: true })
   @SerializeOptions({ groups: [BASIC_USER_INFO] })
+  @UseGuards(AuthGuard)
+  @JwtType(JwtProcessorType.RSA)
   @ApiOperation({
     description: SWAGGER_DESC_FIND_USER
   })
@@ -135,10 +137,17 @@ export class UsersController {
       }
     }
   })
-  async getById(@Param('id') id: number): Promise<UserDto> {
+  async getById(@Param('id') id: number, @Req() req: FastifyRequest): Promise<UserDto> {
     try {
       this.logger.debug(`Find a user by id: ${id}`);
-      return new UserDto(await this.usersService.findById(id));
+      const user = await this.usersService.findById(id);
+      if (!user) {
+        throw new NotFoundException('User not found');
+      }
+      if (this.originEmail(req) !== user.email) {
+        throw new ForbiddenException('Access denied');
+      }
+      return new UserDto(user);
     } catch (err) {
       throw new HttpException(err.message, err.status);
     }
@@ -216,10 +225,7 @@ export class UsersController {
     this.logger.debug(`Find a user photo by email: ${email}`);
     const user = await this.usersService.findByEmail(email);
     if (!user) {
-      throw new NotFoundException({
-        error: 'Could not file user',
-        location: __filename
-      });
+      throw new NotFoundException('Could not find user');
     }
 
     if (!user.photo) {
@@ -230,10 +236,7 @@ export class UsersController {
     try {
       return user.photo;
     } catch (err) {
-      throw new InternalServerErrorException({
-        error: err.message,
-        location: __filename
-      });
+      throw new InternalServerErrorException('An error occurred while retrieving the photo');
     }
   }
 
@@ -269,10 +272,7 @@ export class UsersController {
 
     const user = await this.usersService.findById(id);
     if (!user) {
-      throw new NotFoundException({
-        error: 'Could not file user',
-        location: __filename
-      });
+      throw new NotFoundException('Could not find user');
     }
 
     await this.usersService.deletePhoto(id);
@@ -309,10 +309,7 @@ export class UsersController {
         }
       }
     } catch (err) {
-      throw new InternalServerErrorException({
-        error: err.message,
-        location: __filename
-      });
+      throw new InternalServerErrorException('An error occurred while processing the LDAP query');
     }
 
     if (!users) {
@@ -551,10 +548,7 @@ export class UsersController {
         await this.usersService.updatePhoto(email, file_buffer);
       }
     } catch (err) {
-      throw new InternalServerErrorException({
-        error: err.message,
-        location: __filename
-      });
+      throw new InternalServerErrorException('An error occurred while uploading the file');
     }
   }
 

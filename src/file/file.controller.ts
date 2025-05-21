@@ -50,7 +50,7 @@ export class FileController {
 
   private async loadCPFile(cpBaseUrl: string, path: string) {
     if (!path.startsWith(cpBaseUrl)) {
-      throw new BadRequestException(`Invalid paramater 'path' ${path}`);
+      throw new BadRequestException(`Invalid parameter 'path' ${path}`);
     }
 
     const file: Stream = await this.fileService.getFile(path);
@@ -86,11 +86,22 @@ export class FileController {
     @Query('type') contentType: string,
     @Res({ passthrough: true }) res: FastifyReply
   ) {
-    const file: Stream = await this.fileService.getFile(path);
+    if (!this.isValidPath(path)) {
+      throw new BadRequestException('Invalid file path');
+    }
+
+    const sanitizedPath = path.replace(/[^a-zA-Z0-9-_./]/g, ''); // Sanitize path to allow only specific characters
+    const file: Stream = await this.fileService.getFile(sanitizedPath);
     const type = this.getContentType(contentType);
     res.type(type);
 
     return file;
+  }
+
+  private isValidPath(filePath: string): boolean {
+    // Implement a whitelist of allowed paths or a regex pattern to validate paths
+    const allowedPaths = ['config/products/crystals/']; // Example whitelist
+    return allowedPaths.some(allowedPath => filePath.startsWith(allowedPath));
   }
 
   @Get('/google')
@@ -197,6 +208,10 @@ export class FileController {
     @Query('type') contentType: string,
     @Res({ passthrough: true }) res: FastifyReply
   ) {
+    if (!this.isValidPath(path)) {
+      throw new BadRequestException('Invalid file path');
+    }
+
     const file: Stream = await this.loadCPFile(
       CloudProvidersMetaData.AZURE,
       path
@@ -235,6 +250,10 @@ export class FileController {
     @Query('type') contentType: string,
     @Res({ passthrough: true }) res: FastifyReply
   ) {
+    if (!this.isValidPath(path)) {
+      throw new BadRequestException('Invalid file path');
+    }
+
     const file: Stream = await this.loadCPFile(
       CloudProvidersMetaData.DIGITAL_OCEAN,
       path
