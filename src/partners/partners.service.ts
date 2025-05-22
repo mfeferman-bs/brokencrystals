@@ -60,18 +60,21 @@ export class PartnersService {
   }
 
   private selectPartnerPropertiesByXPATH(
-    xpathExpression: string
+    xpathExpression: string,
+    params: Record<string, string> = {}
   ): SelectReturnType {
     const partnersXMLObj = this.getPartnersXMLObj();
-    return xpath.select(xpathExpression, partnersXMLObj);
+    const variables = Object.keys(params).map(key => `declare variable $${key} as xs:string external;`).join(' ');
+    const expressionWithVariables = `${variables} ${xpathExpression}`;
+    return xpath.select(expressionWithVariables, partnersXMLObj, null, params);
   }
 
   private getFormattedXMLOutput(xmlNodes): string {
     return `${this.XML_HEADER}\n<root>\n${xmlNodes.join('\n')}\n</root>`;
   }
 
-  getPartnersProperties(xpathExpression: string): string {
-    let xmlNodes = this.selectPartnerPropertiesByXPATH(xpathExpression);
+  getPartnersProperties(xpathExpression: string, params: Record<string, string> = {}): string {
+    let xmlNodes = this.selectPartnerPropertiesByXPATH(xpathExpression, params);
 
     if (!Array.isArray(xmlNodes)) {
       this.logger.debug(
