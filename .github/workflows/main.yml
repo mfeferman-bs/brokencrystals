@@ -1,0 +1,50 @@
+name: ci
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - brokencrystals
+
+jobs:
+  bright-scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install jq
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq
+
+      - name: Download BrightSec CLI
+        run: |
+          curl -L -o bright-cli-linux-x64 https://github.com/NeuraLegion/bright-cli/releases/download/v12.6.0/bright-cli-linux-x64
+          chmod +x bright-cli-linux-x64
+
+      - name: Fetch entrypoints from BrightSec
+        id: get_entrypoints
+        env:
+          BRIGHT_KEY: ${{ secrets.BRIGHT_TOKEN }}
+          PROJECT_ID: ${{ secrets.BRIGHT_PROJECT }}
+        run: |
+          ./bright-cli-linux-x64 entrypoints:list -t "$BRIGHT_TOKEN" -p "$BRIGHT_PROJECT" --status new --status changed > entrypoints.json
+
+      - name: Extract entrypoint IDs
+        id: extract_ids
+        run: |
+          ids=$(jq -r '.[].id' entrypoints.json | tr '\n' ' ')
+          echo "entrypoint_ids=$ids" >> $GITHUB_OUTPUT
+        shell: bash
+
+      - name: Run scan with entrypoint IDs
+        env:
+          BRIGHT_KEY: ${{ secrets.BRIGHT_TOKEN }}
+          PROJECT_ID: ${{ secrets.BRIGHT_PROJECT }}
+        run: |
+          TIMESTAMP=$(date +'%Y-%m-%d_%H-%M-%S')
+          SCAN_NAME="automated scan $TIMESTAMP"
+          ENTRYPOINT_FLAGS=$(echo "${{ steps.extract_ids.outputs.entrypoint_ids }}" | sed 's/ / -e /g')
+          ./bright-cli-linux-x64 scan:run -t "$BRIGHT_TOKEN" -n "$SCAN_NAME" -e $ENTRYPOINT_FLAGS -p "$BRIGHT_PROJECT"
