@@ -1,50 +1,118 @@
-name: ci
+name: Run Bright API Incremental Scan
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - brokencrystals
+    inputs:
+      api_token:
+        description: 'Bright Security API Token'
+        required: true
+        type: string
+      project_id:
+        description: 'Bright Security Project ID'
+        required: true
+        type: string
+      archive_path:
+        description: 'Path to OpenAPI archive file (relative to repo root)'
+        required: true
+        type: string
 
 jobs:
-  bright-scan:
+  api-scan:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Install jq
+      - name: Validate archive file exists
         run: |
-          sudo apt-get update
-          sudo apt-get install -y jq
+          if [ ! -f "${{ github.workspace }}/${{ inputs.archive_path }}" ]; then
+            echo "[Error]: Archive file not found at path: ${{ inputs.archive_path }}"
+            exit 1
+          fi
 
-      - name: Download BrightSec CLI
+      - name: Upload archive
+        id: upload
         run: |
-          curl -L -o bright-cli-linux-x64 https://github.com/NeuraLegion/bright-cli/releases/download/v12.6.0/bright-cli-linux-x64
-          chmod +x bright-cli-linux-x64
+          ARCHIVE_FILE="$(basename ${{ inputs.archive_path }})"
+          ARCHIVE_DIR="$(dirname ${{ inputs.archive_path }})"
 
-      - name: Fetch entrypoints from BrightSec
-        id: get_entrypoints
-        env:
-          BRIGHT_KEY: ${{ secrets.BRIGHT_TOKEN }}
-          PROJECT_ID: ${{ secrets.BRIGHT_PROJECT }}
-        run: |
-          ./bright-cli-linux-x64 entrypoints:list -t "$BRIGHT_TOKEN" -p "$BRIGHT_PROJECT" --status new --status changed > entrypoints.json
+          archiveID=$(docker run --rm \
+            -v "${{ github.workspace }}/${ARCHIVE_DIR}:/app" \
+            brightsec/cli \
+            archive:upload \
+            --type openapi \
+            --token "${{ inputs.api_token }}" \
+            --project-id "${{ inputs.project_id }}" \
+            "/app/${ARCHIVE_FILE}")
 
-      - name: Extract entrypoint IDs
-        id: extract_ids
-        run: |
-          ids=$(jq -r '.[].id' entrypoints.json | tr '\n' ' ')
-          echo "entrypoint_ids=$ids" >> $GITHUB_OUTPUT
-        shell: bash
+          echo "archiveID=$archiveID" >> $GITHUB_OUTPUT
 
-      - name: Run scan with entrypoint IDs
-        env:
-          BRIGHT_KEY: ${{ secrets.BRIGHT_TOKEN }}
-          PROJECT_ID: ${{ secrets.BRIGHT_PROJECT }}
+      - name: Start discovery scan
+        id: discovery
         run: |
-          TIMESTAMP=$(date +'%Y-%m-%d_%H-%M-%S')
-          SCAN_NAME="automated scan $TIMESTAMP"
-          ENTRYPOINT_FLAGS=$(echo "${{ steps.extract_ids.outputs.entrypoint_ids }}" | sed 's/ / -e /g')
-          ./bright-cli-linux-x64 scan:run -t "$BRIGHT_TOKEN" -n "$SCAN_NAME" -e $ENTRYPOINT_FLAGS -p "$BRIGHT_PROJECT"
+          dscan_id=$(docker run --rm \
+            brightsec/cli discovery:run \
+            --archive "${{ steps.upload.outputs.archiveID }}" \
+            --token "${{ inputs.api_token }}" \
+            --project "${{ inputs.project_id }}" \
+            --name "api discovery")
+
+          echo "dscan_id=$dscan_id" >> $GITHUB_OUTPUT
+
+      - name: Poll discovery status
+        run: |
+          while true; do
+            output=$(docker run --rm \
+              brightsec/cli discovery:polling \
+              --interval 2000 \
+              --timeout 2 \
+              --token "${{ inputs.api_token }}" \
+              --project "${{ inputs.project_id }}" \
+              "${{ steps.discovery.outputs.dscan_id }}")
+
+            status=$(echo "$output" | grep -io 'Discovery status is [a-z]\+' || echo "")
+            echo "[INFO] $status"
+
+            case "$status" in
+              *complete*) break;;
+              *aborted*|*failed*) exit 1;;
+              *) sleep 2;;
+            esac
+          done
+
+      - name: Get entrypoints
+        run: |
+          docker run --rm brightsec/cli entrypoints:list \
+            --token "${{ inputs.api_token }}" \
+            --project "${{ inputs.project_id }}" \
+            --status new --status changed > entrypoints.json
+
+          if [ ! -f entrypoints.json ]; then
+            echo "[Error]: entrypoints.json not found"
+            exit 1
+          fi
+
+      - name: Format entrypoint IDs
+        id: ids
+        run: |
+          ids=$(grep -o '"id": *"[^"]*"' entrypoints.json | sed 's/.*: *"//' | sed 's/"$//' | tr '\n' ' ')
+          entryPoints=""
+          for id in $ids; do entryPoints+="-e $id "; done
+
+          if [ -z "$entryPoints" ]; then
+            echo "[Error]: No entrypoints found"
+            exit 1
+          fi
+
+          echo "entryPoints=$entryPoints" >> $GITHUB_OUTPUT
+
+      - name: Run API scan
+        run: |
+          timestamp=$(date +'%Y-%m-%d_%H-%M-%S')
+          scan_name="API scan $timestamp"
+
+          docker run --rm brightsec/cli scan:run \
+            --token "${{ inputs.api_token }}" \
+            --project "${{ inputs.project_id }}" \
+            --name "$scan_name" \
+            --entrypoint ${{ steps.ids.outputs.entryPoints }}
