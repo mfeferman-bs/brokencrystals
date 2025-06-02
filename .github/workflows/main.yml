@@ -97,7 +97,7 @@ jobs:
         run: |
           ids=$(grep -o '"id": *"[^"]*"' entrypoints.json | sed 's/.*: *"//' | sed 's/"$//' | tr '\n' ' ')
           entryPoints=""
-          for id in $ids; do entryPoints+="-e $id "; done
+          for id in $ids; do entryPoints+="-e $id "; echo "$id"; done
 
           if [ -z "$entryPoints" ]; then
             echo "[Error]: No entrypoints found"
