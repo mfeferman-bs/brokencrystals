@@ -1,20 +1,9 @@
-name: Run Bright API Incremental Scan
+name: Run Bright API Scan
 
-on:
-  workflow_dispatch:
-    inputs:
-      api_token:
-        description: 'Bright Security API Token'
-        required: true
-        type: string
-      project_id:
-        description: 'Bright Security Project ID'
-        required: true
-        type: string
-      archive_path:
-        description: 'Path to OpenAPI archive file (relative to repo root)'
-        required: true
-        type: string
+env:
+  OPENAPI_FILE: './swagger.json'
+  API_TOKEN: ${{ secrets.BRIGHT_API_TOKEN }}
+  PROJECT_ID: ${{ secrets.BRIGHT_PROJECT_ID }}
 
 jobs:
   api-scan:
@@ -25,7 +14,7 @@ jobs:
 
       - name: Validate archive file exists
         run: |
-          if [ ! -f "${{ github.workspace }}/${{ inputs.archive_path }}" ]; then
+          if [ ! -f "${{ github.workspace }}/${{ OPENAPI_FILE }}" ]; then
             echo "[Error]: Archive file not found at path: ${{ inputs.archive_path }}"
             exit 1
           fi
@@ -41,8 +30,8 @@ jobs:
             brightsec/cli \
             archive:upload \
             --type openapi \
-            --token "${{ inputs.api_token }}" \
-            --project-id "${{ inputs.project_id }}" \
+            --token "$API_TOKEN" \
+            --project-id "$PROJECT_ID" \
             "/app/${ARCHIVE_FILE}")
 
           echo "archiveID=$archiveID" >> $GITHUB_OUTPUT
@@ -53,8 +42,8 @@ jobs:
           dscan_id=$(docker run --rm \
             brightsec/cli discovery:run \
             --archive "${{ steps.upload.outputs.archiveID }}" \
-            --token "${{ inputs.api_token }}" \
-            --project "${{ inputs.project_id }}" \
+            --token "$API_TOKEN" \
+            --project "$PROJECT_ID" \
             --name "api discovery")
 
           echo "dscan_id=$dscan_id" >> $GITHUB_OUTPUT
@@ -66,8 +55,8 @@ jobs:
               brightsec/cli discovery:polling \
               --interval 2000 \
               --timeout 2 \
-              --token "${{ inputs.api_token }}" \
-              --project "${{ inputs.project_id }}" \
+              --token "$API_TOKEN" \
+              --project "$PROJECT_ID" \
               "${{ steps.discovery.outputs.dscan_id }}")
 
             status=$(echo "$output" | grep -io 'Discovery status is [a-z]\+' || echo "")
@@ -83,8 +72,8 @@ jobs:
       - name: Get entrypoints
         run: |
           docker run --rm brightsec/cli entrypoints:list \
-            --token "${{ inputs.api_token }}" \
-            --project "${{ inputs.project_id }}" \
+            --token "$API_TOKEN" \
+            --project "$PROJECT_ID" \
             --status new --status changed > entrypoints.json
 
           if [ ! -f entrypoints.json ]; then
@@ -112,7 +101,7 @@ jobs:
           scan_name="API scan $timestamp"
 
           docker run --rm brightsec/cli scan:run \
-            --token "${{ inputs.api_token }}" \
-            --project "${{ inputs.project_id }}" \
+            --token "$API_TOKEN" \
+            --project "$PROJECT_ID" \
             --name "$scan_name" \
             --entrypoint ${{ steps.ids.outputs.entryPoints }}
