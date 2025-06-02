@@ -1,9 +1,12 @@
 name: Run Bright API Scan
 
+on:
+  workflow_dispatch:
+
 env:
-  OPENAPI_FILE: './swagger.json'
   API_TOKEN: ${{ secrets.BRIGHT_API_TOKEN }}
   PROJECT_ID: ${{ secrets.BRIGHT_PROJECT_ID }}
+  ARCHIVE_PATH: ${{ secrets.BRIGHT_ARCHIVE_PATH }}
 
 jobs:
   api-scan:
@@ -14,16 +17,16 @@ jobs:
 
       - name: Validate archive file exists
         run: |
-          if [ ! -f "${{ github.workspace }}/${{ OPENAPI_FILE }}" ]; then
-            echo "[Error]: Archive file not found at path: ${{ inputs.archive_path }}"
+          if [ ! -f "${{ github.workspace }}/${{ env.ARCHIVE_PATH }}" ]; then
+            echo "[Error]: Archive file not found at path: ${{ env.ARCHIVE_PATH }}"
             exit 1
           fi
 
       - name: Upload archive
         id: upload
         run: |
-          ARCHIVE_FILE="$(basename ${{ inputs.archive_path }})"
-          ARCHIVE_DIR="$(dirname ${{ inputs.archive_path }})"
+          ARCHIVE_FILE="$(basename ${{ env.ARCHIVE_PATH }})"
+          ARCHIVE_DIR="$(dirname ${{ env.ARCHIVE_PATH }})"
 
           archiveID=$(docker run --rm \
             -v "${{ github.workspace }}/${ARCHIVE_DIR}:/app" \
