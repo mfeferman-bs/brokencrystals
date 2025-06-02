@@ -113,5 +113,6 @@ jobs:
           docker run --rm brightsec/cli scan:run \
             --token "$API_TOKEN" \
             --project "$PROJECT_ID" \
+            --bucket "api" \
             --name "$scan_name" \
             --entrypoint ${{ steps.ids.outputs.entryPoints }}
