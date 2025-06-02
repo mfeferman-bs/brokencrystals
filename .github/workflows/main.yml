@@ -1,5 +1,15 @@
 name: Run Bright API Scan
 
+on:
+  pull_request:
+    branches:
+      - '**'
+
+  push:
+    branches:
+      - stable
+      - unstable
+      
 env:
   API_TOKEN: ${{ secrets.BRIGHT_API_TOKEN }}
   PROJECT_ID: ${{ secrets.BRIGHT_PROJECT_ID }}
