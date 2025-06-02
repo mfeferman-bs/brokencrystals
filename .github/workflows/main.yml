@@ -84,6 +84,7 @@ jobs:
           docker run --rm brightsec/cli entrypoints:list \
             --token "$API_TOKEN" \
             --project "$PROJECT_ID" \
+            --limit 500 \
             --status new --status changed > entrypoints.json
 
           if [ ! -f entrypoints.json ]; then
