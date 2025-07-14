@@ -1,0 +1,105 @@
+name: Bright API Incremental Scan
+
+on:
+  workflow_dispatch:
+
+jobs:
+  bright-incremental-scan:
+    runs-on: ubuntu-latest
+
+    env:
+      API_TOKEN: ${{ secrets.BRIGHT_API_TOKEN }}
+      PROJECT_ID: ${{ secrets.BRIGHT_PROJECT_ID }}
+      AUTH_OBJ_ID: ${{ secrets.BRIGHT_AUTH_OBJECT_ID }}
+      ARCHIVE_PATH: ./swagger.json
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Upload OpenAPI Spec
+        id: upload_archive
+        run: |
+          archiveID=$(docker run --rm \
+            -v "$(pwd)":/app \
+            brightsec/cli \
+            archive:upload \
+            --type openapi \
+            --token "$API_TOKEN" \
+            --project-id "$PROJECT_ID" \
+            "/app/$(basename $ARCHIVE_PATH)")
+          echo "archive_id=$archiveID" >> $GITHUB_OUTPUT
+
+      - name: Run OpenAPI Discovery
+        id: discovery
+        run: |
+          dscan_id=$(docker run --rm \
+            brightsec/cli discovery:run \
+            --archive "${{ steps.upload_archive.outputs.archive_id }}" \
+            --token "$API_TOKEN" \
+            --project "$PROJECT_ID" \
+            --auth "$AUTH_OBJ_ID" \
+            --name "api discovery")
+          echo "dscan_id=$dscan_id" >> $GITHUB_OUTPUT
+
+      - name: Poll Discovery Scan
+        run: |
+          while true; do
+            scan_output=$(docker run --rm \
+              brightsec/cli discovery:polling \
+              --interval 2000 \
+              --timeout 2 \
+              --token "$API_TOKEN" \
+              --project "$PROJECT_ID" \
+              "${{ steps.discovery.outputs.dscan_id }}" 2>&1)
+
+            status=$(echo "$scan_output" | grep -io 'Discovery status is [a-z]\+')
+            echo "[INFO] $status"
+
+            case "$status" in
+              "Discovery status is complete")
+                echo "[INFO] Discovery complete"
+                break
+                ;;
+              "Discovery status is aborted"|"Discovery status is failed")
+                echo "[ERROR] Discovery ended: $status"
+                exit 1
+                ;;
+              *)
+                echo "[INFO] Waiting for discovery to complete..."
+                sleep 2
+                ;;
+            esac
+          done
+
+      - name: List Entry Points
+        run: |
+          docker run --rm brightsec/cli entrypoints:list \
+            --token "$API_TOKEN" \
+            --project "$PROJECT_ID" \
+            --status new \
+            --status changed > entrypoints.json
+
+      - name: Parse Entry Point IDs
+        id: parse_ids
+        run: |
+          ids=$(grep -o '"id": *"[^"]*"' entrypoints.json | sed 's/.*: *"//' | sed 's/"$//' | tr '\n' ' ')
+          if [ -z "$ids" ]; then
+            echo "No new or changed entry points found."
+            exit 1
+          fi
+          entryPoints=""
+          for id in $ids; do
+            entryPoints="$entryPoints -e $id"
+          done
+          echo "entryPoints=$entryPoints" >> $GITHUB_OUTPUT
+
+      - name: Run Bright Scan
+        run: |
+          timestamp=$(date +'%Y-%m-%d_%H-%M-%S')
+          scan_name="API scan $timestamp"
+          docker run --rm brightsec/cli scan:run \
+            --token "$API_TOKEN" \
+            --project "$PROJECT_ID" \
+            --name "$scan_name" \
+            --entrypoint ${{ steps.parse_ids.outputs.entryPoints }}
