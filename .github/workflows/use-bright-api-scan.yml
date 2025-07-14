@@ -1,4 +1,4 @@
-name: Use Bright API Scan
+name: Bright API Scan
 
 on:
   workflow_dispatch:
