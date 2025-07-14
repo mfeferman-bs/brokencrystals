@@ -15,7 +15,7 @@ on:
         required: true
       BRIGHT_PROJECT_ID:
         required: true
-      GITHUB_TOKEN:
+      KEY_GITHUB:
         required: true
 
 jobs:
@@ -87,5 +87,5 @@ jobs:
           scan: ${{ steps.scan.outputs.id }}
           wait_for: any
           code_scanning_alerts: true
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.KEY_GITHUB }}
           timeout: 900
