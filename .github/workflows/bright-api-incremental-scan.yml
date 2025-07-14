@@ -1,4 +1,4 @@
-name: Bright API Incremental Scan Reusable
+name: bright-api-incremental-scan
 
 on:
   workflow_call:
@@ -9,7 +9,7 @@ on:
       scan_name:
         required: false
         type: string
-        default: "API Scan"
+        default: "Incremental API Scan"
     secrets:
       BRIGHT_API_TOKEN:
         required: true
