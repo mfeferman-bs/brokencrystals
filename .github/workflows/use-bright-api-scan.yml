@@ -1,15 +1,15 @@
-name: Call Bright API Scan Workflow
+name: Use Bright API Scan
 
 on:
   workflow_dispatch:
-  
+
 jobs:
   call-bright-scan:
-    uses: mfeferman-bs/brokencrystals/.github/workflows/bright-api-incremental-scan.yml@main
+    uses: .github/workflows/reusable-bright-api-scan.yml@main  # or a specific tag like @v1.0.0
     with:
       archive_path: ./swagger.json
       scan_name: "Incremental API Scan"
     secrets:
       BRIGHT_API_TOKEN: ${{ secrets.BRIGHT_API_TOKEN }}
       BRIGHT_PROJECT_ID: ${{ secrets.BRIGHT_PROJECT_ID }}
-      GITHUB_TOKEN: ${{ secrets.KEY_GITHUB }}
+      KEY_GITHUB: ${{ secrets.GITHUB_TOKEN }}
