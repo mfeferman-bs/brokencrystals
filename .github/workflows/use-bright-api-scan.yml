@@ -12,4 +12,4 @@ jobs:
     secrets:
       BRIGHT_API_TOKEN: ${{ secrets.BRIGHT_API_TOKEN }}
       BRIGHT_PROJECT_ID: ${{ secrets.BRIGHT_PROJECT_ID }}
-      KEY_GITHUB: ${{ secrets.GITHUB_TOKEN }}
+      KEY_GITHUB: ${{ secrets.KEY_GITHUB }}
