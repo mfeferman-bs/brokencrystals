@@ -25,7 +25,7 @@ jobs:
       - name: Validate archive file exists
         run: |
           if [ ! -f "${{ github.workspace }}/${{ env.ARCHIVE_PATH }}" ]; then
-            echo "[Error]: Archive file not found at path: ${{ env.ARCHIVE_PATH }}"
+            echo "::error::Archive file not found at path: ${{ env.ARCHIVE_PATH }}" >> $GITHUB_OUTPUT
             exit 1
           fi
 
@@ -44,7 +44,7 @@ jobs:
             --project-id "$PROJECT_ID" \
             "/app/${ARCHIVE_FILE}")
 
-          echo "archiveID=$archiveID" >> $GITHUB_OUTPUT
+          echo "::info::archiveID=$archiveID" >> $GITHUB_OUTPUT
 
       - name: Start discovery scan
         id: discovery
@@ -56,7 +56,7 @@ jobs:
             --project "$PROJECT_ID" \
             --name "api discovery")
 
-          echo "dscan_id=$dscan_id" >> $GITHUB_OUTPUT
+          echo "::info::dscan_id=$dscan_id" >> $GITHUB_OUTPUT
 
       - name: Poll discovery status
         run: |
@@ -70,7 +70,7 @@ jobs:
               "${{ steps.discovery.outputs.dscan_id }}")
 
             status=$(echo "$output" | grep -io 'Discovery status is [a-z]\+' || echo "")
-            echo "[INFO] $status"
+            echo "::info::$status" >> $GITHUB_OUTPUT
 
             case "$status" in
               *complete*) break;;
@@ -88,7 +88,7 @@ jobs:
             --status new --status changed > entrypoints.json
 
           if [ ! -f entrypoints.json ]; then
-            echo "[Error]: entrypoints.json not found"
+            echo "::error::entrypoints.json not found" >> $GITHUB_OUTPUT
             exit 1
           fi
 
@@ -100,11 +100,11 @@ jobs:
           for id in $ids; do entryPoints+="-e $id "; echo "$id"; done
 
           if [ -z "$entryPoints" ]; then
-            echo "[Error]: No entrypoints found"
+            echo "::error::No entrypoints found" >> $GITHUB_OUTPUT
             exit 1
           fi
 
-          echo "entryPoints=$entryPoints" >> $GITHUB_OUTPUT
+          echo "::info::entryPoints=$entryPoints" >> $GITHUB_OUTPUT
 
       - name: Run API scan
         run: |
