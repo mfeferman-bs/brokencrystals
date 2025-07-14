@@ -1,7 +1,22 @@
-name: Bright Incremental API Scan
+name: Bright API Incremental Scan Reusable
 
 on:
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      archive_path:
+        required: true
+        type: string
+      scan_name:
+        required: false
+        type: string
+        default: "API Scan"
+    secrets:
+      BRIGHT_API_TOKEN:
+        required: true
+      BRIGHT_PROJECT_ID:
+        required: true
+      GITHUB_TOKEN:
+        required: true
 
 jobs:
   bright_api_scan:
@@ -11,26 +26,29 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Upload Swagger file (if needed)
+      - name: Upload OpenAPI/Swagger file using Bright CLI
         id: upload
         run: |
-          echo "::notice::Assuming your Swagger file is already accessible in the repo as './swagger.json'"
-          # If you need to upload to Bright first, use the upload-file action:
-          # echo "file_id=$(some_upload_command)" >> $GITHUB_OUTPUT
+          archive_path="${{ inputs.archive_path }}"
+          archive_id=$(docker run --rm -v "$PWD:$PWD" -w "$PWD" brightsec/cli archive:upload --type openapi --token "${{ secrets.BRIGHT_API_TOKEN }}" --project-id "${{ secrets.BRIGHT_PROJECT_ID }}"   "$archive_path")
+
+          if [ -z "$archive_id" ]; then
+            echo "::error::Failed to upload archive."
+            exit 1
+          fi
+          echo "file_id=$archive_id" >> $GITHUB_OUTPUT
 
       - name: Run Discovery
         id: discovery
         uses: NeuraLegion/bright-github-actions/run-discovery@release
         with:
           api_token: ${{ secrets.BRIGHT_API_TOKEN }}
-          name: GitHub discovery ${{ github.sha }}
           project_id: ${{ secrets.BRIGHT_PROJECT_ID }}
           discovery_types: |
             [ "oas" ]
-          file_path: './swagger.json'
+          file_id: ${{ steps.upload.outputs.file_id }}
 
       - name: Wait for Discovery to Complete
-        id: wait_discovery
         uses: NeuraLegion/bright-github-actions/wait-for-discovery@release
         with:
           api_token: ${{ secrets.BRIGHT_API_TOKEN }}
@@ -59,7 +77,7 @@ jobs:
         with:
           api_token: ${{ secrets.BRIGHT_API_TOKEN }}
           project_id: ${{ secrets.BRIGHT_PROJECT_ID }}
-          name: "API Scan - ${{ github.run_id }}"
+          name: "${{ inputs.scan_name }} - ${{ github.run_id }}"
           entrypoints: ${{ steps.list_eps.outputs.entrypoints }}
 
       - name: Wait for Scan Completion
