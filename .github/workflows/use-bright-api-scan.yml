@@ -1,11 +1,6 @@
-name: Call Bright API Scan Workflow
-
-on:
-  workflow_dispatch:
-
 jobs:
   call-bright-scan:
-    uses: mfeferman-bs/bright-api-incremental-scan/.github/workflows/reusable-bright-api-scan.yml@v1
+    uses: reusable-bright-api-scan.yml@main
     with:
       archive_path: ./swagger.json
       scan_name: "My Project API Scan"
