@@ -5,8 +5,8 @@ on:
 
 jobs:
   call-bright-scan:
-    # uses: mfeferman-bs/bright-api-scan/.github/workflows/bright-api-incremental-scan.yml@main  # or a specific tag like @v1.0.0
-    uses: mfeferman-bs/bright-api-scan/.github/workflows/bright-api-scan.yml@main  # or a specific tag like @v1.0.0
+    uses: mfeferman-bs/bright-api-scan/.github/workflows/bright-api-incremental-scan.yml@main  # or a specific tag like @v1.0.0
+    # uses: mfeferman-bs/bright-api-scan/.github/workflows/bright-api-scan.yml@main  # or a specific tag like @v1.0.0
     with:
       archive_path: ./swagger.json
       scan_name: "Incremental API Scan"
