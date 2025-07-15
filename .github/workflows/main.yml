@@ -43,7 +43,6 @@ jobs:
             --token "$API_TOKEN" \
             --project-id "$PROJECT_ID" \
             "/app/${ARCHIVE_FILE}")
-
           echo "archiveID=$archiveID" >> $GITHUB_OUTPUT
 
       - name: Start discovery scan
@@ -55,7 +54,6 @@ jobs:
             --token "$API_TOKEN" \
             --project "$PROJECT_ID" \
             --name "api discovery")
-
           echo "dscan_id=$dscan_id" >> $GITHUB_OUTPUT
 
       - name: Poll discovery status
@@ -68,10 +66,8 @@ jobs:
               --token "$API_TOKEN" \
               --project "$PROJECT_ID" \
               "${{ steps.discovery.outputs.dscan_id }}")
-
             status=$(echo "$output" | grep -io 'Discovery status is [a-z]\+' || echo "")
             echo "$status" >> $GITHUB_OUTPUT
-
             case "$status" in
               *complete*) break;;
               *aborted*|*failed*) exit 1;;
