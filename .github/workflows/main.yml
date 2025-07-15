@@ -20,12 +20,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Validate archive file exists
         run: |
           if [ ! -f "${{ github.workspace }}/${{ env.ARCHIVE_PATH }}" ]; then
-            echo "::error::Archive file not found at path: ${{ env.ARCHIVE_PATH }}" >> $GITHUB_OUTPUT
+            echo "Archive file not found at path: ${{ env.ARCHIVE_PATH }}" >> $GITHUB_OUTPUT
             exit 1
           fi
 
