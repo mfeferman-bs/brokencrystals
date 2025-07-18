@@ -1,0 +1,17 @@
+
+name: Run Bright CLI Flow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  call-bright-scan:
+    uses: mfeferman-bs/bright-api-scan/.github/workflows/bright-api-scan.yaml@main
+    with:
+      archive_path: ./swagger.json
+      scan_name: "Incremental API Scan"
+    secrets:
+      BRIGHT_API_TOKEN: ${{ secrets.BRIGHT_API_TOKEN }}
+      BRIGHT_PROJECT_ID: ${{ secrets.BRIGHT_PROJECT_ID }}
+      BRIGHT_PROJECT_AUTH_ID: ${{ secrets.BRIGHT_PROJECT_AUTH_ID }}      
+      BRIGHT_REPEATER_ID: ${{ secrets.BRIGHT_REPEATER_ID }}
