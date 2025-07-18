@@ -6,7 +6,7 @@ on:
 
 jobs:
   call-bright-scan:
-    uses: mfeferman-bs/bright-api-scan/.github/workflows/bright-cli-flow.yaml@main
+    uses: mfeferman-bs/bright-api-scan/.github/workflows/bright-cli-flow.yml@main
     with:
       archive_path: ./swagger.json
       scan_name: "Incremental API Scan"
