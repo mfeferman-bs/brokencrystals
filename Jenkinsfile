@@ -87,7 +87,7 @@ pipeline {
             steps {
                 script {
                     sh 'docker run --rm brightsec/cli entrypoints:list --token "$BRIGHT_API_TOKEN" --project "$BRIGHT_PROJECT_ID" --limit 500 > entrypoints.json'
-                    def ids = sh(script: "grep -o '\"id\": *\"[^\"]*\"' entrypoints.json | sed 's/.*: *\"//' | sed 's/\"$//' | tr '\\n' ' '", returnStdout: true).trim()
+                    def ids = sh(script: "grep -o '\"id\": *\"[^\"]*\"' entrypoints.json | sed 's/.*: *\"//' | sed 's/\"\$//' | tr '\\n' ' '", returnStdout: true).trim()
 
                     if (!ids) {
                         error("No entrypoints found")
