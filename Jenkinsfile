@@ -11,29 +11,36 @@ pipeline {
 
     stages {
 
-        stage('Install Docker') {
+        stage('Install Docker (no sudo)') {
             steps {
-                script {
-                    // Check if Docker is installed
-                    def dockerInstalled = sh(script: 'which docker', returnStatus: true) == 0
-                    if (!dockerInstalled) {
-                        echo "Docker is not installed. Installing Docker..."
-
-                        // Install Docker
-                        sh 'curl -fsSL https://get.docker.com -o get-docker.sh'
-                        sh 'sudo sh get-docker.sh'
-
-                        // Start Docker service if it's not running
-                        sh 'sudo systemctl start docker'
-
-                        // Add Jenkins user to the Docker group to avoid sudo for docker commands
-                        sh 'sudo usermod -aG docker jenkins'
-
-                        echo "Docker installed successfully!"
-                    } else {
-                        echo "Docker is already installed."
-                    }
-                }
+                sh '''
+                  set -ex
+        
+                  # Install required packages
+                  apt-get update
+                  apt-get install -y \
+                    ca-certificates \
+                    curl \
+                    gnupg \
+                    lsb-release
+        
+                  # Add Docker’s official GPG key
+                  mkdir -p /etc/apt/keyrings
+                  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+        
+                  # Set up the Docker repository
+                  echo \
+                    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
+                    https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" \
+                    > /etc/apt/sources.list.d/docker.list
+        
+                  # Install Docker Engine
+                  apt-get update
+                  apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+        
+                  # Verify installation
+                  docker --version
+                '''
             }
         }
         
