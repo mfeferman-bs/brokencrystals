@@ -10,6 +10,33 @@ pipeline {
     }
 
     stages {
+
+        stage('Install Docker') {
+            steps {
+                script {
+                    // Check if Docker is installed
+                    def dockerInstalled = sh(script: 'which docker', returnStatus: true) == 0
+                    if (!dockerInstalled) {
+                        echo "Docker is not installed. Installing Docker..."
+
+                        // Install Docker
+                        sh 'curl -fsSL https://get.docker.com -o get-docker.sh'
+                        sh 'sudo sh get-docker.sh'
+
+                        // Start Docker service if it's not running
+                        sh 'sudo systemctl start docker'
+
+                        // Add Jenkins user to the Docker group to avoid sudo for docker commands
+                        sh 'sudo usermod -aG docker jenkins'
+
+                        echo "Docker installed successfully!"
+                    } else {
+                        echo "Docker is already installed."
+                    }
+                }
+            }
+        }
+        
         stage('Upload OpenAPI Archive') {
             steps {
                 script {
