@@ -5,8 +5,7 @@ on:
 
 jobs:
   call-bright-scan:
-    uses: mfeferman-bs/bright-api-scan/.github/workflows/bright-crawl-disco-scan.yml
-@main
+    uses: mfeferman-bs/bright-api-scan/.github/workflows/bright-crawl-disco-scan.yml@main
     with:
       crawl_path: "https://brokencrystals.com"
       project_id: "5W9tVzHKvq8No317koeJTa"
