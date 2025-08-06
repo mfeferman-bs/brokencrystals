@@ -1,0 +1,16 @@
+name: Run Bright DAST Scan example
+
+on:
+  workflow_dispatch:
+
+jobs:
+  call-bright-scan:
+    uses: mfeferman-bs/bright-api-scan/.github/workflows/bright-crawl-disco-scan.yml
+@main
+    with:
+      crawl_path: "https://brokencrystals.com"
+      project_id: "5W9tVzHKvq8No317koeJTa"
+      repeater_id: "czEjKnvkLNwE2asjrBuNdv"
+      scan_name: "Bright Security DAST Scan"
+    secrets:
+      BRIGHT_API_TOKEN: ${{ secrets.BRIGHT_API_TOKEN }}
