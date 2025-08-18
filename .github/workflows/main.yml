@@ -1,34 +1,31 @@
 name: Run Bright API Scan
-
 on:
-  pull_request:
-    branches:
-      - '**'
+  workflow_dispatch:
+# on:
+#   pull_request:
+#     branches:
+#       - '**'
+#   push:
+#     branches:
+#       - stable
+#       - unstable
 
-  push:
-    branches:
-      - stable
-      - unstable
-      
 env:
   API_TOKEN: ${{ secrets.BRIGHT_API_TOKEN }}
   PROJECT_ID: ${{ secrets.BRIGHT_PROJECT_ID }}
   ARCHIVE_PATH: ${{ secrets.BRIGHT_ARCHIVE_PATH }}
-
 jobs:
   api-scan:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-
       - name: Validate archive file exists
         run: |
           if [ ! -f "${{ github.workspace }}/${{ env.ARCHIVE_PATH }}" ]; then
             echo "Archive file not found at path: ${{ env.ARCHIVE_PATH }}" >> $GITHUB_OUTPUT
             exit 1
           fi
-
       - name: Upload archive
         id: upload
         run: |
@@ -44,7 +41,6 @@ jobs:
             --project-id "$PROJECT_ID" \
             "/app/${ARCHIVE_FILE}")
           echo "archiveID=$archiveID" >> $GITHUB_OUTPUT
-
       - name: Start discovery scan
         id: discovery
         run: |
@@ -55,7 +51,6 @@ jobs:
             --project "$PROJECT_ID" \
             --name "api discovery")
           echo "dscan_id=$dscan_id" >> $GITHUB_OUTPUT
-
       - name: Poll discovery status
         run: |
           while true; do
@@ -74,7 +69,6 @@ jobs:
               *) sleep 2;;
             esac
           done
-
       - name: Get entrypoints
         run: |
           docker run --rm brightsec/cli entrypoints:list \
@@ -87,7 +81,6 @@ jobs:
             echo "entrypoints.json not found" >> $GITHUB_OUTPUT
             exit 1
           fi
-
       - name: Format entrypoint IDs
         id: ids
         run: |
@@ -101,7 +94,6 @@ jobs:
           fi
 
           echo "entryPoints=$entryPoints" >> $GITHUB_OUTPUT
-
       - name: Run API scan
         run: |
           timestamp=$(date +'%Y-%m-%d_%H-%M-%S')
