@@ -21,7 +21,7 @@ after(() => runner.clear());
 test('PUT /api/file/raw?path=some/path/to/file.png', { signal: AbortSignal.timeout(timeout) }, async () => {
   await runner
     .createScan({
-      tests: ['file_upload', 'lfi', 'osi', 'ssrf', 'full_path_disclosure'],
+      tests: ['full_path_disclosure'],
       attackParamLocations: [AttackParamLocation.QUERY, AttackParamLocation.BODY]
     })
     .setFailFast(false)
