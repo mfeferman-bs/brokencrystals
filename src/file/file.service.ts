@@ -4,20 +4,54 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { CloudProvidersMetaData } from './cloud.providers.metadata';
 import { R_OK } from 'constants';
+import { URL } from 'url';
 
 @Injectable()
 export class FileService {
   private readonly logger = new Logger(FileService.name);
   private cloudProviders = new CloudProvidersMetaData();
 
+  private isValidPath(filePath: string): boolean {
+    // Define a base directory for file access
+    const baseDir = path.resolve(process.cwd(), 'config/products/crystals');
+    const resolvedPath = path.resolve(baseDir, filePath);
+    return resolvedPath.startsWith(baseDir);
+  }
+
   async getFile(file: string): Promise<Stream> {
     this.logger.log(`Reading file: ${file}`);
+
+    if (!this.isValidPath(file)) {
+      throw new Error('Access to this file path is not allowed');
+    }
 
     if (file.startsWith('/')) {
       await fs.promises.access(file, R_OK);
 
       return fs.createReadStream(file);
     } else if (file.startsWith('http')) {
+      // Validate URL
+      let url;
+      try {
+        url = new URL(file);
+      } catch (err) {
+        throw new Error(`Invalid URL: ${file}`);
+      }
+
+      // Check if the URL is within allowed domains
+      const allowedDomains = [
+        'example.com', // Add allowed domains here
+      ];
+      if (!allowedDomains.includes(url.hostname)) {
+        throw new Error(`Access to the domain '${url.hostname}' is not allowed`);
+      }
+
+      // Check if the URL path is within allowed paths
+      const allowedPaths = this.cloudProviders.getAllowedPaths(url.hostname);
+      if (!allowedPaths.some(allowedPath => url.pathname.startsWith(allowedPath))) {
+        throw new Error(`Access to the path '${url.pathname}' is not allowed`);
+      }
+
       const content = await this.cloudProviders.get(file);
 
       if (content) {
