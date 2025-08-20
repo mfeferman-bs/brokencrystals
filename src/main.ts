@@ -20,6 +20,7 @@ import fastify from 'fastify';
 import { fastifyStatic, ListRender } from '@fastify/static';
 import { join, dirname } from 'path';
 import rawbody from 'raw-body';
+import { GraphQLModule } from '@nestjs/graphql';
 
 const renderDirList: ListRender = (dirs, files) => {
   const currDir = dirname((dirs[0] || files[0]).href);
@@ -228,6 +229,14 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, options);
 
   SwaggerModule.setup('swagger', app, document);
+
+  // Disable GraphQL introspection
+  app.use(
+    '/graphql',
+    GraphQLModule.forRoot({
+      introspection: false,
+    })
+  );
 
   await app.listen(3000, '0.0.0.0');
 }

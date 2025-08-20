@@ -21,7 +21,6 @@ export class GlobalExceptionFilter extends BaseExceptionFilter {
     }
 
     const unprocessableException = new InternalServerErrorException(
-      { error: (exception as Error).message, location: __filename },
       'An internal error has occurred, and the API was unable to service your request.'
     );
 
@@ -32,6 +31,9 @@ export class GlobalExceptionFilter extends BaseExceptionFilter {
     const applicationRef =
       this.applicationRef ||
       (this.httpAdapterHost && this.httpAdapterHost.httpAdapter);
+
+    // Log the original exception for internal tracking
+    console.error(exception);
 
     return applicationRef.reply(
       host.getArgByIndex(1),

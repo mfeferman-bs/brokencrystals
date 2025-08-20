@@ -63,7 +63,16 @@ export class PartnersService {
     xpathExpression: string
   ): SelectReturnType {
     const partnersXMLObj = this.getPartnersXMLObj();
-    return xpath.select(xpathExpression, partnersXMLObj);
+    try {
+      // Validate the XPath expression to prevent injection
+      if (!this.isValidXpath(xpathExpression)) {
+        throw new Error('Invalid XPath expression');
+      }
+      return xpath.select(xpathExpression, partnersXMLObj);
+    } catch (error) {
+      this.logger.error(`XPath selection error: ${error.message}`);
+      return [];
+    }
   }
 
   private getFormattedXMLOutput(xmlNodes): string {
@@ -71,17 +80,30 @@ export class PartnersService {
   }
 
   getPartnersProperties(xpathExpression: string): string {
-    let xmlNodes = this.selectPartnerPropertiesByXPATH(xpathExpression);
+    const xmlNodes = this.selectPartnerPropertiesByXPATH(xpathExpression);
 
     if (!Array.isArray(xmlNodes)) {
       this.logger.debug(
         `xmlNodes's type wasn't 'Array', and it's value was: ${xmlNodes}`
       );
-      xmlNodes = [];
+      return this.getFormattedXMLOutput([]);
     } else {
       this.logger.debug(`Raw xpath xmlNodes value is: ${xmlNodes}`);
     }
 
     return this.getFormattedXMLOutput(xmlNodes);
+  }
+
+  private isValidXpath(xpathExpression: string): boolean {
+    // Basic validation logic for XPath expression
+    // This can be expanded with more complex validation as needed
+    const forbiddenPatterns = [
+      /\bor\b/i,
+      /\band\b/i,
+      /\bunion\b/i,
+      /\bintersect\b/i,
+      /\bexcept\b/i
+    ];
+    return !forbiddenPatterns.some((pattern) => pattern.test(xpathExpression));
   }
 }
