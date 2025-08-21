@@ -20,9 +20,16 @@ export class FileService {
     }
 
     if (file.startsWith('/')) {
-      await fs.promises.access(file, R_OK);
+      const safeBasePath = path.resolve('/safe/base/directory');
+      const resolvedPath = path.resolve(safeBasePath, '.' + file);
 
-      return fs.createReadStream(file);
+      if (!resolvedPath.startsWith(safeBasePath)) {
+        throw new Error('Invalid file path');
+      }
+
+      await fs.promises.access(resolvedPath, R_OK);
+
+      return fs.createReadStream(resolvedPath);
     } else if (file.startsWith('http')) {
       // Validate URL
       const url = new URL(file);
@@ -38,11 +45,16 @@ export class FileService {
         throw new Error(`no such file or directory, access '${file}'`);
       }
     } else {
-      file = path.resolve(process.cwd(), file);
+      const safeBasePath = path.resolve('/safe/base/directory');
+      const resolvedPath = path.resolve(safeBasePath, file);
 
-      await fs.promises.access(file, R_OK);
+      if (!resolvedPath.startsWith(safeBasePath)) {
+        throw new Error('Invalid file path');
+      }
 
-      return fs.createReadStream(file);
+      await fs.promises.access(resolvedPath, R_OK);
+
+      return fs.createReadStream(resolvedPath);
     }
   }
 
