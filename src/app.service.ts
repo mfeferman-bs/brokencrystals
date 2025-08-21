@@ -67,10 +67,24 @@ export class AppService {
       awsBucket: this.configService.get<string>(
         AppModuleConfigProperties.ENV_AWS_BUCKET
       ),
-      sql: `postgres://${dbUser}:${dbPwd}@${dbHost}:${dbPort}/${dbSchema} `,
-      googlemaps: this.configService.get<string>(
-        AppModuleConfigProperties.ENV_GOOGLE_MAPS
-      )
+      sql: `postgres://${dbUser}:****@${dbHost}:${dbPort}/${dbSchema} `, // Masked password
+      googlemaps: '****' // Masked Google Maps API key
+    };
+  }
+
+  getSecrets(): Record<string, string> {
+    this.logger.debug('Called getSecrets');
+    return {
+      codeclimate: '****', // Masked secret
+      facebook: '****', // Masked secret
+      google_b64: '****', // Masked secret
+      google_oauth: '****', // Masked secret
+      google_oauth_token: '****', // Masked secret
+      heroku: '****', // Masked secret
+      hockey_app: '****', // Masked secret
+      outlook: '****', // Masked secret
+      paypal: '****', // Masked secret
+      slack: '****' // Masked secret
     };
   }
 
