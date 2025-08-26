@@ -4,20 +4,32 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { CloudProvidersMetaData } from './cloud.providers.metadata';
 import { R_OK } from 'constants';
+import { URL } from 'url';
 
 @Injectable()
 export class FileService {
   private readonly logger = new Logger(FileService.name);
   private cloudProviders = new CloudProvidersMetaData();
 
+  private readonly allowedPaths = ['config/products/crystals']; // Define allowed base paths
+
   async getFile(file: string): Promise<Stream> {
     this.logger.log(`Reading file: ${file}`);
+
+    if (!this.isPathAllowed(file)) {
+      throw new Error('Access to this file path is not allowed');
+    }
 
     if (file.startsWith('/')) {
       await fs.promises.access(file, R_OK);
 
       return fs.createReadStream(file);
     } else if (file.startsWith('http')) {
+      // Validate the URL against known cloud provider metadata URLs
+      if (!this.isValidCloudProviderUrl(file)) {
+        throw new Error('Invalid URL for cloud provider metadata');
+      }
+
       const content = await this.cloudProviders.get(file);
 
       if (content) {
@@ -32,6 +44,28 @@ export class FileService {
 
       return fs.createReadStream(file);
     }
+  }
+
+  private isValidCloudProviderUrl(url: string): boolean {
+    try {
+      const parsedUrl = new URL(url);
+      // Ensure the URL is HTTPS and matches known cloud provider metadata URLs
+      return (
+        parsedUrl.protocol === 'https:' &&
+        ((parsedUrl.hostname === 'metadata.google.internal' && url.startsWith(CloudProvidersMetaData.GOOGLE)) ||
+          (parsedUrl.hostname === '169.254.169.254' &&
+            (url.startsWith(CloudProvidersMetaData.AZURE) ||
+              url.startsWith(CloudProvidersMetaData.DIGITAL_OCEAN) ||
+              url.startsWith(CloudProvidersMetaData.AWS))))
+      );
+    } catch (error) {
+      return false;
+    }
+  }
+
+  private isPathAllowed(filePath: string): boolean {
+    const resolvedPath = path.resolve(filePath);
+    return this.allowedPaths.some(allowedPath => resolvedPath.startsWith(path.resolve(allowedPath)));
   }
 
   async deleteFile(file: string): Promise<boolean> {
