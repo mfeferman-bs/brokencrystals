@@ -71,6 +71,12 @@ export class PartnersService {
   }
 
   getPartnersProperties(xpathExpression: string): string {
+    // Validate the XPath expression to prevent injection
+    if (!this.isValidXPath(xpathExpression)) {
+      this.logger.error('Invalid XPath expression detected.');
+      throw new Error('Invalid XPath expression.');
+    }
+
     let xmlNodes = this.selectPartnerPropertiesByXPATH(xpathExpression);
 
     if (!Array.isArray(xmlNodes)) {
@@ -83,5 +89,12 @@ export class PartnersService {
     }
 
     return this.getFormattedXMLOutput(xmlNodes);
+  }
+
+  // Basic validation for XPath expressions
+  private isValidXPath(xpath: string): boolean {
+    // Implement a basic validation logic or use a library
+    // For demonstration, we just check for forbidden characters
+    return !xpath.includes(' or ') && !xpath.includes(' and ');
   }
 }

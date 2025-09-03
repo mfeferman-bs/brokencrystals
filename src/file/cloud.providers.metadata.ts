@@ -268,11 +268,35 @@ export class CloudProvidersMetaData {
     } else if (providerUrl.startsWith(CloudProvidersMetaData.AZURE)) {
       return this.providers.get(CloudProvidersMetaData.AZURE);
     } else {
-      const { data } = await axios(providerUrl, {
-        timeout: 5000,
-        responseType: 'text'
-      });
-      return data;
+      throw new Error('Access to this URL is not allowed');
+    }
+  }
+
+  getAllowedPaths(hostname: string): string[] {
+    switch (hostname) {
+      case 'metadata.google.internal':
+        return [
+          '/computeMetadata/v1/attributes/',
+          '/computeMetadata/v1/cpu-platform',
+          '/computeMetadata/v1/description',
+          '/computeMetadata/v1/instance',
+          '/computeMetadata/v1/hostname',
+          '/computeMetadata/v1/project',
+          '/computeMetadata/v1/disks',
+          '/computeMetadata/v1/service-accounts',
+          '/computeMetadata/v1/tags',
+          '/computeMetadata/v1/guest-attributes',
+          '/computeMetadata/v1/maintenance-event',
+          '/computeMetadata/v1/network-interfaces/'
+        ];
+      case '169.254.169.254':
+        return [
+          '/metadata/instance',
+          '/metadata/v1/',
+          '/latest/meta-data/'
+        ];
+      default:
+        return [];
     }
   }
 }
