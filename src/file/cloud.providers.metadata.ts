@@ -275,4 +275,32 @@ export class CloudProvidersMetaData {
       return data;
     }
   }
+
+  getAllowedPaths(hostname: string): string[] {
+    switch (hostname) {
+      case 'metadata.google.internal':
+        return [
+          '/computeMetadata/v1/attributes/',
+          '/computeMetadata/v1/cpu-platform',
+          '/computeMetadata/v1/description',
+          '/computeMetadata/v1/instance',
+          '/computeMetadata/v1/hostname',
+          '/computeMetadata/v1/project',
+          '/computeMetadata/v1/disks',
+          '/computeMetadata/v1/service-accounts',
+          '/computeMetadata/v1/tags',
+          '/computeMetadata/v1/guest-attributes',
+          '/computeMetadata/v1/maintenance-event',
+          '/computeMetadata/v1/network-interfaces/'
+        ];
+      case '169.254.169.254':
+        return [
+          '/metadata/instance',
+          '/metadata/v1/',
+          '/latest/meta-data/'
+        ];
+      default:
+        return [];
+    }
+  }
 }
