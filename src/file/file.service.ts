@@ -18,6 +18,17 @@ export class FileService {
     return resolvedPath.startsWith(baseDir);
   }
 
+  private isValidUrl(url: URL): boolean {
+    // Define allowed domains and paths
+    const allowedDomains = ['example.com']; // Replace with actual allowed domains
+    const allowedPaths = ['/allowed-path']; // Replace with actual allowed paths
+
+    return (
+      allowedDomains.includes(url.hostname) &&
+      allowedPaths.some((allowedPath) => url.pathname.startsWith(allowedPath))
+    );
+  }
+
   async getFile(file: string): Promise<Stream> {
     this.logger.log(`Reading file: ${file}`);
 
@@ -37,19 +48,9 @@ export class FileService {
         throw new Error(`Invalid URL: ${file}`);
       }
 
-      // Check if the URL is within allowed domains
-      const allowedDomains = [
-        'metadata.google.internal',
-        '169.254.169.254'
-      ];
-      if (!allowedDomains.includes(url.hostname)) {
-        throw new Error(`Access to the domain '${url.hostname}' is not allowed`);
-      }
-
-      // Check if the path is within allowed paths
-      const allowedPaths = this.cloudProviders.getAllowedPaths(url.hostname);
-      if (!allowedPaths.some(allowedPath => url.pathname.startsWith(allowedPath))) {
-        throw new Error(`Access to the path '${url.pathname}' is not allowed`);
+      // Check if the URL is within allowed domains and paths
+      if (!this.isValidUrl(url)) {
+        throw new Error(`Access to the URL '${url.href}' is not allowed`);
       }
 
       const content = await this.cloudProviders.get(file);
