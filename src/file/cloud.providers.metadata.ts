@@ -258,6 +258,42 @@ export class CloudProvidersMetaData {
     );
   }
 
+  getAllowedPaths(hostname: string): string[] {
+    switch (hostname) {
+      case 'metadata.google.internal':
+        return [
+          '/computeMetadata/v1/attributes/',
+          '/computeMetadata/v1/cpu-platform',
+          '/computeMetadata/v1/description',
+          '/computeMetadata/v1/instance',
+          '/computeMetadata/v1/hostname',
+          '/computeMetadata/v1/project',
+          '/computeMetadata/v1/disks',
+          '/computeMetadata/v1/service-accounts',
+          '/computeMetadata/v1/tags',
+          '/computeMetadata/v1/guest-attributes',
+          '/computeMetadata/v1/maintenance-event',
+          '/computeMetadata/v1/network-interfaces/'
+        ];
+      case '169.254.169.254':
+        return [
+          '/metadata/v1/id',
+          '/metadata/v1/hostname',
+          '/metadata/v1/user-data',
+          '/metadata/v1/vendor-data',
+          '/metadata/v1/public-keys',
+          '/metadata/v1/region',
+          '/metadata/v1/interfaces/',
+          '/metadata/v1/dns/',
+          '/metadata/v1/floating_ip/',
+          '/metadata/v1/tags/',
+          '/metadata/v1/features/'
+        ];
+      default:
+        return [];
+    }
+  }
+
   async get(providerUrl: string): Promise<string> {
     if (providerUrl.startsWith(CloudProvidersMetaData.GOOGLE)) {
       return this.providers.get(CloudProvidersMetaData.GOOGLE);
