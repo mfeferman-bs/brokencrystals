@@ -218,7 +218,7 @@ export class UsersController {
     if (!user) {
       throw new NotFoundException({
         error: 'Could not file user',
-        location: __filename
+        location: 'UserController'
       });
     }
 
@@ -231,8 +231,8 @@ export class UsersController {
       return user.photo;
     } catch (err) {
       throw new InternalServerErrorException({
-        error: err.message,
-        location: __filename
+        error: 'An error occurred while retrieving the photo',
+        location: 'UserController'
       });
     }
   }
@@ -271,7 +271,7 @@ export class UsersController {
     if (!user) {
       throw new NotFoundException({
         error: 'Could not file user',
-        location: __filename
+        location: 'UserController'
       });
     }
 
@@ -310,8 +310,8 @@ export class UsersController {
       }
     } catch (err) {
       throw new InternalServerErrorException({
-        error: err.message,
-        location: __filename
+        error: 'An error occurred during LDAP query',
+        location: 'UserController'
       });
     }
 
@@ -553,7 +553,7 @@ export class UsersController {
     } catch (err) {
       throw new InternalServerErrorException({
         error: err.message,
-        location: __filename
+        location: 'UserController'
       });
     }
   }
