@@ -75,7 +75,7 @@ export class AppController {
       const escapedText = text.replace(/[&<>'"/]/g, function (char) {
         return `&#${char.charCodeAt(0)};`;
       });
-      const res = dotT.compile(escapedText)();
+      const res = dotT.template(escapedText)();
       this.logger.debug(`Rendered template: ${res}`);
       return res;
     }
@@ -100,7 +100,7 @@ export class AppController {
     } catch (error) {
       throw new HttpException('Invalid URL', HttpStatus.BAD_REQUEST);
     }
-    return { url };
+    return { url: urlObj.toString() };
   }
 
   @Post('metadata')
