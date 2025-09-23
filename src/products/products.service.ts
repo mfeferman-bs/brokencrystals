@@ -57,7 +57,7 @@ export class ProductsService {
       return;
     } catch (err) {
       this.logger.warn(`Failed to execute query. Error: ${err.message}`);
-      throw new InternalServerErrorException(err.message);
+      throw new InternalServerErrorException('Failed to update product.');
     }
   }
 }
