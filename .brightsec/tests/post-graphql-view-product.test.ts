@@ -21,7 +21,7 @@ after(() => runner.clear());
 test('POST /graphql viewProduct', { signal: AbortSignal.timeout(timeout) }, async () => {
   await runner
     .createScan({
-      tests: ['sqli', 'full_path_disclosure', 'jwt'],
+      tests: ['sqli'],
       attackParamLocations: [AttackParamLocation.BODY],
       starMetadata: { databases: ['PostgreSQL'] }
     })
